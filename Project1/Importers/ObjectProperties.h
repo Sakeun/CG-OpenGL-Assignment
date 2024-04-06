@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 #include <vector>
 #include <glm/glm.hpp>
 #include <GL/glew.h>
@@ -20,4 +21,13 @@ struct ObjectProperties
     std::vector<glm::vec3> vertices;
     std::vector<glm::vec2> uvs;
     std::vector<glm::vec3> normals;
+};
+
+struct JsonProperties
+{
+    std::string path;
+    std::string texture;
+    glm::vec3 position;
+    glm::vec3 scale;
+    glm::vec3 rotation;
 };

@@ -1,10 +1,9 @@
 #pragma once
-#include <map>
-#include <glm/glm.hpp>
-#include <string>
+
+#include "../Importers/ObjectProperties.h"
 
 class JsonReader
 {
 public:
-    static std::map<std::string, std::pair<std::string, glm::vec3>> ReadObjects();
+    static std::vector<JsonProperties*> ReadObjects();
 };

@@ -12,6 +12,6 @@ private:
     static GLuint import_texture();
     
 public:
-    static ObjectProperties* get_objects();
+    static std::tuple<ObjectProperties*, int> get_objects();
     
 };

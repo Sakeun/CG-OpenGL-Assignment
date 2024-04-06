@@ -9,8 +9,6 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "glsl.h"
-#include "objloader.h"
-#include "texture.h"
 #include "Importers/Object.h"
 #include "Importers/ObjectProperties.h"
 
@@ -31,6 +29,7 @@ unsigned const int DELTA_TIME = 10;
 const int SIZE_CONSTANT = 3;
 
 ObjectProperties* objects;
+int objectAmount;
 
 
 //--------------------------------------------------------------------------------
@@ -49,28 +48,122 @@ struct LightSource
 // ID's
 GLuint program_id;
 GLuint vao[SIZE_CONSTANT];
-GLuint texture_id[SIZE_CONSTANT];
 
 // Uniform ID's
 GLuint uniform_mv[SIZE_CONSTANT];
 
 // Matrices
-glm::mat4 model[SIZE_CONSTANT], view, projection;
+glm::mat4 view, projection;
 glm::mat4 mv[SIZE_CONSTANT];
 
 // Material and light
 LightSource light;
 Material material[SIZE_CONSTANT];
 
+// Mouse positions
+bool firstMouse = true;
+int mouse_x, mouse_y;
+
+// Camera angles
+float angle_x = 0.0f;
+float angle_y = 0.0f;
+
+// Camera positions
+glm::vec3 camera_position = glm::vec3(0.0, 0.5, 3.0);
+glm::vec3 camera_lookat = glm::vec3(0.0, 0.0, -1.0);
+glm::vec3 camera_up = glm::vec3(0.0, 1.0, 0.0);
+
+// Times
+float delta_time = 0.0f;
+float last_frame = 0.0f;
+
+glm::vec3 target_position = camera_position;
+const float lerp_speed = 0.1f;
+bool mouseActive = false;
+int last_x = 950, last_y = 530;
+
+float yaw = -90.0f;
+float pitch;
+
+glm::vec3 lerp(glm::vec3 start, glm::vec3 end, float time) {
+    return (1.0f - time) * start + time * end;
+}
+
+//------------------------------------------------------------
+// void InitMatrices()
+//------------------------------------------------------------
+
+void InitMatrices()
+{
+    // Create rotation matrix
+    glm::mat4 rotation = glm::rotate(glm::mat4(1.0f), angle_x, glm::vec3(0.0f, 1.0f, 0.0f)); // Rotate around y-axis
+    rotation = glm::rotate(rotation, angle_y, glm::vec3(1.0f, 0.0f, 0.0f)); // Rotate around x-axis
+
+    // Apply rotation to camera_lookat vector
+    glm::vec4 rotated_lookat = rotation * glm::vec4(camera_lookat, 0.0f);
+    glm::vec3 new_lookat(rotated_lookat);
+
+    view = glm::lookAt(target_position, target_position + new_lookat, camera_up);
+    projection = glm::perspective(
+        glm::radians(45.0f),
+        1.0f * WIDTH / HEIGHT, 0.1f,
+        20.0f);
+
+    for (int i = 0; i < objectAmount; i++)
+    {
+        objects[i].mv = view * objects[i].model;
+    }
+}
 
 //--------------------------------------------------------------------------------
-// Mesh variables
+// Mouse handling
 //--------------------------------------------------------------------------------
 
-vector<glm::vec3> vertices[SIZE_CONSTANT];
-vector<glm::vec3> normals[SIZE_CONSTANT];
-vector<glm::vec2> uvs[SIZE_CONSTANT];
+void mouseMotionHandler(int x, int y)
+{
+    if(!mouseActive) return;
 
+    if(firstMouse)
+    {
+        last_x = x;
+        last_y = y;
+        firstMouse = false;
+    }
+
+    float xOffset = x - last_x;
+    float yOffset = last_y - y;
+    last_x = x;
+    last_y = y;
+
+    float sensitivity = 0.1f;
+    xOffset *= sensitivity;
+    yOffset *= sensitivity;
+
+    yaw += xOffset;
+    pitch += yOffset;
+
+    if(pitch > 89.0f)
+        pitch = 89.0f;
+    if(pitch < -89.0f)
+        pitch = -89.0f;
+
+    glm::vec3 direction;
+    direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+    direction.y = sin(glm::radians(pitch));
+    direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+    camera_lookat = glm::normalize(direction);
+}
+
+void mouseClickHandler(int button, int state, int x, int y)
+{
+    if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
+    {
+        mouseActive = !mouseActive;
+        mouse_x = WIDTH / 2;
+        mouse_y = HEIGHT / 2;
+        glutWarpPointer(mouse_x, mouse_y);
+    }
+}
 
 //--------------------------------------------------------------------------------
 // Keyboard handling
@@ -78,8 +171,53 @@ vector<glm::vec2> uvs[SIZE_CONSTANT];
 
 void keyboardHandler(unsigned char key, int a, int b)
 {
+    const float speed = 2.5f * delta_time;
+    glm::vec3 camera_direction_xz = glm::normalize(glm::vec3(camera_lookat.x, 0.0f, camera_lookat.z));
+
     if (key == 27)
         glutExit();
+    if(key == 'w')
+    {
+        target_position += speed * camera_direction_xz;
+    }
+    if(key == 's')
+    {
+        target_position -= speed * camera_direction_xz;
+    }
+    if(key == 'a')
+    {
+        target_position -= glm::normalize(glm::cross(camera_lookat, camera_up)) * speed;
+    }
+    if(key == 'd')
+    {
+        target_position += glm::normalize(glm::cross(camera_lookat, camera_up)) * speed;
+    }
+    if(key == 'i')
+    {
+        angle_y += speed;
+        glm::mat4 rotation = glm::rotate(glm::mat4(1.0f), speed, glm::vec3(1.0f, 0.0f, 0.0f));
+        camera_lookat = glm::vec3(rotation * glm::vec4(camera_lookat, 0.0f));
+    }
+    if(key == 'k')
+    {
+        angle_y -= speed;
+        glm::mat4 rotation = glm::rotate(glm::mat4(1.0f), -speed, glm::vec3(1.0f, 0.0f, 0.0f));
+        camera_lookat = glm::vec3(rotation * glm::vec4(camera_lookat, 0.0f));
+    }
+    if(key == 'j')
+    {
+        angle_x -= speed;
+        glm::mat4 rotation = glm::rotate(glm::mat4(1.0f), -speed, glm::vec3(0.0f, 1.0f, 0.0f));
+        camera_lookat = glm::vec3(rotation * glm::vec4(camera_lookat, 0.0f));
+    }
+    if(key == 'l')
+    {
+        angle_x += speed;
+        glm::mat4 rotation = glm::rotate(glm::mat4(1.0f), speed, glm::vec3(0.0f, 1.0f, 0.0f));
+        camera_lookat = glm::vec3(rotation * glm::vec4(camera_lookat, 0.0f));
+    }
+
+    glutPostRedisplay();
 }
 
 //------------------------------------------------------------
@@ -90,7 +228,6 @@ void InitMaterialsLight(int i)
 {
     light.position = glm::vec3(4.0, 4.0, 4.0);
     material[i].ambient_color = glm::vec3(0.2, 0.2, 0.1);
-    //material.diffuse_color = glm::vec3(0.5, 0.5, 0.3);
     material[i].diffuse_color = glm::vec3(0.5, 0.5, 0.3);
     material[i].specular_color = glm::vec3(1.0, 1.0, 1.0);
     material[i].power = 50.0;
@@ -114,8 +251,16 @@ void Render()
     GLuint uniform_material_diffuse;
     GLuint uniform_specular;
     GLuint uniform_material_power;
+
+
+    float current_frame = glutGet(GLUT_ELAPSED_TIME);
+    delta_time = (current_frame - last_frame) / 1000.0f;
+    last_frame = current_frame;
+    camera_position = lerp(camera_position, target_position, lerp_speed * delta_time);
+
+    InitMatrices();
     
-    for (int i = 0; i < 2; i++)
+    for (int i = 0; i < objectAmount; i++)
     {
         // Do transformation
         if(i != 0)
@@ -189,6 +334,8 @@ void InitGlutGlew(int argc, char** argv)
     glutCreateWindow("OpenGL Sietse van der Zee");
     glutDisplayFunc(Render);
     glutKeyboardFunc(keyboardHandler);
+    glutMouseFunc(mouseClickHandler);
+    glutPassiveMotionFunc(mouseMotionHandler);
     glutTimerFunc(DELTA_TIME, Render, 0);
 
     glEnable(GL_DEPTH_TEST);
@@ -216,53 +363,6 @@ void InitShaders()
     program_id = glsl::makeShaderProgram(vsh_id, fsh_id);
 }
 
-
-//------------------------------------------------------------
-// void InitMatrices()
-//------------------------------------------------------------
-
-void InitMatrices()
-{
-    view = glm::lookAt(
-        glm::vec3(0.0, 2.0, 4.0),
-        glm::vec3(0.0, 0.5, 0.0),
-        glm::vec3(0.0, 1.0, 0.0));
-    projection = glm::perspective(
-        glm::radians(45.0f),
-        1.0f * WIDTH / HEIGHT, 0.1f,
-        20.0f);
-    
-    for (int i = 0; i < 2; i++)
-    {
-        objects[i].model = glm::mat4();
-        objects[i].mv = view * objects[i].model;
-    }
-}
-
-
-//------------------------------------------------------------
-// void InitObjects()
-//------------------------------------------------------------
-
-void InitObjects()
-{
-    bool res;
-
-    // Objects
-
-    res = loadOBJ("Objects/Axes.obj", vertices[0], uvs[0], normals[0]);
-    texture_id[0] = loadDDS("Textures/AxesTexture.dds");
-
-    res = loadOBJ("Objects/box.obj", vertices[1], uvs[1], normals[1]);
-    texture_id[1] = loadBMP("Textures/Yellobrk.bmp");
-
-    res = loadOBJ("Objects/box.obj", vertices[2], uvs[2], normals[2]);
-    texture_id[2] = texture_id[1];
-
-    model[1] = glm::translate(model[1], glm::vec3(1.0, 2.0, -1.0));
-    model[2] = glm::translate(model[2], glm::vec3(-1.0, 2.0, -1.0));
-}
-
 //------------------------------------------------------------
 // void InitBuffers()
 // Allocates and fills buffers
@@ -270,13 +370,10 @@ void InitObjects()
 
 void InitBuffers()
 {
-    // GLuint position_id[2];
-    // GLuint normal_id[2];
-    // GLuint uv_id[2];
     GLuint vbo_vertices;
     GLuint vbo_normals;
     GLuint vbo_uvs;
-    for (int i = 0; i < 2; i++)
+    for (int i = 0; i < objectAmount; i++)
     {
         // vbo for vertices
         glGenBuffers(1, &vbo_vertices);
@@ -338,7 +435,7 @@ int main(int argc, char** argv)
 {
     InitGlutGlew(argc, argv);
     InitShaders();
-    objects = Object::get_objects();
+    tie(objects, objectAmount) = Object::get_objects();
     InitMatrices();
     InitBuffers();
 
