@@ -1,0 +1,14 @@
+{
+  "Objects" : [
+    {
+      "Path": "Axes",
+      "Texture": "AxesTexture",
+      "Pos": { "x" :  0.0, "y" : 0.0, "z" : 0.0 }
+    },
+    {
+      "Path" : "teapot",
+      "Texture" : "uvmap",
+      "Pos" : { "x" :  0.0, "y" : 0.0, "z" : 0.0 }
+    }
+  ]
+}
