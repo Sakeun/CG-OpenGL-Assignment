@@ -9,7 +9,7 @@
 
 std::tuple<ObjectProperties*, int> Object::get_objects()
 {
-    std::vector<JsonProperties*> objects = JsonReader::ReadObjects();
+    std::vector<ImportProperties*> objects = JsonReader::ReadObjects();
     ObjectProperties* objectProperties = new ObjectProperties[objects.size()];
     int i = 0;
     for(auto properties : objects)
@@ -25,4 +25,12 @@ std::tuple<ObjectProperties*, int> Object::get_objects()
     }
 
     return {objectProperties, i};
+}
+
+void Object::InitMaterialLights(Material &materials)
+{
+    materials.ambient_color = glm::vec3(0.2, 0.2, 0.1);
+    materials.diffuse_color = glm::vec3(0.5, 0.5, 0.3);
+    materials.specular_color = glm::vec3(1.0, 1.0, 1.0);
+    materials.power = 10.0;
 }

@@ -153,6 +153,7 @@
     <None Include="vertexshader.vert" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Meshes.json" />
     <Content Include="Objects.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

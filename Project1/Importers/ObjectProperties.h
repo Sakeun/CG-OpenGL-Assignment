@@ -23,10 +23,29 @@ struct ObjectProperties
     std::vector<glm::vec3> normals;
 };
 
-struct JsonProperties
+struct ImportProperties
 {
     std::string path;
     std::string texture;
+    glm::vec3 position;
+    glm::vec3 scale;
+    glm::vec3 rotation;
+};
+
+struct MeshProperties
+{
+    std::vector<GLushort> elements;
+    std::vector<GLfloat> vertices;
+    std::vector<GLfloat> textCoords;
+};
+
+struct ObjectMeshes
+{
+    std::vector<MeshProperties> meshes;
+    Material materials;
+    GLuint texture;
+    glm::mat4 model;
+    glm::mat4 mv;
     glm::vec3 position;
     glm::vec3 scale;
     glm::vec3 rotation;
