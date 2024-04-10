@@ -9,5 +9,5 @@ private:
     //static MeshProperties ReadMesh(nlohmann::json object, std::string meshType);
 public:
     static std::vector<ImportProperties*> ReadObjects();
-    static std::vector<ObjectMeshes*> ReadMeshes();
+    static std::vector<ObjectProperties*> ReadMeshes();
 };

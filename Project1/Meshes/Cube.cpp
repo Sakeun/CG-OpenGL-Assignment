@@ -4,13 +4,20 @@
 
 Cube::Cube(glm::vec3 position, glm::vec3 scale, glm::vec3 rotation, float radians, MeshType type) : Meshes()
 {
-    glm::mat4 model = glm::mat4();
-    if(position != glm::vec3())
-        model = glm::translate(model, position);
-    if(scale != glm::vec3())
+    glm::mat4 rotationMatrix = glm::mat4(1.0f);
+    glm::mat4 translationMatrix = glm::mat4(1.0f);
+
+    // Apply rotation
+    if (rotation.x != 0.0f || rotation.y != 0.0f || rotation.z != 0.0f)
+        rotationMatrix = glm::rotate(rotationMatrix, radians, rotation);
+
+    if (position != glm::vec3())
+        translationMatrix = glm::translate(translationMatrix, position);
+
+    glm::mat4 model = translationMatrix * rotationMatrix;
+
+    if (scale != glm::vec3())
         model = glm::scale(model, scale);
-    if(radians != 0.0f)
-        model = glm::rotate(model, radians, rotation);
 
     Cube::set_triangles(type);
     Cube::set_normals();

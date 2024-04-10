@@ -193,7 +193,7 @@ void Render()
     {
         objects[i].mv = view * objects[i].model;
         // Do transformation
-        if(i != 0)
+        if(i == 1)
         {
             objects[i].model = glm::rotate(objects[i].model, 0.01f, glm::vec3(0.5f, 1.0f, 0.2f));
             objects[i].mv = view * objects[i].model;
@@ -228,39 +228,6 @@ void Render()
         // Send vao
         glBindVertexArray(vao[i]);
         glDrawArrays(GL_TRIANGLES, 0, objects[i].vertices.size());
-        glBindVertexArray(0);
-    }
-
-    for (auto& object : objectMeshes)
-    {
-        object->mv = view * cube->model;
-
-        // Send mv
-        GLint uniform_mv = 0;
-        glUniformMatrix4fv(uniform_mv, 1, GL_FALSE, glm::value_ptr(object->mv));
-        glUseProgram(program_id);
-
-        Object::InitMaterialLights(object->materials);
-
-        const GLuint uniform_proj = glGetUniformLocation(program_id, "projection");
-        const GLuint uniform_material_ambient = glGetUniformLocation(program_id, "mat_ambient");
-        const GLuint uniform_material_diffuse = glGetUniformLocation(program_id, "mat_diffuse");
-        const GLuint uniform_specular = glGetUniformLocation(program_id, "mat_specular");
-        const GLuint uniform_material_power = glGetUniformLocation(program_id, "mat_power");
-
-        //Bind Texture
-        glBindTexture(GL_TEXTURE_2D, object->texture);
-        
-        // Fill uniform vars
-        glUniformMatrix4fv(uniform_proj, 1, GL_FALSE, glm::value_ptr(projection));
-        glUniform3fv(uniform_material_ambient, 1, glm::value_ptr(object->materials.ambient_color));
-        glUniform3fv(uniform_material_diffuse, 1, glm::value_ptr(object->materials.diffuse_color));
-        glUniform3fv(uniform_specular, 1, glm::value_ptr(object->materials.specular_color));
-        glUniform1f(uniform_material_power, object->materials.power);
-
-        // Bind VAO and draw elements
-        glBindVertexArray(vao[objectAmount]); // Assuming the VAO for the cube is stored at index objectAmount
-        glDrawArrays(GL_TRIANGLES, 0, cube->triangles.size());
         glBindVertexArray(0);
     }
 
@@ -351,24 +318,6 @@ void InitBuffers()
 
         glBindVertexArray(0);
     }
-    
-    for(auto object : objectMeshes)
-    {
-        vao.push_back(0);
-
-        const GLuint position_id = glGetAttribLocation(program_id, "position");
-        const GLuint normal_id = glGetAttribLocation(program_id, "normal");
-        const GLuint uv_id = glGetAttribLocation(program_id, "uv");
-        
-        // Allocate memory for vao
-        glBindVertexArray(vao[vao.size() - 1]);
-
-        BufferBinder::bind_vao3d(position_id, cube->triangles);
-        BufferBinder::bind_vao3d(normal_id, cube->normals);
-        BufferBinder::bind_vao2d(uv_id, cube->uvs);
-
-        glBindVertexArray(0);
-    }
 }
 
 
@@ -377,8 +326,6 @@ int main(int argc, char** argv)
     InitGlutGlew(argc, argv);
     InitShaders();
     tie(objects, objectAmount) = Object::get_objects();
-    objectMeshes = JsonReader::ReadMeshes();
-    cube = new Cube(objectMeshes[0]->position, objectMeshes[0]->scale, objectMeshes[0]->rotation, 0.0f, MeshType::Cube);
     tie(view, projection) = camera->SetVP(angle_x, angle_y, WIDTH, HEIGHT);
     InitBuffers();
 
