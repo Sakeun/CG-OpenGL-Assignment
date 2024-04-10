@@ -54,7 +54,7 @@ std::tuple<glm::mat4, glm::mat4> CameraControls::SetVP(const float x, const floa
     glm::mat4 projection = glm::perspective(
         glm::radians(45.0f),
         1.0f * width / height, 0.1f,
-        1000.0f);
+        20.0f);
 
     return {view, projection};
 }

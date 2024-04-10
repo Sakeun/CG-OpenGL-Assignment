@@ -26,23 +26,23 @@ std::vector<ImportProperties*> JsonReader::ReadObjects() {
     return objects;
 }
 
-MeshProperties JsonReader::ReadMesh(nlohmann::json object, std::string meshType)
-{
-    MeshProperties meshProperties;
-    auto& meshObject = object["Meshes"][0][meshType];
-
-    for (auto& element : meshObject["elements"]) {
-        meshProperties.elements.push_back(element);
-    }
-    for (auto& vertex : meshObject["vertices"]) {
-        meshProperties.vertices.push_back(vertex);
-    }
-    for (auto& textCoord : meshObject["uvs"]) {
-        meshProperties.textCoords.push_back(textCoord);
-    }
-
-    return meshProperties;
-}
+// MeshProperties JsonReader::ReadMesh(nlohmann::json object, std::string meshType)
+// {
+//     MeshProperties meshProperties;
+//     auto& meshObject = object["Meshes"][0][meshType];
+//
+//     for (auto& element : meshObject["elements"]) {
+//         meshProperties.elements.push_back(element);
+//     }
+//     for (auto& vertex : meshObject["vertices"]) {
+//         meshProperties.vertices.push_back(vertex);
+//     }
+//     for (auto& textCoord : meshObject["uvs"]) {
+//         meshProperties.textCoords.push_back(textCoord);
+//     }
+//
+//     return meshProperties;
+// }
 
 std::vector<ObjectMeshes*> JsonReader::ReadMeshes()
 {
@@ -54,7 +54,7 @@ std::vector<ObjectMeshes*> JsonReader::ReadMeshes()
     for (auto& object : jsonObject["Objects"]) {
         ObjectMeshes* obj = new ObjectMeshes();
         obj->model = glm::mat4(1.0f);
-        obj->meshes.push_back(ReadMesh(jsonObject, object["Cube"]["mesh"]));
+        //obj->meshes.push_back(ReadMesh(jsonObject, object["Cube"]["mesh"]));
         obj->texture = loadBMP("Textures/uvtemplate.bmp");
         obj->position = glm::vec3(object["Cube"]["position"][0], object["Cube"]["position"][1], object["Cube"]["position"][2]);
         obj->scale = glm::vec3(object["Cube"]["scale"][0], object["Cube"]["scale"][1], object["Cube"]["scale"][2]);

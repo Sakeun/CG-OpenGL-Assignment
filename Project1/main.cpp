@@ -14,6 +14,7 @@
 #include "Importers/Object.h"
 #include "Importers/ObjectProperties.h"
 #include "JsonReader/JsonReader.h"
+#include "Meshes/Cube.h"
 
 using namespace std;
 
@@ -29,28 +30,6 @@ const char* vertexshader_name = "vertexshader.vert";
 unsigned const int DELTA_TIME = 10;
 
 bool cubeRendered = false;
-
-// Indices
-std::vector<int> Indices = {
-    1, 0, 0,    0, 1, 0,    3, 2, 0, // Front face
-    1, 0, 0,    3, 2, 0,    2, 3, 0,
-
-    1, 0, 1,    5, 1, 1,    6, 2, 1, // Right face
-    6, 2, 1,    2, 3, 1,    1, 0, 1,
-
-    6, 2, 2,    5, 1, 2,    4, 0, 2, // Top face
-    4, 0, 2,    7, 3, 2,    6, 2, 2,
-
-    5, 1, 3,    1, 0, 3,    0, 1, 3, // Left face
-    0, 1, 3,    4, 0, 3,    5, 1, 3,
-
-    2, 3, 4,    6, 2, 4,    7, 3, 4, // Back face
-    7, 3, 4,    3, 2, 4,    2, 3, 4,
-
-    5, 1, 5,    4, 0, 5,    0, 1, 5, // Bottom face
-    0, 1, 5,    1, 0, 5,    5, 1, 5
-};
-GLuint ibo;
 
 //--------------------------------------------------------------------------------
 // Typedefs
@@ -99,6 +78,8 @@ int objectAmount;
 std::vector<ObjectMeshes*> objectMeshes;
 
 CameraControls* camera = CameraControls::GetInstance();
+
+Meshes* cube = nullptr;
 
 //--------------------------------------------------------------------------------
 // Mouse handling
@@ -252,12 +233,7 @@ void Render()
 
     for (auto& object : objectMeshes)
     {
-        object->model = glm::translate(object->model, object->position);
-        if(!scaled)
-            object->model = glm::scale(object->model, object->scale);
-        scaled = true;
-        //object->model = glm::rotate(object->model, 0.01f, glm::vec3(0.5f, 1.0f, 0.2f));
-        object->mv = view * object->model;
+        object->mv = view * cube->model;
 
         // Send mv
         GLint uniform_mv = 0;
@@ -284,7 +260,7 @@ void Render()
 
         // Bind VAO and draw elements
         glBindVertexArray(vao[objectAmount]); // Assuming the VAO for the cube is stored at index objectAmount
-        glDrawArrays(GL_TRIANGLES, 0, 36);
+        glDrawArrays(GL_TRIANGLES, 0, cube->triangles.size());
         glBindVertexArray(0);
     }
 
@@ -380,125 +356,6 @@ void InitBuffers()
     {
         vao.push_back(0);
 
-    // // Vertices
-    // std::vector<glm::vec3> vertices = {
-    //     // Front face
-    //     glm::vec3(-1.0f, -1.0f, 1.0f), glm::vec3(1.0f, -1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f),
-    //     glm::vec3(-1.0f, -1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(-1.0f, 1.0f, 1.0f),
-    //
-    //     // Right face
-    //     glm::vec3(1.0f, -1.0f, 1.0f), glm::vec3(1.0f, -1.0f, -1.0f), glm::vec3(1.0f, 1.0f, -1.0f),
-    //     glm::vec3(1.0f, -1.0f, 1.0f), glm::vec3(1.0f, 1.0f, -1.0f), glm::vec3(1.0f, 1.0f, 1.0f),
-    //
-    //     // Back face
-    //     glm::vec3(1.0f, -1.0f, -1.0f), glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(-1.0f, 1.0f, -1.0f),
-    //     glm::vec3(1.0f, -1.0f, -1.0f), glm::vec3(-1.0f, 1.0f, -1.0f), glm::vec3(1.0f, 1.0f, -1.0f),
-    //
-    //     // Left face
-    //     glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(-1.0f, -1.0f, 1.0f), glm::vec3(-1.0f, 1.0f, 1.0f),
-    //     glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(-1.0f, 1.0f, 1.0f), glm::vec3(-1.0f, 1.0f, -1.0f),
-    //
-    //     // Top face
-    //     glm::vec3(-1.0f, 1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.0f, 1.0f, -1.0f),
-    //     glm::vec3(-1.0f, 1.0f, 1.0f), glm::vec3(1.0f, 1.0f, -1.0f), glm::vec3(-1.0f, 1.0f, -1.0f),
-    //
-    //     // Bottom face
-    //     glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(1.0f, -1.0f, -1.0f), glm::vec3(1.0f, -1.0f, 1.0f),
-    //     glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(1.0f, -1.0f, 1.0f), glm::vec3(-1.0f, -1.0f, 1.0f)
-    // };
-
-        std::vector<glm::vec3> points = {
-            glm::vec3(-1.0f, -1.0f, 1.0f), // 0: Front bottom left
-            glm::vec3(1.0f, -1.0f, 1.0f), // 1: Front bottom right
-            glm::vec3(1.0f, 1.0f, 1.0f), // 2: Front top right
-            glm::vec3(-1.0f, 1.0f, 1.0f), // 3: Front top left
-            glm::vec3(-1.0f, -1.0f, -1.0f), // 4: Back bottom left
-            glm::vec3(1.0f, -1.0f, -1.0f), // 5: Back bottom right
-            glm::vec3(1.0f, 1.0f, -1.0f), // 6: Back top right
-            glm::vec3(-1.0f, 1.0f, -1.0f) // 7: Back top left
-        };
-
-        // Vertices
-        std::vector<glm::vec3> vertices = {
-            // Front face
-            points[0], points[1], points[2],
-            points[0], points[2], points[3],
-            
-            // Right face
-            points[1], points[5], points[6],
-            points[1], points[6], points[2],
-
-            // Back face
-            points[5], points[4], points[7],
-            points[5], points[7], points[6],
-
-            // Left face
-            points[4], points[0], points[3],
-            points[4], points[3], points[7],
-
-            // Top face
-            points[3], points[2], points[6],
-            points[3], points[6], points[7],
-            
-            // Bottom face
-            points[4], points[5], points[1],
-            points[4], points[1], points[0]
-        };
-
-    // Normals
-    std::vector<glm::vec3> normals = {
-        // Front face
-        glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 1.0f),
-        glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 1.0f),
-
-        // Right face
-        glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f),
-        glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f),
-
-        // Back face
-        glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 0.0f, -1.0f),
-        glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 0.0f, -1.0f),
-
-        // Left face
-        glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(-1.0f, 0.0f, 0.0f),
-        glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(-1.0f, 0.0f, 0.0f),
-
-        // Top face
-        glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f),
-        glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f),
-
-        // Bottom face
-        glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f),
-        glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f)
-    };
-
-        // UVs
-        std::vector<glm::vec2> uvs = {
-            // Front face
-            glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 0.0f), glm::vec2(1.0f, 1.0f),
-            glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 1.0f), glm::vec2(0.0f, 1.0f),
-
-            // Right face
-            glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 0.0f), glm::vec2(1.0f, 1.0f),
-            glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 1.0f), glm::vec2(0.0f, 1.0f),
-
-            // Back face
-            glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 0.0f), glm::vec2(1.0f, 1.0f),
-            glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 1.0f), glm::vec2(0.0f, 1.0f),
-
-            // Left face
-            glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 0.0f), glm::vec2(1.0f, 1.0f),
-            glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 1.0f), glm::vec2(0.0f, 1.0f),
-
-            // Top face
-            glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 0.0f), glm::vec2(1.0f, 1.0f),
-            glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 1.0f), glm::vec2(0.0f, 1.0f),
-
-            // Bottom face
-            glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 0.0f), glm::vec2(1.0f, 1.0f),
-            glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 1.0f), glm::vec2(0.0f, 1.0f)
-        };
-
         const GLuint position_id = glGetAttribLocation(program_id, "position");
         const GLuint normal_id = glGetAttribLocation(program_id, "normal");
         const GLuint uv_id = glGetAttribLocation(program_id, "uv");
@@ -506,9 +363,9 @@ void InitBuffers()
         // Allocate memory for vao
         glBindVertexArray(vao[vao.size() - 1]);
 
-        BufferBinder::bind_vao3d(position_id, vertices);
-        BufferBinder::bind_vao3d(normal_id, normals);
-        BufferBinder::bind_vao2d(uv_id, uvs);
+        BufferBinder::bind_vao3d(position_id, cube->triangles);
+        BufferBinder::bind_vao3d(normal_id, cube->normals);
+        BufferBinder::bind_vao2d(uv_id, cube->uvs);
 
         glBindVertexArray(0);
     }
@@ -521,6 +378,7 @@ int main(int argc, char** argv)
     InitShaders();
     tie(objects, objectAmount) = Object::get_objects();
     objectMeshes = JsonReader::ReadMeshes();
+    cube = new Cube(objectMeshes[0]->position, objectMeshes[0]->scale, objectMeshes[0]->rotation, 0.0f, MeshType::Cube);
     tie(view, projection) = camera->SetVP(angle_x, angle_y, WIDTH, HEIGHT);
     InitBuffers();
 

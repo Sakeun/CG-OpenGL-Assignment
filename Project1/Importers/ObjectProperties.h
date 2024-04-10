@@ -4,6 +4,8 @@
 #include <glm/glm.hpp>
 #include <GL/glew.h>
 
+#include "../Meshes/Meshes.h"
+
 struct Material
 {
     glm::vec3 ambient_color;
@@ -32,16 +34,9 @@ struct ImportProperties
     glm::vec3 rotation;
 };
 
-struct MeshProperties
-{
-    std::vector<GLushort> elements;
-    std::vector<GLfloat> vertices;
-    std::vector<GLfloat> textCoords;
-};
-
 struct ObjectMeshes
 {
-    std::vector<MeshProperties> meshes;
+    std::vector<Meshes> meshes;
     Material materials;
     GLuint texture;
     glm::mat4 model;

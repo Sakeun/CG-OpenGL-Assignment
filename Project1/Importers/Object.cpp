@@ -32,5 +32,5 @@ void Object::InitMaterialLights(Material &materials)
     materials.ambient_color = glm::vec3(0.2, 0.2, 0.1);
     materials.diffuse_color = glm::vec3(0.5, 0.5, 0.3);
     materials.specular_color = glm::vec3(1.0, 1.0, 1.0);
-    materials.power = 10.0;
+    materials.power = 30.0;
 }
