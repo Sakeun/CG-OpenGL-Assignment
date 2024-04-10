@@ -58,7 +58,7 @@ GLuint ibo;
 
 struct LightSource
 {
-    glm::vec3 position = glm::vec3(1.0f, 0.5f, -1.5f);
+    glm::vec3 position = glm::vec3(4.0f, 4.0f, 4.0f);
 };
 
 //--------------------------------------------------------------------------------
@@ -254,7 +254,7 @@ void Render()
     {
         object->model = glm::translate(object->model, object->position);
         if(!scaled)
-            //object->model = glm::scale(object->model, object->scale);
+            object->model = glm::scale(object->model, object->scale);
         scaled = true;
         //object->model = glm::rotate(object->model, 0.01f, glm::vec3(0.5f, 1.0f, 0.2f));
         object->mv = view * object->model;
@@ -274,14 +274,6 @@ void Render()
 
         //Bind Texture
         glBindTexture(GL_TEXTURE_2D, object->texture);
-
-        // Set the texture wrapping parameters
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-        // Set the texture filtering parameters
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         
         // Fill uniform vars
         glUniformMatrix4fv(uniform_proj, 1, GL_FALSE, glm::value_ptr(projection));
@@ -292,9 +284,7 @@ void Render()
 
         // Bind VAO and draw elements
         glBindVertexArray(vao[objectAmount]); // Assuming the VAO for the cube is stored at index objectAmount
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-        int size; glGetBufferParameteriv(GL_ELEMENT_ARRAY_BUFFER, GL_BUFFER_SIZE, &size);
-        glDrawElements(GL_TRIANGLES, size / sizeof(GLushort), GL_UNSIGNED_SHORT, 0);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
         glBindVertexArray(0);
     }
 
@@ -390,59 +380,124 @@ void InitBuffers()
     {
         vao.push_back(0);
 
-        std::vector<glm::vec3> vertices = {
-            glm::vec3(-1.0f, -1.0f, 1.0f),  // 0 Bottom left front
-            glm::vec3(1.0f, -1.0f, 1.0f),  // 1 Bottom right front
-            glm::vec3(1.0f, 1.0f, 1.0f),  // 2 Top right front
-            glm::vec3(-1.0f, 1.0f, 1.0f),  // 3 Top left front
-            glm::vec3(-1.0f, -1.0f, -1.0f),  // 4 Bottom left back
-            glm::vec3(1.0f, -1.0f, -1.0f),  // 5 Bottom right back
-            glm::vec3(1.0f, 1.0f, -1.0f),  // 6 Top right back
-            glm::vec3(-1.0f, 1.0f, -1.0f),  // 7 Top left back
+    // // Vertices
+    // std::vector<glm::vec3> vertices = {
+    //     // Front face
+    //     glm::vec3(-1.0f, -1.0f, 1.0f), glm::vec3(1.0f, -1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f),
+    //     glm::vec3(-1.0f, -1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(-1.0f, 1.0f, 1.0f),
+    //
+    //     // Right face
+    //     glm::vec3(1.0f, -1.0f, 1.0f), glm::vec3(1.0f, -1.0f, -1.0f), glm::vec3(1.0f, 1.0f, -1.0f),
+    //     glm::vec3(1.0f, -1.0f, 1.0f), glm::vec3(1.0f, 1.0f, -1.0f), glm::vec3(1.0f, 1.0f, 1.0f),
+    //
+    //     // Back face
+    //     glm::vec3(1.0f, -1.0f, -1.0f), glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(-1.0f, 1.0f, -1.0f),
+    //     glm::vec3(1.0f, -1.0f, -1.0f), glm::vec3(-1.0f, 1.0f, -1.0f), glm::vec3(1.0f, 1.0f, -1.0f),
+    //
+    //     // Left face
+    //     glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(-1.0f, -1.0f, 1.0f), glm::vec3(-1.0f, 1.0f, 1.0f),
+    //     glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(-1.0f, 1.0f, 1.0f), glm::vec3(-1.0f, 1.0f, -1.0f),
+    //
+    //     // Top face
+    //     glm::vec3(-1.0f, 1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.0f, 1.0f, -1.0f),
+    //     glm::vec3(-1.0f, 1.0f, 1.0f), glm::vec3(1.0f, 1.0f, -1.0f), glm::vec3(-1.0f, 1.0f, -1.0f),
+    //
+    //     // Bottom face
+    //     glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(1.0f, -1.0f, -1.0f), glm::vec3(1.0f, -1.0f, 1.0f),
+    //     glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(1.0f, -1.0f, 1.0f), glm::vec3(-1.0f, -1.0f, 1.0f)
+    // };
+
+        std::vector<glm::vec3> points = {
+            glm::vec3(-1.0f, -1.0f, 1.0f), // 0: Front bottom left
+            glm::vec3(1.0f, -1.0f, 1.0f), // 1: Front bottom right
+            glm::vec3(1.0f, 1.0f, 1.0f), // 2: Front top right
+            glm::vec3(-1.0f, 1.0f, 1.0f), // 3: Front top left
+            glm::vec3(-1.0f, -1.0f, -1.0f), // 4: Back bottom left
+            glm::vec3(1.0f, -1.0f, -1.0f), // 5: Back bottom right
+            glm::vec3(1.0f, 1.0f, -1.0f), // 6: Back top right
+            glm::vec3(-1.0f, 1.0f, -1.0f) // 7: Back top left
         };
 
-        // depth = 1, height = 0.5 and width = 0.5
+        // Vertices
+        std::vector<glm::vec3> vertices = {
+            // Front face
+            points[0], points[1], points[2],
+            points[0], points[2], points[3],
+            
+            // Right face
+            points[1], points[5], points[6],
+            points[1], points[6], points[2],
 
+            // Back face
+            points[5], points[4], points[7],
+            points[5], points[7], points[6],
+
+            // Left face
+            points[4], points[0], points[3],
+            points[4], points[3], points[7],
+
+            // Top face
+            points[3], points[2], points[6],
+            points[3], points[6], points[7],
+            
+            // Bottom face
+            points[4], points[5], points[1],
+            points[4], points[1], points[0]
+        };
+
+    // Normals
+    std::vector<glm::vec3> normals = {
+        // Front face
+        glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 1.0f),
+        glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 1.0f),
+
+        // Right face
+        glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f),
+        glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f),
+
+        // Back face
+        glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 0.0f, -1.0f),
+        glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 0.0f, -1.0f),
+
+        // Left face
+        glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(-1.0f, 0.0f, 0.0f),
+        glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(-1.0f, 0.0f, 0.0f), glm::vec3(-1.0f, 0.0f, 0.0f),
+
+        // Top face
+        glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f),
+        glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f),
+
+        // Bottom face
+        glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f),
+        glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f)
+    };
+
+        // UVs
         std::vector<glm::vec2> uvs = {
             // Front face
-            glm::vec2(0.5f, 0.0f), // Bottom left
-            glm::vec2(0.5f, 0.5f), // Bottom right
-            glm::vec2(0.0f, 0.5f), // Top right
-            glm::vec2(0.0f, 0.0f), // Top left
-            glm::vec2(1.0f, 0.0f), // Bottom left
-            glm::vec2(1.0f, 0.5f), // Bottom right
-            glm::vec2(0.5f, 1.0f), // Top right
-            glm::vec2(0.0f, 1.0f), // Top left
-        };
-        
-        std::vector<glm::vec3> normals = {
-            glm::vec3(0.0f, 0.0f, 1.0f),  // 0 Front face
-            glm::vec3(1.0f, 0.0f, 0.0f),  // 1 Right face
-            glm::vec3(0.0f, 1.0f, 0.0f),  // 2 Top face
-            glm::vec3(-1.0f, 0.0f, 0.0f),  // 3 Left face
-            glm::vec3(0.0f, 0.0f, -1.0f), // 4 Back face
-            glm::vec3(0.0f, -1.0f, 0.0f), // 5 Bottom face
-        };
+            glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 0.0f), glm::vec2(1.0f, 1.0f),
+            glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 1.0f), glm::vec2(0.0f, 1.0f),
 
-        std::vector<GLushort> indices = {
-            0, 1, 2,  2, 3, 0,   // Front face
-            1, 5, 6,  6, 2, 1,   // Right face
-            7, 6, 5,  5, 4, 7,   // Back face
-            4, 0, 3,  3, 7, 4,   // Left face
-            3, 2, 6,  6, 7, 3,   // Top face
-            4, 5, 1,  1, 0, 4,   // Bottom face
+            // Right face
+            glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 0.0f), glm::vec2(1.0f, 1.0f),
+            glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 1.0f), glm::vec2(0.0f, 1.0f),
+
+            // Back face
+            glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 0.0f), glm::vec2(1.0f, 1.0f),
+            glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 1.0f), glm::vec2(0.0f, 1.0f),
+
+            // Left face
+            glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 0.0f), glm::vec2(1.0f, 1.0f),
+            glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 1.0f), glm::vec2(0.0f, 1.0f),
+
+            // Top face
+            glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 0.0f), glm::vec2(1.0f, 1.0f),
+            glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 1.0f), glm::vec2(0.0f, 1.0f),
+
+            // Bottom face
+            glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 0.0f), glm::vec2(1.0f, 1.0f),
+            glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 1.0f), glm::vec2(0.0f, 1.0f)
         };
-
-        std::vector<glm::vec3> finalVertices;
-        std::vector<glm::vec2> finalUVs;
-        std::vector<glm::vec3> finalNormals;
-
-        for(unsigned int i = 0; i < Indices.size(); i += 3)
-        {
-            finalVertices.push_back(vertices[Indices[i]]);
-            finalUVs.push_back(uvs[Indices[i + 1]]);
-            finalNormals.push_back(normals[Indices[i + 2]]);
-        }
 
         const GLuint position_id = glGetAttribLocation(program_id, "position");
         const GLuint normal_id = glGetAttribLocation(program_id, "normal");
@@ -454,11 +509,6 @@ void InitBuffers()
         BufferBinder::bind_vao3d(position_id, vertices);
         BufferBinder::bind_vao3d(normal_id, normals);
         BufferBinder::bind_vao2d(uv_id, uvs);
-        
-        // Generate index buffer
-        glGenBuffers(1, &ibo);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLushort), indices.data(), GL_STATIC_DRAW);
 
         glBindVertexArray(0);
     }

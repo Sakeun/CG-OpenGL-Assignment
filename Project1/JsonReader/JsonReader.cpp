@@ -55,7 +55,7 @@ std::vector<ObjectMeshes*> JsonReader::ReadMeshes()
         ObjectMeshes* obj = new ObjectMeshes();
         obj->model = glm::mat4(1.0f);
         obj->meshes.push_back(ReadMesh(jsonObject, object["Cube"]["mesh"]));
-        obj->texture = loadDDS("Textures/uvmap.DDS");
+        obj->texture = loadBMP("Textures/uvtemplate.bmp");
         obj->position = glm::vec3(object["Cube"]["position"][0], object["Cube"]["position"][1], object["Cube"]["position"][2]);
         obj->scale = glm::vec3(object["Cube"]["scale"][0], object["Cube"]["scale"][1], object["Cube"]["scale"][2]);
         obj->rotation = glm::vec3(object["Cube"]["rotation"][0], object["Cube"]["rotation"][1], object["Cube"]["rotation"][2]);

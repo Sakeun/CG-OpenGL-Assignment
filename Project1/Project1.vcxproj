@@ -134,6 +134,7 @@
     <ClCompile Include="Importers\Object.cpp" />
     <ClCompile Include="JsonReader\JsonReader.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Meshes.cpp" />
     <ClCompile Include="objloader.cpp" />
     <ClCompile Include="texture.cpp" />
   </ItemGroup>
@@ -145,6 +146,7 @@
     <ClInclude Include="Importers\ObjectProperties.h" />
     <ClInclude Include="json.hpp" />
     <ClInclude Include="JsonReader\JsonReader.h" />
+    <ClInclude Include="Meshes.h" />
     <ClInclude Include="objloader.h" />
     <ClInclude Include="texture.h" />
   </ItemGroup>
