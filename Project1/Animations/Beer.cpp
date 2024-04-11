@@ -44,12 +44,13 @@ void Beer::DrawBeer(GLuint program_id, glm::mat4 view, glm::mat4 projection)
 {
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_real_distribution<> dis(0.0, 0.3);
+    std::uniform_real_distribution<> disX(-2.09, -2.03);
+    std::uniform_real_distribution<> disZ(8.29, 8.35);
     int vaoIndex = 0;
 
     for (int i = 0; i < beer_particles.size(); i++) {
-        float randX = dis(gen);
-        float randZ = dis(gen);
+        float randX = disX(gen);
+        float randZ = disZ(gen);
         float yPos = this->yPos[i];
 
         // Reset the model matrix and apply the translation
@@ -58,12 +59,9 @@ void Beer::DrawBeer(GLuint program_id, glm::mat4 view, glm::mat4 projection)
         beer_particles[i]->model = glm::scale(beer_particles[i]->model, glm::vec3(0.01, 0.01, 0.01));
 
         this->yPos[i] -= 0.001f;
-        if(this->yPos[i] < 0.0f)
+        if(this->yPos[i] < minY)
         {
-            this->yPos[i] = 1.0f;
-            randX = dis(gen);
-            randZ = dis(gen);
-            beer_particles[i]->model = glm::translate(beer_particles[i]->model, glm::vec3(randX, 0.0f, randZ));
+            this->yPos[i] = maxY;
         }
         glm::mat4 mv = view * beer_particles[i]->model;
 
