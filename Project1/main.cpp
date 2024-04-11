@@ -70,7 +70,7 @@ float last_frame = 0.0f;
 
 // Mouse tracking
 bool mouseActive = false;
-int last_x = 950, last_y = 530;
+int last_x = WIDTH / 2, last_y = HEIGHT / 2;
 
 // Object properties
 ObjectProperties* objects;
@@ -87,15 +87,22 @@ Meshes* cube = nullptr;
 
 void mouseMotionHandler(int x, int y)
 {
-    if(!mouseActive || firstMouse) {
+    if (firstMouse)
+    {
+        last_x = x;
+        last_y = y;
         firstMouse = false;
+    }
+
+    if (!mouseActive) {
         return;
     }
 
-    float xOffset = x - WIDTH / 2;
-    float yOffset = HEIGHT / 2 - y;
-    last_x = x;
-    last_y = y;
+    float xOffset = x - last_x;
+    float yOffset = last_y - y;
+
+    last_x = WIDTH / 2;
+    last_y = HEIGHT / 2;
 
     camera->updateCameraRotation(xOffset, yOffset);
     glutWarpPointer(WIDTH / 2, HEIGHT / 2);
@@ -109,7 +116,7 @@ void mouseClickHandler(int button, int state, int x, int y)
         mouseActive = !mouseActive;
         if (mouseActive) {
             firstMouse = true;
-            glutWarpPointer(last_x, last_y);
+            glutWarpPointer(WIDTH / 2, HEIGHT / 2);
         }
     }
 }
@@ -119,50 +126,67 @@ void mouseClickHandler(int button, int state, int x, int y)
 
 void keyboardHandler(unsigned char key, int a, int b)
 {
-    const float speed = 2.5f * delta_time;
-    glm::vec3 camera_direction_xz = glm::normalize(glm::vec3(camera->camera_lookat.x, 0.0f, camera->camera_lookat.z));
+    const float speed = 10.0f * delta_time;
+    glm::vec3 target_position = camera->getTargetPosition();
+    glm::vec3 camera_lookat = camera->getCameraLookat();
+    glm::vec3 camera_up = camera->getCameraUp();
+
+    glm::vec3 camera_direction_xz = glm::normalize(glm::vec3(camera_lookat.x, 0.0f, camera_lookat.z));
 
     if (key == 27)
         glutExit();
     if(key == 'w')
     {
-        camera->target_position += speed * camera_direction_xz;
+        camera->setTargetPosition(target_position + speed * camera_direction_xz);
     }
     if(key == 's')
     {
-        camera->target_position -= speed * camera_direction_xz;
+        camera->setTargetPosition(target_position - speed * camera_direction_xz);
     }
     if(key == 'a')
     {
-        camera->target_position -= glm::normalize(glm::cross(camera->camera_lookat, camera->camera_up)) * speed;
+        camera->setTargetPosition(target_position - glm::normalize(glm::cross(camera_lookat, camera_up)) * speed);
     }
     if(key == 'd')
     {
-        camera->target_position += glm::normalize(glm::cross(camera->camera_lookat, camera->camera_up)) * speed;
+        camera->setTargetPosition(target_position + glm::normalize(glm::cross(camera_lookat, camera_up)) * speed);
     }
     if(key == 'i')
     {
         angle_y += speed;
         glm::mat4 rotation = glm::rotate(glm::mat4(1.0f), speed, glm::vec3(1.0f, 0.0f, 0.0f));
-        camera->camera_lookat = glm::vec3(rotation * glm::vec4(camera->camera_lookat, 0.0f));
+        camera->setCameraLookat(glm::vec3(rotation * glm::vec4(camera_lookat, 0.0f)));
     }
     if(key == 'k')
     {
         angle_y -= speed;
         glm::mat4 rotation = glm::rotate(glm::mat4(1.0f), -speed, glm::vec3(1.0f, 0.0f, 0.0f));
-        camera->camera_lookat = glm::vec3(rotation * glm::vec4(camera->camera_lookat, 0.0f));
+        camera->setCameraLookat(glm::vec3(rotation * glm::vec4(camera_lookat, 0.0f)));
     }
     if(key == 'j')
     {
         angle_x += speed;
         glm::mat4 rotation = glm::rotate(glm::mat4(1.0f), speed, glm::vec3(0.0f, 1.0f, 0.0f));
-        camera->camera_lookat = glm::vec3(rotation * glm::vec4(camera->camera_lookat, 0.0f));
+        camera->setCameraLookat(glm::vec3(rotation * glm::vec4(camera_lookat, 0.0f)));
     }
     if(key == 'l')
     {
         angle_x -= speed;
         glm::mat4 rotation = glm::rotate(glm::mat4(1.0f), -speed, glm::vec3(0.0f, 1.0f, 0.0f));
-        camera->camera_lookat = glm::vec3(rotation * glm::vec4(camera->camera_lookat, 0.0f));
+        camera->setCameraLookat(glm::vec3(rotation * glm::vec4(camera_lookat, 0.0f)));
+    }
+    if (key == 'v') {
+        firstMouse = true;
+        mouseActive = !mouseActive;
+        camera->isWalk = !camera->isWalk;
+    }
+    if (key == 'q' && !camera->isWalk) {
+        target_position.y -= speed;
+        camera->setTargetPosition(target_position);
+    }
+    if (key == 'e' && !camera->isWalk) {
+        target_position.y += speed;
+        camera->setTargetPosition(target_position);
     }
 
     glutPostRedisplay();
@@ -195,8 +219,8 @@ void Render()
         // Do transformation
         if(i == 1)
         {
-            objects[i].model = glm::rotate(objects[i].model, 0.01f, glm::vec3(0.5f, 1.0f, 0.2f));
-            objects[i].mv = view * objects[i].model;
+            //objects[i].model = glm::rotate(objects[i].model, 0.01f, glm::vec3(0.5f, 1.0f, 0.2f));
+            //objects[i].mv = view * objects[i].model;
         }
 
         // Send mv

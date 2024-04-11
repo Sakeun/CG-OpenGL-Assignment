@@ -19,8 +19,12 @@ std::tuple<ObjectProperties*, int> Object::get_objects()
         if(!res) continue;
         objectProperties[i].texture = loadDDS(("Textures/" + properties->texture + ".dds").c_str());
         objectProperties[i].model = glm::mat4();
+        if (properties->radius != 0) {
+            objectProperties[i].model = glm::rotate(objectProperties[i].model, glm::radians(properties->radius), properties->rotation);
+        }
         objectProperties[i].model = glm::scale(objectProperties[i].model, properties->scale);
         objectProperties[i].model = glm::translate(objectProperties[i].model, properties->position);
+        
         delete properties;
         i++;
     }

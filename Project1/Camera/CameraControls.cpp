@@ -32,16 +32,31 @@ void CameraControls::updateCameraRotation(float x, float y)
     direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
     direction.y = sin(glm::radians(pitch));
     direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-    camera_lookat = glm::normalize(direction);
+
+    if (isWalk) {
+        walk_mode_cam.camera_lookat = glm::normalize(direction);
+    }
+    else {
+        drone_mode_cam.camera_lookat = glm::normalize(direction);
+    }
 }
 
 void CameraControls::Lerp(float time) {
     time += lerp_speed;
-    camera_position = (1.0f - time) * camera_position + time * target_position;
+    glm::vec3 newPosition = (1.0f - time) * getCameraPosition() + time * getTargetPosition();
+    if (isWalk) {
+        walk_mode_cam.camera_position = newPosition;
+    }
+    else {
+        drone_mode_cam.camera_position = newPosition;
+    }
 }
 
 std::tuple<glm::mat4, glm::mat4> CameraControls::SetVP(const float x, const float y, const int width, const int height)
 {
+    glm::vec3 camera_lookat = getCameraLookat();
+    glm::vec3 target_position = getTargetPosition();
+    glm::vec3 camera_up = getCameraUp();
     // Create rotation matrix
     glm::mat4 rotation = glm::rotate(glm::mat4(1.0f), x, glm::vec3(0.0f, 1.0f, 0.0f));
     rotation = glm::rotate(rotation, y, glm::vec3(1.0f, 0.0f, 0.0f));
@@ -54,7 +69,74 @@ std::tuple<glm::mat4, glm::mat4> CameraControls::SetVP(const float x, const floa
     glm::mat4 projection = glm::perspective(
         glm::radians(45.0f),
         1.0f * width / height, 0.1f,
-        20.0f);
+        100.0f);
 
     return {view, projection};
+}
+
+void CameraControls::updateTargetPosition(glm::vec3 targetPos) {
+    if (isWalk) {
+        walk_mode_cam.target_position = targetPos;
+    }
+    else {
+        drone_mode_cam.target_position = targetPos;
+    }
+}
+
+glm::vec3 CameraControls::getTargetPosition() {
+    if (isWalk)
+        return walk_mode_cam.target_position;
+    return drone_mode_cam.target_position;
+}
+
+glm::vec3 CameraControls::getCameraUp() {
+    if (isWalk)
+        return walk_mode_cam.camera_up;
+    return drone_mode_cam.camera_up;
+}
+
+glm::vec3 CameraControls::getCameraLookat() {
+    if (isWalk)
+        return walk_mode_cam.camera_lookat;
+    return drone_mode_cam.camera_lookat;
+}
+
+glm::vec3 CameraControls::getCameraPosition() {
+    if (isWalk)
+        return walk_mode_cam.camera_position;
+    return drone_mode_cam.camera_position;
+}
+
+void CameraControls::setCameraUp(glm::vec3 newValue) {
+    if (isWalk) {
+        walk_mode_cam.camera_up = newValue;
+    }
+    else {
+        drone_mode_cam.camera_up = newValue;
+    }
+}
+void CameraControls::setCameraLookat(glm::vec3 newValue) {
+    if (isWalk) {
+        walk_mode_cam.camera_lookat = newValue;
+    }
+    else {
+        drone_mode_cam.camera_lookat = newValue;
+    }
+}
+void CameraControls::setCameraPosition(glm::vec3 newValue) {
+    if (isWalk) {
+        walk_mode_cam.camera_position = newValue;
+    }
+    else {
+        drone_mode_cam.camera_position = newValue;
+    }
+}
+
+void CameraControls::setTargetPosition(glm::vec3 newValue) {
+    if (isWalk) {
+        walk_mode_cam.target_position = newValue;
+    }
+    else {
+        drone_mode_cam.target_position = newValue;
+    }
 }

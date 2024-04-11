@@ -82,5 +82,6 @@
     <None Include="vertexshader.vert" />
     <None Include="fragmentshader.frag" />
     <None Include="Meshes.json" />
+    <None Include="Objects.json" />
   </ItemGroup>
 </Project>

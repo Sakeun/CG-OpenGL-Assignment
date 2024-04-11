@@ -6,6 +6,7 @@ Cube::Cube(glm::vec3 position, glm::vec3 scale, glm::vec3 rotation, float radian
 {
     glm::mat4 rotationMatrix = glm::mat4(1.0f);
     glm::mat4 translationMatrix = glm::mat4(1.0f);
+    glm::mat4 scaleMatrix = glm::mat4(1.0f);
 
     // Apply rotation
     if (rotation.x != 0.0f || rotation.y != 0.0f || rotation.z != 0.0f)
@@ -14,10 +15,10 @@ Cube::Cube(glm::vec3 position, glm::vec3 scale, glm::vec3 rotation, float radian
     if (position != glm::vec3())
         translationMatrix = glm::translate(translationMatrix, position);
 
-    glm::mat4 model = translationMatrix * rotationMatrix;
-
     if (scale != glm::vec3())
-        model = glm::scale(model, scale);
+        scaleMatrix = glm::scale(scaleMatrix, scale);
+
+    glm::mat4 model = translationMatrix * rotationMatrix * scaleMatrix;
 
     Cube::set_triangles(type);
     Cube::set_normals();
