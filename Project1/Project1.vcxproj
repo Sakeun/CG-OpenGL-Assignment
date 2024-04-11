@@ -128,6 +128,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Animations\Beer.cpp" />
     <ClCompile Include="Buffers\BufferBinder.cpp" />
     <ClCompile Include="Camera\CameraControls.cpp" />
     <ClCompile Include="glsl.cpp" />
@@ -139,6 +140,7 @@
     <ClCompile Include="texture.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Animations\Beer.h" />
     <ClInclude Include="Buffers\BufferBinder.h" />
     <ClInclude Include="Camera\CameraControls.h" />
     <ClInclude Include="glsl.h" />

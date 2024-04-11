@@ -9,6 +9,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "glsl.h"
+#include "Animations/Beer.h"
 #include "Buffers/BufferBinder.h"
 #include "Camera/CameraControls.h"
 #include "Importers/Object.h"
@@ -78,6 +79,7 @@ int objectAmount;
 std::vector<ObjectMeshes*> objectMeshes;
 
 CameraControls* camera = CameraControls::GetInstance();
+Beer* beer = Beer::GetInstance();
 
 Meshes* cube = nullptr;
 
@@ -255,6 +257,7 @@ void Render()
         glBindVertexArray(0);
     }
 
+    beer->DrawBeer(program_id, view, projection);
     // Swap buffers
     glutSwapBuffers();
 }
@@ -342,6 +345,8 @@ void InitBuffers()
 
         glBindVertexArray(0);
     }
+
+    beer->InitBeerBuffers(program_id);
 }
 
 
