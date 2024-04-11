@@ -162,6 +162,7 @@
   <ItemGroup>
     <Content Include="Meshes.json" />
     <Content Include="Objects.json" />
+    <Content Include="singlecolor.frag" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -27,6 +27,7 @@ const int WIDTH = 1900, HEIGHT = 1060;
 
 const char* fragshader_name = "fragmentshader.frag";
 const char* vertexshader_name = "vertexshader.vert";
+const char* singlecolor_fragshader_name = "singlecolor.frag";
 
 unsigned const int DELTA_TIME = 10;
 
@@ -47,6 +48,9 @@ struct LightSource
 
 // ID's
 GLuint program_id;
+GLuint singlecolor_fsh_id;
+GLuint singlecolor_program_id;
+
 std::vector<GLuint> vao;
 
 // Matrices
@@ -257,7 +261,7 @@ void Render()
         glBindVertexArray(0);
     }
 
-    beer->DrawBeer(program_id, view, projection);
+    beer->DrawBeer(singlecolor_program_id, view, projection);
     // Swap buffers
     glutSwapBuffers();
 }
@@ -312,9 +316,12 @@ void InitShaders()
     char* vertexshader = glsl::readFile(vertexshader_name);
 
     char* fragshader = glsl::readFile(fragshader_name);
+    char* singlecolor_fragshader = glsl::readFile(singlecolor_fragshader_name);
     
     vsh_id = glsl::makeVertexShader(vertexshader);
     fsh_id = glsl::makeFragmentShader(fragshader);
+    singlecolor_fsh_id = glsl::makeFragmentShader(singlecolor_fragshader);
+    singlecolor_program_id = glsl::makeShaderProgram(vsh_id, singlecolor_fsh_id);
     program_id = glsl::makeShaderProgram(vsh_id, fsh_id);
 }
 

@@ -37,5 +37,4 @@ void main()
 
     // Write final color to the framebuffer
     fragColor = vec4(mat_ambient + diffuse + specular, 1.0);
-    //fragColor = vec4(mat_ambient + diffuse, 1.0);
 }

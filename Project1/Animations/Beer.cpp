@@ -44,7 +44,7 @@ void Beer::DrawBeer(GLuint program_id, glm::mat4 view, glm::mat4 projection)
 {
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_real_distribution<> dis(0.0, 0.5);
+    std::uniform_real_distribution<> dis(0.0, 0.3);
     int vaoIndex = 0;
 
     for (int i = 0; i < beer_particles.size(); i++) {
@@ -78,17 +78,11 @@ void Beer::DrawBeer(GLuint program_id, glm::mat4 view, glm::mat4 projection)
         uniform_mv = glGetUniformLocation(program_id, "mv");
         const GLuint uniform_proj = glGetUniformLocation(program_id, "projection");
         const GLuint uniform_light_pos = glGetUniformLocation(program_id, "light_pos");
-        const GLuint uniform_material_ambient = glGetUniformLocation(program_id, "mat_ambient");
-        const GLuint uniform_material_diffuse = glGetUniformLocation(program_id, "mat_diffuse");
-        const GLuint uniform_specular = glGetUniformLocation(program_id, "mat_specular");
-        const GLuint uniform_material_power = glGetUniformLocation(program_id, "mat_power");
+        GLint fragColLocation = glGetUniformLocation(program_id, "FragCol");
         
         // Fill uniform vars
         glUniformMatrix4fv(uniform_proj, 1, GL_FALSE, glm::value_ptr(projection));
-        glUniform3fv(uniform_material_ambient, 1, glm::value_ptr(material.ambient_color));
-        glUniform3fv(uniform_material_diffuse, 1, glm::value_ptr(material.diffuse_color));
-        glUniform3fv(uniform_specular, 1, glm::value_ptr(material.specular_color));
-        glUniform1f(uniform_material_power, material.power);
+        glUniform3f(fragColLocation, 0.89f, 0.91f, 0.15f);
 
         // Send vao
         glBindVertexArray(vao[vaoIndex]);

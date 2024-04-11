@@ -12,38 +12,19 @@ private:
     std::vector<GLuint> vao;
     Beer()
     {
-        beer_particles = {
-            new Cube(glm::vec3(-0.5, 1.0, 0.0), glm::vec3(0.01, 0.01, 0.01)),
-            new Cube(glm::vec3(0.5, 1.0, 0.0), glm::vec3(0.01, 0.01, 0.01)),
-            new Cube(glm::vec3(0.0, 1.0, -0.5), glm::vec3(0.01, 0.01, 0.01)),
-            new Cube(glm::vec3(0.0, 1.0, 0.5), glm::vec3(0.01, 0.01, 0.01)),
-
-            new Cube(glm::vec3(0.0, 0.9, 0.5), glm::vec3(0.01, 0.01, 0.01)),
-            new Cube(glm::vec3(0.0, 0.9, -0.5), glm::vec3(0.01, 0.01, 0.01)),
-            new Cube(glm::vec3(0.5, 0.9, 0.0), glm::vec3(0.01, 0.01, 0.01)),
-            new Cube(glm::vec3(-0.5, 0.9, 0.0), glm::vec3(0.01, 0.01, 0.01)),
-
-            new Cube(glm::vec3(0.5, 0.8, 0.0), glm::vec3(0.01, 0.01, 0.01)),
-            new Cube(glm::vec3(-0.5, 0.8, 0.0), glm::vec3(0.01, 0.01, 0.01)),
-            new Cube(glm::vec3(0.0, 0.8, 0.5), glm::vec3(0.01, 0.01, 0.01)),
-            new Cube(glm::vec3(0.0, 0.8, -0.5), glm::vec3(0.01, 0.01, 0.01)),
-
-            new Cube(glm::vec3(0.0, 0.7, 0.5), glm::vec3(0.01, 0.01, 0.01)),
-            new Cube(glm::vec3(0.0, 0.7, -0.5), glm::vec3(0.01, 0.01, 0.01)),
-            new Cube(glm::vec3(0.5, 0.7, 0.0), glm::vec3(0.01, 0.01, 0.01)),
-            new Cube(glm::vec3(-0.5, 0.7, 0.0), glm::vec3(0.01, 0.01, 0.01)),
-
-            new Cube(glm::vec3(-0.5, 0.6, 0.0), glm::vec3(0.01, 0.01, 0.01)),
-            new Cube(glm::vec3(0.5, 0.6, 0.0), glm::vec3(0.01, 0.01, 0.01)),
-            new Cube(glm::vec3(0.0, 0.6, -0.5), glm::vec3(0.01, 0.01, 0.01)),
-            new Cube(glm::vec3(0.0, 0.6, 0.5), glm::vec3(0.01, 0.01, 0.01)),
-
-            new Cube(glm::vec3(0.0, 0.5, 0.5), glm::vec3(0.01, 0.01, 0.01)),
-            new Cube(glm::vec3(0.0, 0.5, -0.5), glm::vec3(0.01, 0.01, 0.01)),
-            new Cube(glm::vec3(0.5, 0.5, 0.0), glm::vec3(0.01, 0.01, 0.01)),
-            new Cube(glm::vec3(-0.5, 0.5, 0.0), glm::vec3(0.01, 0.01, 0.01))
-        };
-        yPos = { 1.0f, 1.0f, 1.0f, 1.0f, 0.9f, 0.9f, 0.9f, 0.9f, 0.8f, 0.8f, 0.8f, 0.8f, 0.7f, 0.7f, 0.7f, 0.7f, 0.6f, 0.6f, 0.6f, 0.6f, 0.5f, 0.5f, 0.5f, 0.5f };
+        float currY = 1.0f;
+        while(currY >= 0.0f)
+        {
+            beer_particles.push_back(new Cube(glm::vec3(-0.5f, currY, 0.0f), glm::vec3(0.01f, 0.01f, 0.01f)));
+            yPos.push_back(currY);
+            beer_particles.push_back(new Cube(glm::vec3(0.5f, currY, 0.0f), glm::vec3(0.01f, 0.01f, 0.01f)));
+            yPos.push_back(currY);
+            beer_particles.push_back(new Cube(glm::vec3(0.0f, currY, -0.5f), glm::vec3(0.01f, 0.01f, 0.01f)));
+            yPos.push_back(currY);
+            beer_particles.push_back(new Cube(glm::vec3(0.0f, currY, 0.5f), glm::vec3(0.01f, 0.01f, 0.01f)));
+            yPos.push_back(currY);
+            currY -= 0.05f;
+        }
     }
     
 public:
