@@ -119,6 +119,33 @@
           "rotation": [ 0.0, 0.0, 0.0 ]
         }
       ]
+    },
+    {
+      "Props": {
+        "name": "Stage",
+        "texture": "stairs",
+        "position": [ 13.1, 0.0, 0.0 ]
+      },
+      "Obj": [
+        {
+          "mesh": "Cube",
+          "position": [ 0.0, -0.55, 0.0 ],
+          "scale": [ 3.0, 0.6, 10.09 ],
+          "rotation": [ 0.0, 0.0, 0.0 ]
+        },
+        {
+          "mesh": "Cube",
+          "position": [ 1.0, 1.8, -7.1 ],
+          "scale": [ 1.0, 1.8, 3.0 ],
+          "rotation": [ 0.0, 0.0, 0.0 ]
+        },
+        {
+          "mesh": "Cube",
+          "position": [ 1.0, 1.8, 7.1 ],
+          "scale": [ 1.0, 1.8, 3.0 ],
+          "rotation": [ 0.0, 0.0, 0.0 ]
+        }
+      ]
     }
   ]
 }

@@ -6,6 +6,7 @@
 #include "ObjectProperties.h"
 #include "../objloader.h"
 #include "../texture.h"
+#include "../Animations/Animation.h"
 
 std::tuple<ObjectProperties*, int> Object::get_objects()
 {
@@ -24,7 +25,13 @@ std::tuple<ObjectProperties*, int> Object::get_objects()
         }
         objectProperties[i].model = glm::scale(objectProperties[i].model, properties->scale);
         objectProperties[i].model = glm::translate(objectProperties[i].model, properties->position);
-        
+        if(properties->isAnimated)
+        {
+            objectProperties[i].animation = new Animation(properties->xDegrees, properties->yDegrees, properties->zDegrees);
+        } else
+        {
+            objectProperties[i].animation = nullptr;
+        }
         delete properties;
         i++;
     }

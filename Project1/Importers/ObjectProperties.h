@@ -6,6 +6,8 @@
 
 #include "../Meshes/Meshes.h"
 
+class Animation;
+
 struct Material
 {
     glm::vec3 ambient_color;
@@ -23,6 +25,7 @@ struct ObjectProperties
     std::vector<glm::vec3> vertices;
     std::vector<glm::vec2> uvs;
     std::vector<glm::vec3> normals;
+    Animation* animation;
 };
 
 struct ImportProperties
@@ -33,6 +36,10 @@ struct ImportProperties
     glm::vec3 scale;
     glm::vec3 rotation;
     float radius;
+    bool isAnimated;
+    float xDegrees;
+    float yDegrees;
+    float zDegrees;
 };
 
 struct ObjectMeshes

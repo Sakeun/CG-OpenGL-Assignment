@@ -9,6 +9,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "glsl.h"
+#include "Animations/Animation.h"
 #include "Animations/Beer.h"
 #include "Buffers/BufferBinder.h"
 #include "Camera/CameraControls.h"
@@ -221,13 +222,13 @@ void Render()
     
     for (int i = 0; i < objectAmount; i++)
     {
-        objects[i].mv = view * objects[i].model;
         // Do transformation
-        if(i == 1)
+        if(objects[i].animation)
         {
-            //objects[i].model = glm::rotate(objects[i].model, 0.01f, glm::vec3(0.5f, 1.0f, 0.2f));
-            //objects[i].mv = view * objects[i].model;
+            objects[i].animation->Execute(objects[i].model);
         }
+
+        objects[i].mv = view * objects[i].model;
 
         // Send mv
         GLint uniform_mv = 0;

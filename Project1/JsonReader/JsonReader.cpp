@@ -21,6 +21,13 @@ std::vector<ImportProperties*> JsonReader::ReadObjects() {
         obj->scale = glm::vec3(object["Scale"]["x"], object["Scale"]["y"], object["Scale"]["z"]);
         obj->rotation = glm::vec3(object["Rotation"]["x"], object["Rotation"]["y"], object["Rotation"]["z"]);
         obj->radius = object["Rotation"]["radius"];
+        if(object["Animation"])
+        {
+            obj->isAnimated = true;
+            obj->xDegrees = object["AnimationProps"]["xDeg"];
+            obj->yDegrees = object["AnimationProps"]["yDeg"];
+            obj->zDegrees = object["AnimationProps"]["zDeg"];
+        }
         objects.push_back(obj);
     }
 
