@@ -21,6 +21,7 @@ struct ObjectProperties
     glm::mat4 model;
     glm::mat4 mv;
     GLuint texture;
+    glm::vec3 color;
     Material materials;
     std::vector<glm::vec3> vertices;
     std::vector<glm::vec2> uvs;

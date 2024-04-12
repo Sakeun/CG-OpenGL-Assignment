@@ -42,6 +42,12 @@
     <ClCompile Include="Meshes\Cube.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Animations\Animation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Animations\Beer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="glsl.h">
@@ -77,11 +83,18 @@
     <ClInclude Include="Meshes\Meshes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Animations\Animation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Animations\Beer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="vertexshader.vert" />
     <None Include="fragmentshader.frag" />
     <None Include="Meshes.json" />
     <None Include="Objects.json" />
+    <None Include="singlecolor.frag" />
   </ItemGroup>
 </Project>

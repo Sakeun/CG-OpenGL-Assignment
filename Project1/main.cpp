@@ -40,7 +40,7 @@ bool cubeRendered = false;
 
 struct LightSource
 {
-    glm::vec3 position = glm::vec3(4.0f, 4.0f, 4.0f);
+    glm::vec3 position = glm::vec3(4.0f, 2.0f, 2.0f);
 };
 
 //--------------------------------------------------------------------------------
@@ -220,7 +220,7 @@ void Render()
 
     tie(view, projection) = camera->SetVP(angle_x, angle_y, WIDTH, HEIGHT);
     
-    for (int i = 0; i < objectAmount; i++)
+    for (glm::uint i = 0; i < objectAmount; i++)
     {
         // Do transformation
         if(objects[i].animation)
@@ -230,31 +230,62 @@ void Render()
 
         objects[i].mv = view * objects[i].model;
 
-        // Send mv
-        GLint uniform_mv = 0;
-        glUniformMatrix4fv(uniform_mv, 1, GL_FALSE, glm::value_ptr(objects[i].mv));
-        glUseProgram(program_id);
+        if (objects[i].texture == 0) {
+            // Send mv
+            GLint uniform_mv = 0;
+            glUniformMatrix4fv(uniform_mv, 1, GL_FALSE, glm::value_ptr(objects[i].mv));
+            glUseProgram(singlecolor_program_id);
+            Material material;
+            Object::InitMaterialLights(material);
 
-        Object::InitMaterialLights(objects[i].materials);
-        
-        // Make uniform vars
-        uniform_mv = glGetUniformLocation(program_id, "mv");
-        const GLuint uniform_proj = glGetUniformLocation(program_id, "projection");
-        const GLuint uniform_light_pos = glGetUniformLocation(program_id, "light_pos");
-        const GLuint uniform_material_ambient = glGetUniformLocation(program_id, "mat_ambient");
-        const GLuint uniform_material_diffuse = glGetUniformLocation(program_id, "mat_diffuse");
-        const GLuint uniform_specular = glGetUniformLocation(program_id, "mat_specular");
-        const GLuint uniform_material_power = glGetUniformLocation(program_id, "mat_power");
+            // Make uniform vars
+            uniform_mv = glGetUniformLocation(singlecolor_program_id, "mv");
+            const GLuint uniform_proj = glGetUniformLocation(singlecolor_program_id, "projection");
+            const GLuint uniform_light_pos = glGetUniformLocation(singlecolor_program_id, "light_pos");
+            GLint fragColLocation = glGetUniformLocation(singlecolor_program_id, "FragCol");
+            const GLuint uniform_material_ambient = glGetUniformLocation(program_id, "mat_ambient");
+            const GLuint uniform_material_diffuse = glGetUniformLocation(program_id, "mat_diffuse");
+            const GLuint uniform_specular = glGetUniformLocation(program_id, "mat_specular");
+            const GLuint uniform_material_power = glGetUniformLocation(program_id, "mat_power");
 
-        //Bind Texture
-        glBindTexture(GL_TEXTURE_2D, objects[i].texture);
-        
-        // Fill uniform vars
-        glUniformMatrix4fv(uniform_proj, 1, GL_FALSE, glm::value_ptr(projection));
-        glUniform3fv(uniform_material_ambient, 1, glm::value_ptr(objects[i].materials.ambient_color));
-        glUniform3fv(uniform_material_diffuse, 1, glm::value_ptr(objects[i].materials.diffuse_color));
-        glUniform3fv(uniform_specular, 1, glm::value_ptr(objects[i].materials.specular_color));
-        glUniform1f(uniform_material_power, objects[i].materials.power);
+            // Fill uniform vars
+            glUniformMatrix4fv(uniform_proj, 1, GL_FALSE, glm::value_ptr(projection));
+            glm::vec3 color = objects[i].color;
+            glUniform3f(fragColLocation, color.r, color.g, color.b);
+            glUniform3fv(uniform_material_ambient, 1, glm::value_ptr(material.ambient_color));
+            glUniform3fv(uniform_material_diffuse, 1, glm::value_ptr(material.diffuse_color));
+            glUniform3fv(uniform_specular, 1, glm::value_ptr(material.specular_color));
+            glUniform1f(uniform_material_power, material.power);
+        }
+        else {
+
+            // Send mv
+            GLint uniform_mv = 0;
+            glUniformMatrix4fv(uniform_mv, 1, GL_FALSE, glm::value_ptr(objects[i].mv));
+            glUseProgram(program_id);
+
+            Object::InitMaterialLights(objects[i].materials);
+
+            // Make uniform vars
+            uniform_mv = glGetUniformLocation(program_id, "mv");
+            const GLuint uniform_proj = glGetUniformLocation(program_id, "projection");
+            const GLuint uniform_light_pos = glGetUniformLocation(program_id, "light_pos");
+            const GLuint uniform_material_ambient = glGetUniformLocation(program_id, "mat_ambient");
+            const GLuint uniform_material_diffuse = glGetUniformLocation(program_id, "mat_diffuse");
+            const GLuint uniform_specular = glGetUniformLocation(program_id, "mat_specular");
+            const GLuint uniform_material_power = glGetUniformLocation(program_id, "mat_power");
+
+            //Bind Texture
+            glBindTexture(GL_TEXTURE_2D, objects[i].texture);
+
+            glUniform1i(glGetUniformLocation(program_id, "texsampler"), 0);
+            // Fill uniform vars
+            glUniformMatrix4fv(uniform_proj, 1, GL_FALSE, glm::value_ptr(projection));
+            glUniform3fv(uniform_material_ambient, 1, glm::value_ptr(objects[i].materials.ambient_color));
+            glUniform3fv(uniform_material_diffuse, 1, glm::value_ptr(objects[i].materials.diffuse_color));
+            glUniform3fv(uniform_specular, 1, glm::value_ptr(objects[i].materials.specular_color));
+            glUniform1f(uniform_material_power, objects[i].materials.power);
+        }
 
         // Send vao
         glBindVertexArray(vao[i]);

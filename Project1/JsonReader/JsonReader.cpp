@@ -6,6 +6,7 @@
 #include "../Importers/ObjectProperties.h"
 #include "../Meshes/Cube.h"
 #include <glm/gtc/matrix_transform.hpp>
+#include "../Importers/Object.h"
 
 std::vector<ImportProperties*> JsonReader::ReadObjects() {
     std::ifstream file("Objects.json");
@@ -61,7 +62,13 @@ std::vector<ObjectProperties*> JsonReader::ReadMeshes()
                 obj->model = mesh.model;
             }
             std::string path = object["Props"]["texture"];
-            obj->texture = loadDDS(("Textures/" + path + ".dds").c_str());
+            obj->texture = 0;
+            if (path.find("color") != std::string::npos) {
+                std::string subS = path.substr(6);
+                obj->color = Object::get_color(subS);
+            } else {
+                obj->texture = loadDDS(("Textures/" + path + ".dds").c_str());
+            }
             objects.push_back(obj);
         }
     }

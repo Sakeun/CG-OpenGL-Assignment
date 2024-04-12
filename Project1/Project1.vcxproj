@@ -159,6 +159,7 @@
     <None Include="fragmentshader.frag" />
     <None Include="Meshes.json" />
     <None Include="Objects.json" />
+    <None Include="singlecolor.frag" />
     <None Include="vertexshader.vert" />
   </ItemGroup>
   <ItemGroup>
