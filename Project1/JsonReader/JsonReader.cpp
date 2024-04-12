@@ -7,6 +7,8 @@
 #include "../Meshes/Cube.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include "../Importers/Object.h"
+#include "../objloader.h"
+#include "../Animations/Animation.h"
 
 std::vector<ImportProperties*> JsonReader::ReadObjects() {
     std::ifstream file("Objects.json");
@@ -22,6 +24,7 @@ std::vector<ImportProperties*> JsonReader::ReadObjects() {
         obj->scale = glm::vec3(object["Scale"]["x"], object["Scale"]["y"], object["Scale"]["z"]);
         obj->rotation = glm::vec3(object["Rotation"]["x"], object["Rotation"]["y"], object["Rotation"]["z"]);
         obj->radius = object["Rotation"]["radius"];
+        obj->shader = object["Shader"];
         if(object["Animation"])
         {
             obj->isAnimated = true;
@@ -73,9 +76,10 @@ std::vector<ObjectProperties*> JsonReader::ReadMeshes()
             }
             std::string path = object["Props"]["texture"];
             obj->texture = 0;
+            obj->materials = ReadMaterial(object["Props"]["Shader"]);
             if (path.find("color") != std::string::npos) {
                 std::string subS = path.substr(6);
-                obj->color = Object::get_color(subS);
+                obj->materials.diffuse_color = Object::get_color(subS);
                 
             } else {
                 obj->texture = loadDDS(("Textures/" + path + ".dds").c_str());
@@ -87,4 +91,34 @@ std::vector<ObjectProperties*> JsonReader::ReadMeshes()
     file.close();
 
     return objects;
+}
+
+ShaderType JsonReader::GetShaderType(std::string shader)
+{
+    if (shader == "Glossy")
+        return ShaderType::Glossy;
+    if (shader == "SlightReflection")
+        return ShaderType::SlightReflection;
+    if (shader == "Shiny")
+        return ShaderType::Shiny;
+    if (shader == "Matt")
+        return ShaderType::Matt;
+    
+    return ShaderType::Glossy;
+}
+
+Material JsonReader::ReadMaterial(std::string shader)
+{
+    std::ifstream file("Shaders.json");
+    nlohmann::json object;
+    file >> object;
+    Material mat;
+    mat.ambient_color = getVec3(object[shader]["ambient"]);
+    mat.specular_color = getVec3(object[shader]["specular"]);
+    mat.power = object[shader]["shininess"];
+    mat.ambient_strength = object[shader]["ambientStrength"];
+    mat.specular_strength = object[shader]["specularStrength"];
+    mat.diffuse_strength = object[shader]["diffuseStrength"];
+    file.close();
+    return mat;
 }

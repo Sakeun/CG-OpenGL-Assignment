@@ -3,10 +3,16 @@
 #include <vector>
 #include <glm/glm.hpp>
 #include <GL/glew.h>
-
+#include "../Animations/Animation.h"
 #include "../Meshes/Meshes.h"
 
-class Animation;
+enum ShaderType
+{
+    Matt,
+    Glossy,
+    SlightReflection,
+    Shiny
+};
 
 struct Material
 {
@@ -14,6 +20,9 @@ struct Material
     glm::vec3 diffuse_color;
     glm::vec3 specular_color;
     float power;
+    float ambient_strength;
+    float specular_strength;
+    float diffuse_strength;
 };
 
 
@@ -22,7 +31,6 @@ struct ObjectProperties
     glm::mat4 model;
     glm::mat4 mv;
     GLuint texture;
-    glm::vec3 color;
     Material materials;
     std::vector<glm::vec3> vertices;
     std::vector<glm::vec2> uvs;
@@ -37,6 +45,7 @@ struct ImportProperties
     glm::vec3 position;
     glm::vec3 scale;
     glm::vec3 rotation;
+    std::string shader;
     float radius;
     bool isAnimated;
     float xDegrees;

@@ -38,6 +38,7 @@ std::tuple<ObjectProperties*, int> Object::get_objects()
         objectProperties[i].normals = loadedObjs[properties->path].normals;
 
         objectProperties[i].texture = loadDDS(("Textures/" + properties->texture + ".dds").c_str());
+        objectProperties[i].materials = JsonReader::ReadMaterial(properties->shader);
 
         objectProperties[i].model = glm::mat4();
         if (properties->radius != 0) {
@@ -76,8 +77,8 @@ glm::vec3 Object::get_color(std::string color) {
 
 void Object::InitMaterialLights(Material &materials)
 {
-    materials.ambient_color = glm::vec3(0.2, 0.2, 0.1);
-    materials.diffuse_color = glm::vec3(1.0, 1.0, 1.0);
+    materials.ambient_color = glm::vec3(0.2, 0.07, 0.07);
+    materials.diffuse_color = glm::vec3(0.5, 0.0, 0.0);
     materials.specular_color = glm::vec3(1.0, 1.0, 1.0);
-    materials.power = 100.0;
+    materials.power = 128.0;
 }

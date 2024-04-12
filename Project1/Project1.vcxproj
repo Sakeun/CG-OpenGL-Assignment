@@ -137,6 +137,7 @@
     <ClCompile Include="JsonReader\JsonReader.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Meshes\Cube.cpp" />
+    <ClCompile Include="Meshes\Cylinder.cpp" />
     <ClCompile Include="objloader.cpp" />
     <ClCompile Include="texture.cpp" />
   </ItemGroup>
@@ -151,6 +152,7 @@
     <ClInclude Include="json.hpp" />
     <ClInclude Include="JsonReader\JsonReader.h" />
     <ClInclude Include="Meshes\Cube.h" />
+    <ClInclude Include="Meshes\Cylinder.h" />
     <ClInclude Include="Meshes\Meshes.h" />
     <ClInclude Include="objloader.h" />
     <ClInclude Include="texture.h" />
@@ -165,6 +167,7 @@
   <ItemGroup>
     <Content Include="Meshes.json" />
     <Content Include="Objects.json" />
+    <Content Include="Shaders.json" />
     <Content Include="singlecolor.frag" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

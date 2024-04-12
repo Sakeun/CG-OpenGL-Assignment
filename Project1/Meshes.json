@@ -4,7 +4,8 @@
       "Props": {
         "name": "SpeakerLeft",
         "texture": "color Black",
-        "position": [ 12.8, 2.0, -7.0 ]
+        "position": [ 20.7, 2.0, -7.0 ],
+        "Shader": "Metallic"
       },
       "Obj": [
         {
@@ -83,7 +84,8 @@
       "Props": {
         "name": "SpeakerRight",
         "texture": "color Black",
-        "position": [ 12.8, 2.0, 7.0 ]
+        "position": [ 20.7, 2.0, 7.0 ],
+        "Shader": "Metallic"
       },
       "Obj": [
         {
@@ -162,7 +164,8 @@
       "Props": {
         "name": "Stairs",
         "texture": "stairs",
-        "position": [ -5.5, 0.0, 0.0 ]
+        "position": [ -5.5, 0.0, 0.0 ],
+        "Shader": "Phong"
       },
       "Obj": [
         {
@@ -276,13 +279,14 @@
       "Props": {
         "name": "Stage",
         "texture": "color Black",
-        "position": [ 13.1, 0.0, 0.0 ]
+        "position": [ 20.1, 0.0, 0.0 ],
+        "Shader": "Phong"
       },
       "Obj": [
         {
           "mesh": "Cube",
           "position": [ 0.0, -0.55, 0.0 ],
-          "scale": [ 3.0, 0.6, 10.09 ],
+          "scale": [ 5.0, 0.6, 10.09 ],
           "rotation": [ 0.0, 0.0, 0.0 ],
           "radians": 0.0
         }
@@ -292,20 +296,45 @@
       "Props": {
         "name": "Curtains",
         "texture": "color Red",
-        "position": [ 13.1, 0.0, 0.0 ]
+        "Shader": "Cloth",
+        "position": [ 20.1, 0.7, 0.0 ]
       },
       "Obj": [
         {
           "mesh": "Cube",
           "position": [ 1.0, 1.8, -7.1 ],
-          "scale": [ 1.0, 1.8, 3.0 ],
+          "scale": [ 0.2, 2.5, 3.0 ],
           "rotation": [ 0.0, 0.0, 0.0 ],
           "radians": 0.0
         },
         {
           "mesh": "Cube",
           "position": [ 1.0, 1.8, 7.1 ],
-          "scale": [ 1.0, 1.8, 3.0 ],
+          "scale": [ 0.2, 2.5, 3.0 ],
+          "rotation": [ 0.0, 0.0, 0.0 ],
+          "radians": 0.0
+        }
+      ]
+    },
+    {
+      "Props": {
+        "name": "Upstairs",
+        "texture": "color Black",
+        "Shader": "Phong",
+        "position": [ 20.1, 0.7, 0.0 ]
+      },
+      "Obj": [
+        {
+          "mesh": "Cube",
+          "position": [ 1.0, 1.8, -7.1 ],
+          "scale": [ 0.2, 2.5, 3.0 ],
+          "rotation": [ 0.0, 0.0, 0.0 ],
+          "radians": 0.0
+        },
+        {
+          "mesh": "Cube",
+          "position": [ 1.0, 1.8, 7.1 ],
+          "scale": [ 0.2, 2.5, 3.0 ],
           "rotation": [ 0.0, 0.0, 0.0 ],
           "radians": 0.0
         }

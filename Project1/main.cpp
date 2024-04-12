@@ -242,8 +242,6 @@ void Render()
             // Send mv
             GLint uniform_mv = glGetUniformLocation(singlecolor_program_id, "mv");
             glUniformMatrix4fv(uniform_mv, 1, GL_FALSE, glm::value_ptr(objects[i].mv));
-            Material material;
-            Object::InitMaterialLights(material);
 
             // Make uniform vars
             uniform_mv = glGetUniformLocation(singlecolor_program_id, "mv");
@@ -251,18 +249,22 @@ void Render()
             const GLuint uniform_light_pos = glGetUniformLocation(singlecolor_program_id, "light_pos");
             GLint fragColLocation = glGetUniformLocation(singlecolor_program_id, "FragCol");
             const GLuint uniform_material_ambient = glGetUniformLocation(program_id, "mat_ambient");
-            const GLuint uniform_material_diffuse = glGetUniformLocation(program_id, "mat_diffuse");
             const GLuint uniform_specular = glGetUniformLocation(program_id, "mat_specular");
             const GLuint uniform_material_power = glGetUniformLocation(program_id, "mat_power");
+            const GLuint uniform_reflection_ambient = glGetUniformLocation(program_id, "reflection_ambient");
+            const GLuint uniform_reflection_diffuse = glGetUniformLocation(program_id, "reflection_diffuse");
+            const GLuint uniform_reflection_specular = glGetUniformLocation(program_id, "reflection_specular");
 
             // Fill uniform vars
             glUniformMatrix4fv(uniform_proj, 1, GL_FALSE, glm::value_ptr(projection));
-            glm::vec3 color = objects[i].color;
+            glm::vec3 color = objects[i].materials.diffuse_color;
             glUniform3f(fragColLocation, color.r, color.g, color.b);
-            glUniform3fv(uniform_material_ambient, 1, glm::value_ptr(material.ambient_color));
-            glUniform3fv(uniform_material_diffuse, 1, glm::value_ptr(material.diffuse_color));
-            glUniform3fv(uniform_specular, 1, glm::value_ptr(material.specular_color));
-            glUniform1f(uniform_material_power, material.power);
+            glUniform3fv(uniform_material_ambient, 1, glm::value_ptr(objects[i].materials.ambient_color));
+            glUniform3fv(uniform_specular, 1, glm::value_ptr(objects[i].materials.specular_color));
+            glUniform1f(uniform_material_power, objects[i].materials.power);
+            glUniform1f(uniform_reflection_ambient, objects[i].materials.ambient_strength);
+            glUniform1f(uniform_reflection_diffuse, 1.0f);
+            glUniform1f(uniform_reflection_specular, objects[i].materials.specular_strength);
         }
         else {
             glUseProgram(program_id);
@@ -270,8 +272,6 @@ void Render()
             GLint uniform_mv = 0;
             glUniformMatrix4fv(uniform_mv, 1, GL_FALSE, glm::value_ptr(objects[i].mv));
             glUseProgram(program_id);
-
-            Object::InitMaterialLights(objects[i].materials);
 
             // Make uniform vars
             uniform_mv = glGetUniformLocation(program_id, "mv");
@@ -281,6 +281,9 @@ void Render()
             const GLuint uniform_material_diffuse = glGetUniformLocation(program_id, "mat_diffuse");
             const GLuint uniform_specular = glGetUniformLocation(program_id, "mat_specular");
             const GLuint uniform_material_power = glGetUniformLocation(program_id, "mat_power");
+            const GLuint uniform_reflection_ambient = glGetUniformLocation(program_id, "reflection_ambient");
+            const GLuint uniform_reflection_diffuse = glGetUniformLocation(program_id, "reflection_diffuse");
+            const GLuint uniform_reflection_specular = glGetUniformLocation(program_id, "reflection_specular");
 
             //Bind Texture
             glBindTexture(GL_TEXTURE_2D, objects[i].texture);
@@ -292,6 +295,9 @@ void Render()
             glUniform3fv(uniform_material_diffuse, 1, glm::value_ptr(objects[i].materials.diffuse_color));
             glUniform3fv(uniform_specular, 1, glm::value_ptr(objects[i].materials.specular_color));
             glUniform1f(uniform_material_power, objects[i].materials.power);
+            glUniform1f(uniform_reflection_ambient, objects[i].materials.ambient_strength);
+            glUniform1f(uniform_reflection_diffuse, objects[i].materials.diffuse_strength);
+            glUniform1f(uniform_reflection_specular, objects[i].materials.specular_strength);
         }
 
         // Send vao
