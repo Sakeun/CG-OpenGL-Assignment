@@ -1,37 +1,16 @@
 {
   "Objects": [
     {
-      "Path": "Axes",
-      "Texture": "AxesTexture",
-      "Pos": {
-        "x": 0.0,
-        "y": 0.0,
-        "z": 0.0
-      },
-      "Scale": {
-        "x": 0.5,
-        "y": 0.5,
-        "z": 0.5
-      },
-      "Rotation": {
-        "x": 0.0,
-        "y": 0.0,
-        "z": 0.0,
-        "radius": 0
-      },
-      "Animation": false
-    },
-    {
       "Path": "Walls",
       "Texture": "Walls",
       "Pos": {
         "x": 0.0,
-        "y": -2.5,
+        "y": -1.9,
         "z": 0.0
       },
       "Scale": {
-        "x": 1.0,
-        "y": 0.45,
+        "x": 1.5,
+        "y": 0.6,
         "z": 1.0
       },
       "Rotation": {
@@ -40,20 +19,21 @@
         "z": 0.0,
         "radius": 0
       },
-      "Animation": false
+      "Animation": false,
+      "Repeated": false
     },
     {
       "Path": "LightBarRound",
       "Texture": "Lights",
       "Pos": {
         "x": 0.0,
-        "y": 60.0,
+        "y": 35.0,
         "z": 0.0
       },
       "Scale": {
-        "x": 0.05,
-        "y": 0.05,
-        "z": 0.05
+        "x": 0.10,
+        "y": 0.10,
+        "z": 0.10
       },
       "Rotation": {
         "x": 0.0,
@@ -61,20 +41,21 @@
         "z": 0.0,
         "radius": 0
       },
-      "Animation": false
+      "Animation": false,
+      "Repeated": false
     },
     {
       "Path": "LightBar",
       "Texture": "Lights",
       "Pos": {
         "x": -35.0,
-        "y": 60.0,
+        "y": 35.0,
         "z": 0.0
       },
       "Scale": {
-        "x": 0.05,
-        "y": 0.05,
-        "z": 0.05
+        "x": 0.10,
+        "y": 0.10,
+        "z": 0.10
       },
       "Rotation": {
         "x": 0.0,
@@ -82,20 +63,27 @@
         "z": 0.0,
         "radius": 0
       },
-      "Animation": false
+      "Animation": false,
+      "Repeated": true,
+      "RepeatOffset": {
+        "amount": 2,
+        "xOffset": 130,
+        "yOffset": 0,
+        "zOffset": 0
+      }
     },
     {
       "Path": "LightBar",
       "Texture": "Lights",
       "Pos": {
         "x": -35.0,
-        "y": 60.0,
+        "y": 35.0,
         "z": 0.0
       },
       "Scale": {
-        "x": 0.05,
-        "y": 0.05,
-        "z": 0.05
+        "x": 0.10,
+        "y": 0.10,
+        "z": 0.10
       },
       "Rotation": {
         "x": 0.0,
@@ -103,20 +91,21 @@
         "z": 0.0,
         "radius": 90
       },
-      "Animation": false
+      "Animation": false,
+      "Repeated": false
     },
     {
       "Path": "LightBar",
       "Texture": "Lights",
       "Pos": {
         "x": -35.0,
-        "y": 60.0,
+        "y": 35.0,
         "z": 0.0
       },
       "Scale": {
-        "x": 0.05,
-        "y": 0.05,
-        "z": 0.05
+        "x": 0.10,
+        "y": 0.10,
+        "z": 0.10
       },
       "Rotation": {
         "x": 0.0,
@@ -124,20 +113,21 @@
         "z": 0.0,
         "radius": -90
       },
-      "Animation": false
+      "Animation": false,
+      "Repeated": false
     },
     {
       "Path": "LightBar",
       "Texture": "Lights",
       "Pos": {
         "x": -35.0,
-        "y": 60.0,
+        "y": 35.0,
         "z": 0.0
       },
       "Scale": {
-        "x": 0.05,
-        "y": 0.05,
-        "z": 0.05
+        "x": 0.10,
+        "y": 0.10,
+        "z": 0.10
       },
       "Rotation": {
         "x": 0.0,
@@ -145,7 +135,8 @@
         "z": 0.0,
         "radius": 180
       },
-      "Animation": false
+      "Animation": false,
+      "Repeated": false
     },
     {
       "Path": "RoundLight",
@@ -171,7 +162,8 @@
         "xDeg": 45.0,
         "yDeg": 360.0,
         "zDeg": 0.0
-      }
+      },
+      "Repeated": false
     },
     {
       "Path": "RoundLightBase",
@@ -197,7 +189,8 @@
         "xDeg": 0.0,
         "yDeg": 360.0,
         "zDeg": 0.0
-      }
+      },
+      "Repeated": false
     },
     {
       "Path": "RoundLight",
@@ -223,7 +216,8 @@
         "xDeg": -45.0,
         "yDeg": -360.0,
         "zDeg": 0.0
-      }
+      },
+      "Repeated": false
     },
     {
       "Path": "RoundLightBase",
@@ -249,7 +243,8 @@
         "xDeg": 0.0,
         "yDeg": -360.0,
         "zDeg": 0.0
-      }
+      },
+      "Repeated": false
     },
     {
       "Path": "BarAnimated",
@@ -270,7 +265,80 @@
         "z": 0.0,
         "radius": 90
       },
-      "Animation": false
+      "Animation": false,
+      "Repeated": false
+    },
+    {
+      "Path": "BarNormal",
+      "Texture": "MiscTextures",
+      "Pos": {
+        "x": 14.0,
+        "y": -1.0,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 0.6,
+        "y": 0.6,
+        "z": 0.6
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 1.0,
+        "z": 0.0,
+        "radius": 90
+      },
+      "Animation": false,
+      "Repeated": false
+    },
+    {
+      "Path": "BarNormal",
+      "Texture": "MiscTextures",
+      "Pos": {
+        "x": 37.0,
+        "y": 1.5,
+        "z": 0.0
+      },
+      "Scale": {
+        "x": 0.6,
+        "y": 0.6,
+        "z": 0.6
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": 1.0,
+        "z": 0.0,
+        "radius": 180
+      },
+      "Animation": false,
+      "Repeated": false
+    },
+    {
+      "Path": "Barricade",
+      "Texture": "MiscTextures",
+      "Pos": {
+        "x": -15.8,
+        "y": -1.85,
+        "z": -13.5
+      },
+      "Scale": {
+        "x": 0.6,
+        "y": 0.6,
+        "z": 0.6
+      },
+      "Rotation": {
+        "x": 0.0,
+        "y": -1.0,
+        "z": 0.0,
+        "radius": 90
+      },
+      "Animation": false,
+      "Repeated": true,
+      "RepeatOffset": {
+        "amount": 17,
+        "xOffset": 2,
+        "yOffset": 0,
+        "zOffset": 0
+      }
     }
   ]
 }

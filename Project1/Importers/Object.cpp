@@ -17,26 +17,35 @@ std::tuple<ObjectProperties*, int> Object::get_objects()
 {
     std::vector<ImportProperties*> objects = JsonReader::ReadObjects();
     std::vector<ObjectProperties*> meshes = JsonReader::ReadMeshes();
+
+    // Map used to store objects once they've already been loaded, to prevent having to load an object again if it's used multiple times.
+    std::map<std::string, ObjectElements> loadedObjs;
+
     ObjectProperties* objectProperties = new ObjectProperties[objects.size() + meshes.size()];
     int i = 0;
     for(auto properties : objects)
     {
-        bool res = loadOBJ(("Objects/" + properties->path + ".obj").c_str(), objectProperties[i].vertices, objectProperties[i].uvs, objectProperties[i].normals);
-        if(!res) continue;
-        objectProperties[i].texture = 0;
-        if (properties->texture.find("color") != std::string::npos) {
-            std::string subS = properties->texture.substr(6);
-            objectProperties[i].color = get_color(subS);
+        // Check if object has already been loaded
+        if (loadedObjs.find(properties->path) == loadedObjs.end()) {
+            ObjectElements obj;
+            bool res = loadOBJ(("Objects/" + properties->path + ".obj").c_str(), obj.vertices, obj.uvs, obj.normals);
+            if (!res) continue;
+            loadedObjs[properties->path] = obj;
         }
-        else {
-            objectProperties[i].texture = loadDDS(("Textures/" + properties->texture + ".dds").c_str());
-        }
+
+        objectProperties[i].vertices = loadedObjs[properties->path].vertices;
+        objectProperties[i].uvs = loadedObjs[properties->path].uvs;
+        objectProperties[i].normals = loadedObjs[properties->path].normals;
+
+        objectProperties[i].texture = loadDDS(("Textures/" + properties->texture + ".dds").c_str());
+
         objectProperties[i].model = glm::mat4();
         if (properties->radius != 0) {
             objectProperties[i].model = glm::rotate(objectProperties[i].model, glm::radians(properties->radius), properties->rotation);
         }
         objectProperties[i].model = glm::scale(objectProperties[i].model, properties->scale);
         objectProperties[i].model = glm::translate(objectProperties[i].model, properties->position);
+
         if(properties->isAnimated)
         {
             objectProperties[i].animation = new Animation(properties->xDegrees, properties->yDegrees, properties->zDegrees);
@@ -44,6 +53,7 @@ std::tuple<ObjectProperties*, int> Object::get_objects()
         {
             objectProperties[i].animation = nullptr;
         }
+
         delete properties;
         i++;
     }

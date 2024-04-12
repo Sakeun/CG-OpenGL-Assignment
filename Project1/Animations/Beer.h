@@ -34,4 +34,5 @@ public:
     static Beer* GetInstance();
     void InitBeerBuffers(GLuint program_id);
     void DrawBeer(GLuint program_id, glm::mat4 view, glm::mat4 projection);
+    void UpdatePositions();
 };

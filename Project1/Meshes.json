@@ -2,28 +2,159 @@
   "Objects": [
     {
       "Props": {
-        "name": "Speaker",
-        "texture": "uvmap",
-        "position": [ 0.0, 0.0, 0.0 ]
+        "name": "SpeakerLeft",
+        "texture": "color Black",
+        "position": [ 12.8, 2.0, -7.0 ]
       },
       "Obj": [
         {
           "mesh": "Cube",
           "position": [ 0.0, 0.0, 0.0 ],
-          "scale": [ 1.0, 0.2, 0.2 ],
-          "rotation": [ 0.0, 0.0, 0.0 ]
+          "scale": [ 0.2, 0.15, 0.4 ],
+          "rotation": [ 0.0, 0.0, 0.0 ],
+          "radians": 0.0
         },
         {
           "mesh": "Cube",
-          "position": [ 0.0, 0.4, -0.07 ],
-          "scale": [ 1.0, 0.2, 0.2 ],
-          "rotation": [ 1.0, 0.0, 0.0 ]
+          "position": [ 0.03, 0.3, 0.0 ],
+          "scale": [ 0.2, 0.15, 0.4 ],
+          "rotation": [ 0.0, 0.0, -1.0 ],
+          "radians": 10.0
         },
         {
           "mesh": "Cube",
-          "position": [ 0.0, -0.4, -0.07 ],
-          "scale": [ 1.0, 0.2, 0.2 ],
-          "rotation": [ -1.0, 0.0, 0.0 ]
+          "position": [ 0.10, 0.6, 0.0 ],
+          "scale": [ 0.2, 0.15, 0.4 ],
+          "rotation": [ 0.0, 0.0, -1.0 ],
+          "radians": 15.0
+        },
+        {
+          "mesh": "Cube",
+          "position": [ 0.03, -0.3, 0.0 ],
+          "scale": [ 0.2, 0.15, 0.4 ],
+          "rotation": [ 0.0, 0.0, 1.0 ],
+          "radians": 10.0
+        },
+        {
+          "mesh": "Cube",
+          "position": [ 0.10, -0.6, 0.0 ],
+          "scale": [ 0.2, 0.15, 0.4 ],
+          "rotation": [ 0.0, 0.0, 1.0 ],
+          "radians": 15.0
+        },
+        {
+          "mesh": "Cube",
+          "position": [ 0.0, 0.0, 0.85 ],
+          "scale": [ 0.2, 0.15, 0.4 ],
+          "rotation": [ 0.0, 0.0, 0.0 ],
+          "radians": 0.0
+        },
+        {
+          "mesh": "Cube",
+          "position": [ 0.03, 0.3, 0.85 ],
+          "scale": [ 0.2, 0.15, 0.4 ],
+          "rotation": [ 0.0, 0.0, -1.0 ],
+          "radians": 10.0
+        },
+        {
+          "mesh": "Cube",
+          "position": [ 0.10, 0.6, 0.85 ],
+          "scale": [ 0.2, 0.15, 0.4 ],
+          "rotation": [ 0.0, 0.0, -1.0 ],
+          "radians": 15.0
+        },
+        {
+          "mesh": "Cube",
+          "position": [ 0.03, -0.3, 0.85 ],
+          "scale": [ 0.2, 0.15, 0.4 ],
+          "rotation": [ 0.0, 0.0, 1.0 ],
+          "radians": 10.0
+        },
+        {
+          "mesh": "Cube",
+          "position": [ 0.10, -0.6, 0.85 ],
+          "scale": [ 0.2, 0.15, 0.4 ],
+          "rotation": [ 0.0, 0.0, 1.0 ],
+          "radians": 15.0
+        }
+      ]
+    },
+    {
+      "Props": {
+        "name": "SpeakerRight",
+        "texture": "color Black",
+        "position": [ 12.8, 2.0, 7.0 ]
+      },
+      "Obj": [
+        {
+          "mesh": "Cube",
+          "position": [ 0.0, 0.0, 0.0 ],
+          "scale": [ 0.2, 0.15, 0.4 ],
+          "rotation": [ 0.0, 0.0, 0.0 ],
+          "radians": 0.0
+        },
+        {
+          "mesh": "Cube",
+          "position": [ 0.03, 0.3, 0.0 ],
+          "scale": [ 0.2, 0.15, 0.4 ],
+          "rotation": [ 0.0, 0.0, -1.0 ],
+          "radians": 10.0
+        },
+        {
+          "mesh": "Cube",
+          "position": [ 0.10, 0.6, 0.0 ],
+          "scale": [ 0.2, 0.15, 0.4 ],
+          "rotation": [ 0.0, 0.0, -1.0 ],
+          "radians": 15.0
+        },
+        {
+          "mesh": "Cube",
+          "position": [ 0.03, -0.3, 0.0 ],
+          "scale": [ 0.2, 0.15, 0.4 ],
+          "rotation": [ 0.0, 0.0, 1.0 ],
+          "radians": 10.0
+        },
+        {
+          "mesh": "Cube",
+          "position": [ 0.10, -0.6, 0.0 ],
+          "scale": [ 0.2, 0.15, 0.4 ],
+          "rotation": [ 0.0, 0.0, 1.0 ],
+          "radians": 15.0
+        },
+        {
+          "mesh": "Cube",
+          "position": [ 0.0, 0.0, 0.85 ],
+          "scale": [ 0.2, 0.15, 0.4 ],
+          "rotation": [ 0.0, 0.0, 0.0 ],
+          "radians": 0.0
+        },
+        {
+          "mesh": "Cube",
+          "position": [ 0.03, 0.3, 0.85 ],
+          "scale": [ 0.2, 0.15, 0.4 ],
+          "rotation": [ 0.0, 0.0, -1.0 ],
+          "radians": 10.0
+        },
+        {
+          "mesh": "Cube",
+          "position": [ 0.10, 0.6, 0.85 ],
+          "scale": [ 0.2, 0.15, 0.4 ],
+          "rotation": [ 0.0, 0.0, -1.0 ],
+          "radians": 15.0
+        },
+        {
+          "mesh": "Cube",
+          "position": [ 0.03, -0.3, 0.85 ],
+          "scale": [ 0.2, 0.15, 0.4 ],
+          "rotation": [ 0.0, 0.0, 1.0 ],
+          "radians": 10.0
+        },
+        {
+          "mesh": "Cube",
+          "position": [ 0.10, -0.6, 0.85 ],
+          "scale": [ 0.2, 0.15, 0.4 ],
+          "rotation": [ 0.0, 0.0, 1.0 ],
+          "radians": 15.0
         }
       ]
     },
@@ -31,92 +162,113 @@
       "Props": {
         "name": "Stairs",
         "texture": "stairs",
-        "position": [ -6.0, 0.0, 0.0 ]
+        "position": [ -5.5, 0.0, 0.0 ]
       },
       "Obj": [
         {
           "mesh": "Cube",
-          "position": [ 0.0, -1.0, 0.0 ],
+          "position": [ -7.7, -1.1, 0.0 ],
           "scale": [ 1.0, 0.05, 10.09 ],
-          "rotation": [ 0.0, 0.0, 0.0 ]
+          "rotation": [ 0.0, 0.0, 0.0 ],
+          "radians": 0.0
         },
         {
           "mesh": "Cube",
-          "position": [ -0.3, -0.9, 0.0 ],
+          "position": [ -8.0, -1.0, 0.0 ],
           "scale": [ 1.0, 0.05, 10.09 ],
-          "rotation": [ 0.0, 0.0, 0.0 ]
+          "rotation": [ 0.0, 0.0, 0.0 ],
+          "radians": 0.0
         },
         {
           "mesh": "Cube",
-          "position": [ -0.6, -0.8, 0.0 ],
+          "position": [ -8.3, -0.9, 0.0 ],
           "scale": [ 1.0, 0.05, 10.09 ],
-          "rotation": [ 0.0, 0.0, 0.0 ]
+          "rotation": [ 0.0, 0.0, 0.0 ],
+          "radians": 0.0
         },
         {
           "mesh": "Cube",
-          "position": [ -0.9, -0.7, 0.0 ],
+          "position": [ -8.6, -0.8, 0.0 ],
           "scale": [ 1.0, 0.05, 10.09 ],
-          "rotation": [ 0.0, 0.0, 0.0 ]
+          "rotation": [ 0.0, 0.0, 0.0 ],
+          "radians": 0.0
         },
         {
           "mesh": "Cube",
-          "position": [ -1.2, -0.6, 0.0 ],
+          "position": [ -8.9, -0.7, 0.0 ],
           "scale": [ 1.0, 0.05, 10.09 ],
-          "rotation": [ 0.0, 0.0, 0.0 ]
+          "rotation": [ 0.0, 0.0, 0.0 ],
+          "radians": 0.0
         },
         {
           "mesh": "Cube",
-          "position": [ -1.5, -0.5, 0.0 ],
+          "position": [ -9.2, -0.6, 0.0 ],
           "scale": [ 1.0, 0.05, 10.09 ],
-          "rotation": [ 0.0, 0.0, 0.0 ]
+          "rotation": [ 0.0, 0.0, 0.0 ],
+          "radians": 0.0
         },
         {
           "mesh": "Cube",
-          "position": [ -1.8, -0.4, 0.0 ],
+          "position": [ -9.5, -0.5, 0.0 ],
           "scale": [ 1.0, 0.05, 10.09 ],
-          "rotation": [ 0.0, 0.0, 0.0 ]
+          "rotation": [ 0.0, 0.0, 0.0 ],
+          "radians": 0.0
         },
         {
           "mesh": "Cube",
-          "position": [ -2.1, -0.3, 0.0 ],
+          "position": [ -9.8, -0.4, 0.0 ],
           "scale": [ 1.0, 0.05, 10.09 ],
-          "rotation": [ 0.0, 0.0, 0.0 ]
+          "rotation": [ 0.0, 0.0, 0.0 ],
+          "radians": 0.0
         },
         {
           "mesh": "Cube",
-          "position": [ -2.4, -0.2, 0.0 ],
+          "position": [ -10.1, -0.3, 0.0 ],
           "scale": [ 1.0, 0.05, 10.09 ],
-          "rotation": [ 0.0, 0.0, 0.0 ]
+          "rotation": [ 0.0, 0.0, 0.0 ],
+          "radians": 0.0
         },
         {
           "mesh": "Cube",
-          "position": [ -2.7, -0.1, 0.0 ],
+          "position": [ -10.4, -0.2, 0.0 ],
           "scale": [ 1.0, 0.05, 10.09 ],
-          "rotation": [ 0.0, 0.0, 0.0 ]
+          "rotation": [ 0.0, 0.0, 0.0 ],
+          "radians": 0.0
         },
         {
           "mesh": "Cube",
-          "position": [ -3.0, 0.0, 0.0 ],
+          "position": [ -10.7, -0.1, 0.0 ],
           "scale": [ 1.0, 0.05, 10.09 ],
-          "rotation": [ 0.0, 0.0, 0.0 ]
+          "rotation": [ 0.0, 0.0, 0.0 ],
+          "radians": 0.0
         },
         {
           "mesh": "Cube",
-          "position": [ -3.3, 0.1, 0.0 ],
+          "position": [ -11.0, 0.0, 0.0 ],
           "scale": [ 1.0, 0.05, 10.09 ],
-          "rotation": [ 0.0, 0.0, 0.0 ]
+          "rotation": [ 0.0, 0.0, 0.0 ],
+          "radians": 0.0
         },
         {
           "mesh": "Cube",
-          "position": [ -3.6, 0.2, 0.0 ],
+          "position": [ -11.3, 0.1, 0.0 ],
           "scale": [ 1.0, 0.05, 10.09 ],
-          "rotation": [ 0.0, 0.0, 0.0 ]
+          "rotation": [ 0.0, 0.0, 0.0 ],
+          "radians": 0.0
         },
         {
           "mesh": "Cube",
-          "position": [ -6.9, 0.3, 0.0 ],
+          "position": [ -11.6, 0.2, 0.0 ],
+          "scale": [ 1.0, 0.05, 10.09 ],
+          "rotation": [ 0.0, 0.0, 0.0 ],
+          "radians": 0.0
+        },
+        {
+          "mesh": "Cube",
+          "position": [ -14.9, 0.3, 0.0 ],
           "scale": [ 4.0, 0.05, 10.09 ],
-          "rotation": [ 0.0, 0.0, 0.0 ]
+          "rotation": [ 0.0, 0.0, 0.0 ],
+          "radians": 0.0
         }
       ]
     },
@@ -131,13 +283,8 @@
           "mesh": "Cube",
           "position": [ 0.0, -0.55, 0.0 ],
           "scale": [ 3.0, 0.6, 10.09 ],
-          "rotation": [ 0.0, 0.0, 0.0 ]
-        },
-        {
-          "mesh": "Cube",
-          "position": [ 0.0, -0.55, 0.0 ],
-          "scale": [ 3.0, 0.6, 10.09 ],
-          "rotation": [ 0.0, 0.0, 0.0 ]
+          "rotation": [ 0.0, 0.0, 0.0 ],
+          "radians": 0.0
         }
       ]
     },
@@ -152,13 +299,15 @@
           "mesh": "Cube",
           "position": [ 1.0, 1.8, -7.1 ],
           "scale": [ 1.0, 1.8, 3.0 ],
-          "rotation": [ 0.0, 0.0, 0.0 ]
+          "rotation": [ 0.0, 0.0, 0.0 ],
+          "radians": 0.0
         },
         {
           "mesh": "Cube",
           "position": [ 1.0, 1.8, 7.1 ],
           "scale": [ 1.0, 1.8, 3.0 ],
-          "rotation": [ 0.0, 0.0, 0.0 ]
+          "rotation": [ 0.0, 0.0, 0.0 ],
+          "radians": 0.0
         }
       ]
     }

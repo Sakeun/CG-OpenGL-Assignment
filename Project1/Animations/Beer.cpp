@@ -42,27 +42,7 @@ void Beer::InitBeerBuffers(GLuint program_id)
 
 void Beer::DrawBeer(GLuint program_id, glm::mat4 view, glm::mat4 projection)
 {
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_real_distribution<> disX(-2.09, -2.03);
-    std::uniform_real_distribution<> disZ(8.29, 8.35);
-    int vaoIndex = 0;
-
     for (int i = 0; i < beer_particles.size(); i++) {
-        float randX = disX(gen);
-        float randZ = disZ(gen);
-        float yPos = this->yPos[i];
-
-        // Reset the model matrix and apply the translation
-        beer_particles[i]->model = glm::mat4(1.0f);
-        beer_particles[i]->model = glm::translate(beer_particles[i]->model, glm::vec3(randX, yPos, randZ));
-        beer_particles[i]->model = glm::scale(beer_particles[i]->model, glm::vec3(0.01, 0.01, 0.01));
-
-        this->yPos[i] -= 0.001f;
-        if(this->yPos[i] < minY)
-        {
-            this->yPos[i] = maxY;
-        }
         glm::mat4 mv = view * beer_particles[i]->model;
 
         // Send mv
@@ -83,9 +63,33 @@ void Beer::DrawBeer(GLuint program_id, glm::mat4 view, glm::mat4 projection)
         glUniform3f(fragColLocation, 0.89f, 0.91f, 0.15f);
 
         // Send vao
-        glBindVertexArray(vao[vaoIndex]);
+        glBindVertexArray(vao[i]);
         glDrawArrays(GL_TRIANGLES, 0, beer_particles[i]->triangles.size());
         glBindVertexArray(0);
-        vaoIndex++;
+    }
+}
+
+void Beer::UpdatePositions() {
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<> disX(-2.09, -2.03);
+    std::uniform_real_distribution<> disZ(8.29, 8.35);
+    int vaoIndex = 0;
+
+    for (int i = 0; i < beer_particles.size(); i++) {
+        float randX = disX(gen);
+        float randZ = disZ(gen);
+        float yPos = this->yPos[i];
+
+        // Reset the model matrix and apply the translation
+        beer_particles[i]->model = glm::mat4(1.0f);
+        beer_particles[i]->model = glm::translate(beer_particles[i]->model, glm::vec3(randX, yPos, randZ));
+        beer_particles[i]->model = glm::scale(beer_particles[i]->model, glm::vec3(0.01, 0.01, 0.01));
+
+        this->yPos[i] -= 0.001f;
+        if (this->yPos[i] < minY)
+        {
+            this->yPos[i] = maxY;
+        }
     }
 }

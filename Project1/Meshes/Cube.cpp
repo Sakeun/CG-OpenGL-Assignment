@@ -10,7 +10,7 @@ Cube::Cube(glm::vec3 position, glm::vec3 scale, glm::vec3 rotation, float radian
 
     // Apply rotation
     if (rotation.x != 0.0f || rotation.y != 0.0f || rotation.z != 0.0f)
-        rotationMatrix = glm::rotate(rotationMatrix, radians, rotation);
+        rotationMatrix = glm::rotate(rotationMatrix, glm::radians(radians), rotation);
 
     if (position != glm::vec3())
         translationMatrix = glm::translate(translationMatrix, position);

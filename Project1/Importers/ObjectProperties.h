@@ -16,6 +16,7 @@ struct Material
     float power;
 };
 
+
 struct ObjectProperties
 {
     glm::mat4 model;
@@ -53,4 +54,10 @@ struct ObjectMeshes
     glm::vec3 position;
     glm::vec3 scale;
     glm::vec3 rotation;
+};
+
+struct ObjectElements {
+    std::vector<glm::vec3> vertices;
+    std::vector<glm::vec2> uvs;
+    std::vector<glm::vec3> normals;
 };

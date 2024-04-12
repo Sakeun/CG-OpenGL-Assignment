@@ -31,6 +31,7 @@ const char* vertexshader_name = "vertexshader.vert";
 const char* singlecolor_fragshader_name = "singlecolor.frag";
 
 unsigned const int DELTA_TIME = 10;
+unsigned const int PARTICLE_DELTA_TIME = 50;
 
 bool cubeRendered = false;
 
@@ -202,13 +203,18 @@ void keyboardHandler(unsigned char key, int a, int b)
 //--------------------------------------------------------------------------------
 // Rendering
 //--------------------------------------------------------------------------------
+void RenderParticles() {
+
+    beer->UpdatePositions();
+    glutSwapBuffers();
+
+}
 
 void Render()
 {
     // Define background
     glClearColor(0.0, 0.0, 0.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glUseProgram(program_id);
 
     float current_frame = glutGet(GLUT_ELAPSED_TIME);
     delta_time = (current_frame - last_frame) / 1000.0f;
@@ -231,10 +237,11 @@ void Render()
         objects[i].mv = view * objects[i].model;
 
         if (objects[i].texture == 0) {
-            // Send mv
-            GLint uniform_mv = 0;
-            glUniformMatrix4fv(uniform_mv, 1, GL_FALSE, glm::value_ptr(objects[i].mv));
             glUseProgram(singlecolor_program_id);
+
+            // Send mv
+            GLint uniform_mv = glGetUniformLocation(singlecolor_program_id, "mv");
+            glUniformMatrix4fv(uniform_mv, 1, GL_FALSE, glm::value_ptr(objects[i].mv));
             Material material;
             Object::InitMaterialLights(material);
 
@@ -258,7 +265,7 @@ void Render()
             glUniform1f(uniform_material_power, material.power);
         }
         else {
-
+            glUseProgram(program_id);
             // Send mv
             GLint uniform_mv = 0;
             glUniformMatrix4fv(uniform_mv, 1, GL_FALSE, glm::value_ptr(objects[i].mv));
@@ -292,7 +299,6 @@ void Render()
         glDrawArrays(GL_TRIANGLES, 0, objects[i].vertices.size());
         glBindVertexArray(0);
     }
-
     beer->DrawBeer(singlecolor_program_id, view, projection);
     // Swap buffers
     glutSwapBuffers();
@@ -308,6 +314,11 @@ void Render(int n)
 {
     Render();
     glutTimerFunc(DELTA_TIME, Render, 0);
+}
+
+void UpdateBeerAnimation(int value) {
+    RenderParticles();
+    glutTimerFunc(PARTICLE_DELTA_TIME, UpdateBeerAnimation, 0);
 }
 
 
@@ -328,6 +339,7 @@ void InitGlutGlew(int argc, char** argv)
     glutMouseFunc(mouseClickHandler);
     glutPassiveMotionFunc(mouseMotionHandler);
     glutTimerFunc(DELTA_TIME, Render, 0);
+    glutTimerFunc(PARTICLE_DELTA_TIME, UpdateBeerAnimation, 0);
 
     glEnable(GL_DEPTH_TEST);
     glClear(GL_DEPTH_BUFFER_BIT);
