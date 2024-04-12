@@ -28,16 +28,24 @@ private:
         drone_mode_cam.camera_lookat = glm::vec3(-5.0, -1.0, -3.0);
         drone_mode_cam.camera_up = glm::vec3(0.0, 1.0, 0.0);
         drone_mode_cam.target_position = drone_mode_cam.camera_position;
+
+        upstairs_cam.camera_position = glm::vec3(-10.0, 4.5, 10.0);
+        upstairs_cam.camera_lookat = glm::vec3(3.0, 0.0, -1.0);
+        upstairs_cam.camera_up = glm::vec3(0.0, 1.0, 0.0);
+        upstairs_cam.target_position = upstairs_cam.camera_position;
         isWalk = true;
+        isUpstairs = false;
     }
     float yaw;
     float pitch;
     const float lerp_speed = 0.1f;
     CameraPositions walk_mode_cam;
     CameraPositions drone_mode_cam;
+    CameraPositions upstairs_cam;
     
 public:
     bool isWalk;
+    bool isUpstairs;
     
     CameraControls(CameraControls const&) = delete;
     void operator=(CameraControls const&) = delete;

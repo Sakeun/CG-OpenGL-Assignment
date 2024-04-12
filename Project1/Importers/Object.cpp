@@ -71,6 +71,8 @@ std::tuple<ObjectProperties*, int> Object::get_objects()
 glm::vec3 Object::get_color(std::string color) {
     if (color == "Red")
         return glm::vec3(0.76, 0.01, 0.04);
+    if (color == "Grey")
+        return glm::vec3(0.5, 0.5, 0.5);
 
     return glm::vec3(0.01, 0.01, 0.01);
 }

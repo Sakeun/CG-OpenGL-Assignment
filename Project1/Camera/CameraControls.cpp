@@ -34,7 +34,10 @@ void CameraControls::updateCameraRotation(float x, float y)
     direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
 
     if (isWalk) {
-        walk_mode_cam.camera_lookat = glm::normalize(direction);
+        if(isUpstairs)
+            upstairs_cam.camera_lookat = glm::normalize(direction);
+        else
+            walk_mode_cam.camera_lookat = glm::normalize(direction);
     }
     else {
         drone_mode_cam.camera_lookat = glm::normalize(direction);
@@ -45,7 +48,10 @@ void CameraControls::Lerp(float time) {
     time += lerp_speed;
     glm::vec3 newPosition = (1.0f - time) * getCameraPosition() + time * getTargetPosition();
     if (isWalk) {
-        walk_mode_cam.camera_position = newPosition;
+        if(isUpstairs)
+            upstairs_cam.camera_position = newPosition;
+        else
+            walk_mode_cam.camera_position = newPosition;
     }
     else {
         drone_mode_cam.camera_position = newPosition;
@@ -76,7 +82,10 @@ std::tuple<glm::mat4, glm::mat4> CameraControls::SetVP(const float x, const floa
 
 void CameraControls::updateTargetPosition(glm::vec3 targetPos) {
     if (isWalk) {
-        walk_mode_cam.target_position = targetPos;
+        if(isUpstairs)
+            upstairs_cam.target_position = targetPos;
+        else
+            walk_mode_cam.target_position = targetPos;
     }
     else {
         drone_mode_cam.target_position = targetPos;
@@ -84,24 +93,32 @@ void CameraControls::updateTargetPosition(glm::vec3 targetPos) {
 }
 
 glm::vec3 CameraControls::getTargetPosition() {
+    if(isUpstairs && isWalk)
+        return upstairs_cam.target_position;
     if (isWalk)
         return walk_mode_cam.target_position;
     return drone_mode_cam.target_position;
 }
 
 glm::vec3 CameraControls::getCameraUp() {
+    if(isUpstairs && isWalk)
+        return upstairs_cam.camera_up;
     if (isWalk)
         return walk_mode_cam.camera_up;
     return drone_mode_cam.camera_up;
 }
 
 glm::vec3 CameraControls::getCameraLookat() {
+    if(isUpstairs && isWalk)
+        return upstairs_cam.camera_lookat;
     if (isWalk)
         return walk_mode_cam.camera_lookat;
     return drone_mode_cam.camera_lookat;
 }
 
 glm::vec3 CameraControls::getCameraPosition() {
+    if(isUpstairs && isWalk)
+        return upstairs_cam.camera_position;
     if (isWalk)
         return walk_mode_cam.camera_position;
     return drone_mode_cam.camera_position;
@@ -109,7 +126,10 @@ glm::vec3 CameraControls::getCameraPosition() {
 
 void CameraControls::setCameraUp(glm::vec3 newValue) {
     if (isWalk) {
-        walk_mode_cam.camera_up = newValue;
+        if(isUpstairs)
+            upstairs_cam.camera_up = newValue;
+        else
+            walk_mode_cam.camera_up = newValue;
     }
     else {
         drone_mode_cam.camera_up = newValue;
@@ -117,7 +137,10 @@ void CameraControls::setCameraUp(glm::vec3 newValue) {
 }
 void CameraControls::setCameraLookat(glm::vec3 newValue) {
     if (isWalk) {
-        walk_mode_cam.camera_lookat = newValue;
+        if(isUpstairs)
+            upstairs_cam.camera_lookat = newValue;
+        else
+            walk_mode_cam.camera_lookat = newValue;
     }
     else {
         drone_mode_cam.camera_lookat = newValue;
@@ -125,7 +148,10 @@ void CameraControls::setCameraLookat(glm::vec3 newValue) {
 }
 void CameraControls::setCameraPosition(glm::vec3 newValue) {
     if (isWalk) {
-        walk_mode_cam.camera_position = newValue;
+        if(isUpstairs)
+            upstairs_cam.camera_position = newValue;
+        else
+            walk_mode_cam.camera_position = newValue;
     }
     else {
         drone_mode_cam.camera_position = newValue;
@@ -134,7 +160,10 @@ void CameraControls::setCameraPosition(glm::vec3 newValue) {
 
 void CameraControls::setTargetPosition(glm::vec3 newValue) {
     if (isWalk) {
-        walk_mode_cam.target_position = newValue;
+        if(isUpstairs)
+            upstairs_cam.target_position = newValue;
+        else
+            walk_mode_cam.target_position = newValue;
     }
     else {
         drone_mode_cam.target_position = newValue;

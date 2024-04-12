@@ -196,6 +196,14 @@ void keyboardHandler(unsigned char key, int a, int b)
         target_position.y += speed;
         camera->setTargetPosition(target_position);
     }
+    if(key == '1' && camera->isWalk)
+    {
+        camera->isUpstairs = false;
+    }
+    if(key == '2' && camera->isWalk)
+    {
+        camera->isUpstairs = true;
+    }
 
     glutPostRedisplay();
 }

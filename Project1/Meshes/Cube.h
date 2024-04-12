@@ -5,8 +5,7 @@ class Cube : public Meshes
 {
 public:
     explicit Cube(glm::vec3 position = glm::vec3(), glm::vec3 scale = glm::vec3(), glm::vec3 rotation = glm::vec3(0, 0, 0), float radians = 0.0f, MeshType type = MeshType::Cube);
-    ~Cube() = default;
-    
+
 private:
     std::vector<glm::vec3> vertices = {
         glm::vec3(-1.0f, -1.0f, 1.0f), // 0: Front bottom left

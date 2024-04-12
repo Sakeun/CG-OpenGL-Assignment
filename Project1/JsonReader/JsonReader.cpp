@@ -5,10 +5,10 @@
 #include "../texture.h"
 #include "../Importers/ObjectProperties.h"
 #include "../Meshes/Cube.h"
+#include "../Meshes/Cylinder.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include "../Importers/Object.h"
 #include "../objloader.h"
-#include "../Animations/Animation.h"
 
 std::vector<ImportProperties*> JsonReader::ReadObjects() {
     std::ifstream file("Objects.json");
@@ -62,29 +62,38 @@ std::vector<ObjectProperties*> JsonReader::ReadMeshes()
     for (auto& object : jsonObject["Objects"]) {
         for (auto& jsonMesh : object["Obj"]) {
             ObjectProperties* obj = new ObjectProperties();
+            Meshes* mesh = nullptr;
+            // Each mesh has it's own position, so the object can be "built" at the center. Additionally, the object (every mesh combined) has a position, to move everything together
+            // Add both positions together to get the final position of the mesh.
             if (jsonMesh["mesh"] == "Cube")
             {
-                // Each mesh has it's own position, so the object can be "built" at the center. Additionally, the object (every mesh combined) has a position, to move everything together
-                // Add both positions together to get the final position of the mesh.
                 glm::vec3 position = getVec3(jsonMesh["position"]) + getVec3(object["Props"]["position"]);
-
-                Cube mesh = Cube(position, getVec3(jsonMesh["scale"]), getVec3(jsonMesh["rotation"]), jsonMesh["radians"], MeshType::Cube);
-                obj->vertices = mesh.triangles;
-                obj->normals = mesh.normals;
-                obj->uvs = mesh.uvs;
-                obj->model = mesh.model;
+                mesh = new Cube(position, getVec3(jsonMesh["scale"]), getVec3(jsonMesh["rotation"]), jsonMesh["radians"], MeshType::Cube);
             }
-            std::string path = object["Props"]["texture"];
-            obj->texture = 0;
-            obj->materials = ReadMaterial(object["Props"]["Shader"]);
-            if (path.find("color") != std::string::npos) {
-                std::string subS = path.substr(6);
-                obj->materials.diffuse_color = Object::get_color(subS);
+            if(jsonMesh["mesh"] == "Cylinder")
+            {
+                glm::vec3 position = getVec3(jsonMesh["position"]) + getVec3(object["Props"]["position"]);
+                mesh = new Cylinder(position, getVec3(jsonMesh["scale"]), getVec3(jsonMesh["rotation"]), jsonMesh["radians"], MeshType::Cylinder);
+            }
+            if(mesh != nullptr)
+            {
+                obj->vertices = mesh->triangles;
+                obj->normals = mesh->normals;
+                obj->uvs = mesh->uvs;
+                obj->model = mesh->model;
+                delete mesh;
+                std::string path = object["Props"]["texture"];
+                obj->texture = 0;
+                obj->materials = ReadMaterial(object["Props"]["Shader"]);
+                if (path.find("color") != std::string::npos) {
+                    std::string subS = path.substr(6);
+                    obj->materials.diffuse_color = Object::get_color(subS);
                 
-            } else {
-                obj->texture = loadDDS(("Textures/" + path + ".dds").c_str());
+                } else {
+                    obj->texture = loadDDS(("Textures/" + path + ".dds").c_str());
+                }
+                objects.push_back(obj);
             }
-            objects.push_back(obj);
         }
     }
 
