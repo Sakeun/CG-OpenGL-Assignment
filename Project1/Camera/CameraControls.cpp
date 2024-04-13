@@ -2,6 +2,8 @@
 
 #include <tuple>
 
+#include "../glsl.h"
+
 CameraControls* CameraControls::instance = nullptr;
 
 CameraControls* CameraControls::GetInstance()
@@ -16,46 +18,38 @@ CameraControls* CameraControls::GetInstance()
 
 void CameraControls::updateCameraRotation(float x, float y)
 {
+    float* yaw = getYaw();
+    float* pitch = getPitch();
+    
     constexpr float sensitivity = 0.1f;
-    x *= sensitivity;
-    y *= sensitivity;
+    // Calculate the change in yaw and pitch
+    float deltaYaw = x * sensitivity;
+    float deltaPitch = y * sensitivity;
 
-    yaw += x;
-    pitch += y;
+    if (abs(deltaYaw) > 45.0f || abs(deltaPitch) > 45.0f)
+        return;
 
-    if(pitch > 89.0f)
-        pitch = 89.0f;
-    if(pitch < -89.0f)
-        pitch = -89.0f;
+    // Add the change in yaw and pitch to the current yaw and pitch
+    *yaw += deltaYaw;
+    *pitch += deltaPitch;
+
+    if(*pitch > 89.0f)
+        *pitch = 89.0f;
+    if(*pitch < -89.0f)
+        *pitch = -89.0f;
 
     glm::vec3 direction;
-    direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-    direction.y = sin(glm::radians(pitch));
-    direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+    direction.x = cos(glm::radians(*yaw)) * cos(glm::radians(*pitch));
+    direction.y = sin(glm::radians(*pitch));
+    direction.z = sin(glm::radians(*yaw)) * cos(glm::radians(*pitch));
 
-    if (isWalk) {
-        if(isUpstairs)
-            upstairs_cam.camera_lookat = glm::normalize(direction);
-        else
-            walk_mode_cam.camera_lookat = glm::normalize(direction);
-    }
-    else {
-        drone_mode_cam.camera_lookat = glm::normalize(direction);
-    }
+    setCameraLookat(glm::normalize(direction));
 }
 
 void CameraControls::Lerp(float time) {
     time += lerp_speed;
     glm::vec3 newPosition = (1.0f - time) * getCameraPosition() + time * getTargetPosition();
-    if (isWalk) {
-        if(isUpstairs)
-            upstairs_cam.camera_position = newPosition;
-        else
-            walk_mode_cam.camera_position = newPosition;
-    }
-    else {
-        drone_mode_cam.camera_position = newPosition;
-    }
+    setCameraPosition(newPosition);
 }
 
 std::tuple<glm::mat4, glm::mat4> CameraControls::SetVP(const float x, const float y, const int width, const int height)
@@ -160,6 +154,7 @@ void CameraControls::setCameraPosition(glm::vec3 newValue) {
 
 void CameraControls::setTargetPosition(glm::vec3 newValue) {
     if (isWalk) {
+        newValue.y = getTargetPosition().y;
         if(isUpstairs)
             upstairs_cam.target_position = newValue;
         else
@@ -168,4 +163,44 @@ void CameraControls::setTargetPosition(glm::vec3 newValue) {
     else {
         drone_mode_cam.target_position = newValue;
     }
+}
+
+void CameraControls::ToggleCameraMode(unsigned char key)
+{
+    if(key == '1' && isWalk)
+    {
+        isUpstairs = false;
+    }
+    else if(key == '2' && isWalk)
+    {
+        isUpstairs = true;
+    }
+    else if(key == 'v')
+    {
+        isWalk = !isWalk;
+    }
+}
+
+void CameraControls::SetYawPitch(float& yaw, float& pitch, glm::vec3 newValue)
+{
+    yaw = glm::degrees(atan2(newValue.z, newValue.x));
+    pitch = glm::degrees(asin(newValue.y));
+}
+
+float* CameraControls::getYaw()
+{
+    if(isUpstairs && isWalk)
+        return &upstairs_cam.yaw;
+    if (isWalk)
+        return &walk_mode_cam.yaw;
+    return &drone_mode_cam.yaw;
+}
+
+float* CameraControls::getPitch()
+{
+    if(isUpstairs && isWalk)
+        return &upstairs_cam.pitch;
+    if (isWalk)
+        return &walk_mode_cam.pitch;
+    return &drone_mode_cam.pitch;
 }

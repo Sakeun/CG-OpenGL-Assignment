@@ -145,11 +145,11 @@ void keyboardHandler(unsigned char key, int a, int b)
         glutExit();
     if(key == 'w')
     {
-        camera->setTargetPosition(target_position + speed * camera_direction_xz);
+        camera->setTargetPosition(target_position + speed * camera_lookat);
     }
     if(key == 's')
     {
-        camera->setTargetPosition(target_position - speed * camera_direction_xz);
+        camera->setTargetPosition(target_position - speed * camera_lookat);
     }
     if(key == 'a')
     {
@@ -161,27 +161,19 @@ void keyboardHandler(unsigned char key, int a, int b)
     }
     if(key == 'i')
     {
-        angle_y += speed;
-        glm::mat4 rotation = glm::rotate(glm::mat4(1.0f), speed, glm::vec3(1.0f, 0.0f, 0.0f));
-        camera->setCameraLookat(glm::vec3(rotation * glm::vec4(camera_lookat, 0.0f)));
+        camera->updateCameraRotation(0.0f, 10.0f);
     }
     if(key == 'k')
     {
-        angle_y -= speed;
-        glm::mat4 rotation = glm::rotate(glm::mat4(1.0f), -speed, glm::vec3(1.0f, 0.0f, 0.0f));
-        camera->setCameraLookat(glm::vec3(rotation * glm::vec4(camera_lookat, 0.0f)));
+        camera->updateCameraRotation(0.0f, -10.0f);
     }
     if(key == 'j')
     {
-        angle_x += speed;
-        glm::mat4 rotation = glm::rotate(glm::mat4(1.0f), speed, glm::vec3(0.0f, 1.0f, 0.0f));
-        camera->setCameraLookat(glm::vec3(rotation * glm::vec4(camera_lookat, 0.0f)));
+        camera->updateCameraRotation(-10.0f, 0.0f);
     }
     if(key == 'l')
     {
-        angle_x -= speed;
-        glm::mat4 rotation = glm::rotate(glm::mat4(1.0f), -speed, glm::vec3(0.0f, 1.0f, 0.0f));
-        camera->setCameraLookat(glm::vec3(rotation * glm::vec4(camera_lookat, 0.0f)));
+        camera->updateCameraRotation(10.0f, 0.0f);
     }
     if (key == 'v') {
         firstMouse = true;
@@ -203,6 +195,22 @@ void keyboardHandler(unsigned char key, int a, int b)
     if(key == '2' && camera->isWalk)
     {
         camera->isUpstairs = true;
+    }
+    if(key == 'b' && camera->isWalk)
+    {
+        if(beer->isGrabbed)
+        {
+            beer->DrinkBeer();
+        }
+        else
+        {
+            camera->isUpstairs = false;
+            camera->setCameraLookat(glm::vec3(-0.4f, -0.17f, 0.9f));
+            camera->setTargetPosition(glm::vec3(-1.35f, 0.5f, 6.92f));
+            camera->SetYawPitch(*camera->getYaw(), *camera->getPitch(), glm::normalize(camera->getCameraLookat()));
+            beer->GrabBeer(program_id);
+            
+        }
     }
 
     glutPostRedisplay();
@@ -240,6 +248,11 @@ void Render()
         if(objects[i].animation)
         {
             objects[i].animation->Execute(objects[i].model);
+            if (objects[i].animation->IsCompleted())
+            {
+                delete objects[i].animation;
+                objects[i].animation = nullptr;
+            }
         }
 
         objects[i].mv = view * objects[i].model;
@@ -314,6 +327,26 @@ void Render()
         glBindVertexArray(0);
     }
     beer->DrawBeer(singlecolor_program_id, view, projection);
+
+    glm::vec3 cameraPos = camera->getTargetPosition();
+    glm::vec3 cameraLookat = camera->getCameraLookat();
+    glm::vec3 cameraUp = camera->getCameraUp();
+
+    // Calculate the camera's right and down vectors
+    glm::vec3 cameraRight = glm::normalize(glm::cross(cameraLookat, cameraUp));
+    glm::vec3 cameraDown = glm::normalize(glm::cross(cameraRight, cameraLookat));
+
+    // Define the offset from the camera position
+    float rightOffset = 0.6f; // Adjust this value as needed
+    float downOffset = -0.2f; // Adjust this value as needed
+    glm::vec3 offset = rightOffset * cameraRight + downOffset * cameraDown;
+
+    if(camera->isWalk)
+        beer->UpdateCupPosition(cameraPos + cameraLookat + offset, program_id, view, projection);
+
+    printf("camera lookat: %f %f %f\n", cameraLookat.x, cameraLookat.y, cameraLookat.z);
+    printf("camera position: %f %f %f\n", cameraPos.x, cameraPos.y, cameraPos.z);
+    printf("camera up: %f %f %f\n", cameraUp.x, cameraUp.y, cameraUp.z);
     // Swap buffers
     glutSwapBuffers();
 }
