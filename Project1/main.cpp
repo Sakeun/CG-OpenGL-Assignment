@@ -11,6 +11,8 @@
 #include "glsl.h"
 #include "Animations/Animation.h"
 #include "Animations/Beer.h"
+#include "Animations/Crowd.h"
+#include "Animations/Instructions.h"
 #include "Buffers/BufferBinder.h"
 #include "Camera/CameraControls.h"
 #include "Importers/Object.h"
@@ -86,6 +88,8 @@ std::vector<ObjectMeshes*> objectMeshes;
 
 CameraControls* camera = CameraControls::GetInstance();
 Beer* beer = Beer::GetInstance();
+Instructions* instructions = Instructions::GetInstance();
+Crowd* crowd = Crowd::GetInstance();
 
 Meshes* cube = nullptr;
 
@@ -211,6 +215,10 @@ void keyboardHandler(unsigned char key, int a, int b)
             beer->GrabBeer(program_id);
             
         }
+    }
+    if(key == 'm')
+    {
+        instructions->GrabInstructions();
     }
 
     glutPostRedisplay();
@@ -338,15 +346,18 @@ void Render()
 
     // Define the offset from the camera position
     float rightOffset = 0.6f; // Adjust this value as needed
+    float leftOffset = -0.5f;
     float downOffset = -0.2f; // Adjust this value as needed
-    glm::vec3 offset = rightOffset * cameraRight + downOffset * cameraDown;
+    glm::vec3 offsetRight = rightOffset * cameraRight + downOffset * cameraDown;
+    glm::vec3 offsetLeft = leftOffset * cameraRight + downOffset * cameraDown;
 
     if(camera->isWalk)
-        beer->UpdateCupPosition(cameraPos + cameraLookat + offset, program_id, view, projection);
+        beer->UpdateCupPosition(cameraPos + cameraLookat + offsetRight, program_id, view, projection);
 
-    printf("camera lookat: %f %f %f\n", cameraLookat.x, cameraLookat.y, cameraLookat.z);
-    printf("camera position: %f %f %f\n", cameraPos.x, cameraPos.y, cameraPos.z);
-    printf("camera up: %f %f %f\n", cameraUp.x, cameraUp.y, cameraUp.z);
+    instructions->UpdateInstructionsPosition(cameraPos + cameraLookat + offsetLeft, program_id, view, projection);
+
+    crowd->DrawCrowd(program_id, view, projection);
+    
     // Swap buffers
     glutSwapBuffers();
 }

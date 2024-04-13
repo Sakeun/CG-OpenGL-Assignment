@@ -100,7 +100,7 @@ void Beer::UpdatePositions() {
 
 void Beer::GrabBeer(GLuint program_id)
 {
-    if (!isGrabbed)
+    if (!isGrabbed && !cup)
     {
         cup = new ObjectProperties();
         bool res = loadOBJ("Objects/Cup.obj", cup->vertices, cup->uvs, cup->normals);
