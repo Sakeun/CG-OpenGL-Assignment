@@ -26,7 +26,7 @@
     {
       "Path": "LightBarRound",
       "Texture": "Lights",
-      "Shader": "Metallic",
+      "Shader": "Props",
       "Pos": {
         "x": 15.0,
         "y": 35.0,
@@ -49,7 +49,7 @@
     {
       "Path": "LightBar",
       "Texture": "Lights",
-      "Shader": "Metallic",
+      "Shader": "Props",
       "Pos": {
         "x": -20.0,
         "y": 35.0,
@@ -78,7 +78,7 @@
     {
       "Path": "LightBar",
       "Texture": "Lights",
-      "Shader": "Metallic",
+      "Shader": "Props",
       "Pos": {
         "x": -35.0,
         "y": 35.0,
@@ -101,7 +101,7 @@
     {
       "Path": "LightBar",
       "Texture": "Lights",
-      "Shader": "Metallic",
+      "Shader": "Props",
       "Pos": {
         "x": -35.0,
         "y": 35.0,
@@ -124,7 +124,7 @@
     {
       "Path": "LightBar",
       "Texture": "Lights",
-      "Shader": "Metallic",
+      "Shader": "Props",
       "Pos": {
         "x": -50.0,
         "y": 35.0,
@@ -147,7 +147,7 @@
     {
       "Path": "RoundLight",
       "Texture": "Lights",
-      "Shader": "Metallic",
+      "Shader": "Props",
       "Pos": {
         "x": 80.0,
         "y": 0.45,
@@ -175,7 +175,7 @@
     {
       "Path": "RoundLightBase",
       "Texture": "Lights",
-      "Shader": "Metallic",
+      "Shader": "Props",
       "Pos": {
         "x": 80.0,
         "y": 0.45,
@@ -203,7 +203,7 @@
     {
       "Path": "RoundLight",
       "Texture": "Lights",
-      "Shader": "Metallic",
+      "Shader": "Props",
       "Pos": {
         "x": 80.0,
         "y": 0.45,
@@ -231,7 +231,7 @@
     {
       "Path": "RoundLightBase",
       "Texture": "Lights",
-      "Shader": "Metallic",
+      "Shader": "Props",
       "Pos": {
         "x": 80.0,
         "y": 0.45,
@@ -356,8 +356,8 @@
     },
     {
       "Path": "Artist",
-      "Texture": "MiscTextures",
-      "Shader": "Metallic",
+      "Texture": "color Grey",
+      "Shader": "Singer",
       "Pos": {
         "x": 0.0,
         "y": 0.05,

@@ -5,7 +5,7 @@
         "name": "SpeakerLeft",
         "texture": "color Black",
         "position": [ 20.7, 2.0, -7.0 ],
-        "Shader": "Metallic"
+        "Shader": "Props"
       },
       "Obj": [
         {
@@ -85,7 +85,7 @@
         "name": "SpeakerRight",
         "texture": "color Black",
         "position": [ 20.7, 2.0, 7.0 ],
-        "Shader": "Metallic"
+        "Shader": "Props"
       },
       "Obj": [
         {
@@ -165,7 +165,7 @@
         "name": "Stairs",
         "texture": "stairs",
         "position": [ -5.5, 0.0, 0.0 ],
-        "Shader": "Phong"
+        "Shader": "Wall"
       },
       "Obj": [
         {
@@ -280,7 +280,7 @@
         "name": "Stage",
         "texture": "color Black",
         "position": [ 20.1, 0.0, 0.0 ],
-        "Shader": "Phong"
+        "Shader": "Stage"
       },
       "Obj": [
         {
@@ -296,7 +296,7 @@
       "Props": {
         "name": "Curtains",
         "texture": "color Red",
-        "Shader": "Cloth",
+        "Shader": "Curtain",
         "position": [ 20.1, 0.7, 0.0 ]
       },
       "Obj": [

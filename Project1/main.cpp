@@ -141,19 +141,27 @@ void keyboard_handler(unsigned char key, int a, int b)
         glutExit();
     if(key == 'w')
     {
-        camera->set_target_position(target_position + speed * camera_lookat);
+        glm::vec3 updated_position = target_position + speed * camera_lookat;
+        updated_position.y = target_position.y;
+        camera->set_target_position(updated_position);
     }
     if(key == 's')
     {
-        camera->set_target_position(target_position - speed * camera_lookat);
+        glm::vec3 updated_position = target_position - speed * camera_lookat;
+        updated_position.y = target_position.y;
+        camera->set_target_position(updated_position);
     }
     if(key == 'a')
     {
-        camera->set_target_position(target_position - glm::normalize(glm::cross(camera_lookat, camera_up)) * speed);
+        glm::vec3 updated_position = target_position - glm::normalize(glm::cross(camera_lookat, camera_up)) * speed;
+        updated_position.y = target_position.y;
+        camera->set_target_position(updated_position);
     }
     if(key == 'd')
     {
-        camera->set_target_position(target_position + glm::normalize(glm::cross(camera_lookat, camera_up)) * speed);
+        glm::vec3 updated_position = target_position + glm::normalize(glm::cross(camera_lookat, camera_up)) * speed;
+        updated_position.y = target_position.y;
+        camera->set_target_position(updated_position);
     }
     if(key == 'i')
     {

@@ -1,21 +1,5 @@
 {
-  "Phong": {
-    "ambient": [ 0.1, 0.1, 0.1 ],
-    "specular": [ 1.0, 1.0, 1.0 ],
-    "shininess": 32.0,
-    "ambientStrength": 0.2,
-    "diffuseStrength": 0.8,
-    "specularStrength": 0.5
-  },
-  "Blinn": {
-    "ambient": [ 0.15, 0.15, 0.15 ],
-    "specular": [ 1.0, 1.0, 1.0 ],
-    "shininess": 64.0,
-    "ambientStrength": 0.1,
-    "diffuseStrength": 0.9,
-    "specularStrength": 0.8
-  },
-  "Metallic": {
+  "Props": {
     "ambient": [ 0.05, 0.05, 0.05 ],
     "specular": [ 1.0, 1.0, 1.0 ],
     "shininess": 128.0,
@@ -23,7 +7,7 @@
     "diffuseStrength": 0.5,
     "specularStrength": 0.9
   },
-  "Cloth": {
+  "Curtain": {
     "ambient": [ 0.2, 0.2, 0.2 ],
     "specular": [ 0.2, 0.2, 0.2 ],
     "shininess": 16.0,
@@ -31,36 +15,52 @@
     "diffuseStrength": 0.7,
     "specularStrength": 0.3
   },
-  "Ceramic": {
-    "ambient": [ 0.1, 0.1, 0.1 ],
-    "specular": [ 0.8, 0.8, 0.8 ],
-    "shininess": 30.0,
-    "ambientStrength": 0.3,
-    "diffuseStrength": 0.6,
-    "specularStrength": 0.8
-  },
   "Bar": {
-    "ambient": [ 0.1, 0.1, 0.1 ],
+    "ambient": [ 0.95, 0.62, 0.88 ],
     "specular": [ 1.0, 1.0, 1.0 ],
     "shininess": 10.0,
-    "ambientStrength": 0.2,
+    "ambientStrength": 0.1,
     "diffuseStrength": 1.0,
     "specularStrength": 1.0
   },
   "Barricade": {
-    "ambient": [ 0.1, 0.1, 0.1 ],
+    "ambient": [ 0.95, 0.62, 0.88 ],
     "specular": [ 1.0, 1.0, 1.0 ],
     "shininess": 15.0,
-    "ambientStrength": 0.2,
+    "ambientStrength": 0.1,
     "diffuseStrength": 0.5,
     "specularStrength": 1.0
   },
   "Wall": {
+    "ambient": [ 0.95, 0.62, 0.88 ],
+    "specular": [ 1.0, 1.0, 1.0 ],
+    "shininess": 3.0,
+    "ambientStrength": 0.1,
+    "diffuseStrength": 1.0,
+    "specularStrength": 0.5
+  },
+  "Singer": {
+    "ambient": [ 0.1, 0.1, 0.1 ],
+    "specular": [ 1.0, 1.0, 1.0 ],
+    "shininess": 128.0,
+    "ambientStrength": 0.1,
+    "diffuseStrength": 1.0,
+    "specularStrength": 0.5
+  },
+  "Character": {
+    "ambient": [ 0.95, 0.62, 0.88 ],
+    "specular": [ 1.0, 1.0, 1.0 ],
+    "shininess": 128.0,
+    "ambientStrength": 0.25,
+    "diffuseStrength": 1.0,
+    "specularStrength": 0.5
+  },
+  "Stage": {
     "ambient": [ 0.2, 0.2, 0.2 ],
     "specular": [ 1.0, 1.0, 1.0 ],
-    "shininess": 5.0,
-    "ambientStrength": 0.3,
-    "diffuseStrength": 0.7,
-    "specularStrength": 0.2
+    "shininess": 80.0,
+    "ambientStrength": 0.1,
+    "diffuseStrength": 1.0,
+    "specularStrength": 0.5
   }
 }
