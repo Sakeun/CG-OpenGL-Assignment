@@ -3,8 +3,8 @@
 #include <vector>
 #include <glm/glm.hpp>
 #include <GL/glew.h>
-#include "../Animations/Animation.h"
-#include "../Meshes/Meshes.h"
+#include "Animations/Animation.h"
+#include "Meshes/Meshes.h"
 
 enum ShaderType
 {
@@ -51,18 +51,6 @@ struct ImportProperties
     float xDegrees;
     float yDegrees;
     float zDegrees;
-};
-
-struct ObjectMeshes
-{
-    std::vector<Meshes> meshes;
-    Material materials;
-    GLuint texture;
-    glm::mat4 model;
-    glm::mat4 mv;
-    glm::vec3 position;
-    glm::vec3 scale;
-    glm::vec3 rotation;
 };
 
 struct ObjectElements {

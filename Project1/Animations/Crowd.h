@@ -2,7 +2,7 @@
 #include <GL/glew.h>
 #include <vector>
 #include <glm/gtc/type_ptr.hpp>
-#include "../Importers/ObjectProperties.h"
+#include "../Structs.h"
 #include "../Buffers/RenderingHandler.h"
 
 class Crowd

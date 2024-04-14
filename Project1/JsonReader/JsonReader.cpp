@@ -3,7 +3,6 @@
 
 #include "../json.hpp"
 #include "../texture.h"
-#include "../Importers/ObjectProperties.h"
 #include "../Meshes/Cube.h"
 #include "../Meshes/Cylinder.h"
 #include <glm/gtc/matrix_transform.hpp>

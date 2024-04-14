@@ -54,7 +54,7 @@ void Beer::draw_beer_particles(GLuint program_id, glm::mat4 view, glm::mat4 proj
         glUseProgram(program_id);
         
         Material material;
-        Object::InitMaterialLights(material);
+        Object::init_material_lights(material);
         
         // Make uniform vars
         uniform_mv = glGetUniformLocation(program_id, "mv");

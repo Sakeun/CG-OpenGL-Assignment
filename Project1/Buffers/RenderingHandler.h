@@ -2,7 +2,7 @@
 #include <GL/glew.h>
 #include <glm/detail/type_mat.hpp>
 
-#include "../Importers/ObjectProperties.h"
+#include "../Structs.h"
 
 enum FragmentShader
 {

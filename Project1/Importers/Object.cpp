@@ -2,8 +2,6 @@
 #include "../JsonReader/JsonReader.h"
 #include <string>
 #include <glm/gtc/matrix_transform.hpp>
-
-#include "ObjectProperties.h"
 #include "../objloader.h"
 #include "../texture.h"
 #include "../Animations/Animation.h"
@@ -40,6 +38,7 @@ std::tuple<ObjectProperties*, int> Object::get_objects()
         objectProperties[i].texture = loadDDS(("Textures/" + properties->texture + ".dds").c_str());
         objectProperties[i].materials = JsonReader::ReadMaterial(properties->shader);
 
+        // Translate the object to the predefined position
         objectProperties[i].model = glm::mat4();
         if (properties->radius != 0) {
             objectProperties[i].model = glm::rotate(objectProperties[i].model, glm::radians(properties->radius), properties->rotation);
@@ -47,6 +46,7 @@ std::tuple<ObjectProperties*, int> Object::get_objects()
         objectProperties[i].model = glm::scale(objectProperties[i].model, properties->scale);
         objectProperties[i].model = glm::translate(objectProperties[i].model, properties->position);
 
+        // Add animation to the object
         if(properties->isAnimated)
         {
             objectProperties[i].animation = new Animation(properties->xDegrees, properties->yDegrees, properties->zDegrees);
@@ -59,6 +59,7 @@ std::tuple<ObjectProperties*, int> Object::get_objects()
         i++;
     }
 
+    // Add all the custom made meshes to the object array for rendering
     for(auto properties : meshes)
     {
         objectProperties[i] = *properties;
@@ -77,7 +78,7 @@ glm::vec3 Object::get_color(std::string color) {
     return glm::vec3(0.01, 0.01, 0.01);
 }
 
-void Object::InitMaterialLights(Material &materials)
+void Object::init_material_lights(Material &materials)
 {
     materials.ambient_color = glm::vec3(0.2, 0.07, 0.07);
     materials.diffuse_color = glm::vec3(0.5, 0.0, 0.0);

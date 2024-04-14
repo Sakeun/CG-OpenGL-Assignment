@@ -2,7 +2,7 @@
 #include <GL/glew.h>
 
 #include "../Buffers/RenderingHandler.h"
-#include "../Importers/ObjectProperties.h"
+#include "../Structs.h"
 #include "../Meshes/Cube.h"
 
 class Beer

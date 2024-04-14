@@ -17,9 +17,8 @@
 #include "Buffers/RenderingHandler.h"
 #include "Camera/CameraControls.h"
 #include "Importers/Object.h"
-#include "Importers/ObjectProperties.h"
+#include "Structs.h"
 #include "JsonReader/JsonReader.h"
-#include "Meshes/Cube.h"
 
 using namespace std;
 
@@ -67,38 +66,38 @@ float delta_time = 0.0f;
 float last_frame = 0.0f;
 
 // Mouse tracking
-bool mouseActive = false;
+bool mouse_active = false;
 int last_x = WIDTH / 2, last_y = HEIGHT / 2;
 
 // Mouse positions
-bool firstMouse = true;
+bool first_mouse = true;
 int mouse_x, mouse_y;
 
 // Object properties
 ObjectProperties* objects;
-int objectAmount;
+int object_amount;
 
 // Singletons
 CameraControls* camera = CameraControls::get_instance();
 Beer* beer = Beer::get_instance();
 Instructions* instructions = Instructions::get_instance();
 Crowd* crowd = Crowd::get_instance();
-RenderingHandler* renderingHandler;
+RenderingHandler* rendering_handler;
 
 //--------------------------------------------------------------------------------
 // Mouse handling
 //--------------------------------------------------------------------------------
 
-void mouseMotionHandler(int x, int y)
+void mouse_motion_handler(int x, int y)
 {
-    if (firstMouse)
+    if (first_mouse)
     {
         last_x = x;
         last_y = y;
-        firstMouse = false;
+        first_mouse = false;
     }
 
-    if (!mouseActive) {
+    if (!mouse_active) {
         return;
     }
 
@@ -113,13 +112,13 @@ void mouseMotionHandler(int x, int y)
     
 }
 
-void mouseClickHandler(int button, int state, int x, int y)
+void mouse_click_handler(int button, int state, int x, int y)
 {
     if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
     {
-        mouseActive = !mouseActive;
-        if (mouseActive) {
-            firstMouse = true;
+        mouse_active = !mouse_active;
+        if (mouse_active) {
+            first_mouse = true;
             glutWarpPointer(WIDTH / 2, HEIGHT / 2);
         }
     }
@@ -129,7 +128,7 @@ void mouseClickHandler(int button, int state, int x, int y)
 // Keyboard handling
 //--------------------------------------------------------------------------------
 
-void keyboardHandler(unsigned char key, int a, int b)
+void keyboard_handler(unsigned char key, int a, int b)
 {
     const float speed = 10.0f * delta_time;
     glm::vec3 target_position = camera->get_target_position();
@@ -209,14 +208,14 @@ void keyboardHandler(unsigned char key, int a, int b)
 //--------------------------------------------------------------------------------
 // Rendering
 //--------------------------------------------------------------------------------
-void RenderParticles() {
+void render_particles() {
 
     beer->update_particle_positions();
     glutSwapBuffers();
 
 }
 
-void Render()
+void render()
 {
     // Lerp camera for smooth movement
     float current_frame = glutGet(GLUT_ELAPSED_TIME);
@@ -230,7 +229,7 @@ void Render()
 
     camera->set_vp(view, projection, angle_x, angle_y, WIDTH, HEIGHT);
     
-    for (glm::uint i = 0; i < objectAmount; i++)
+    for (glm::uint i = 0; i < object_amount; i++)
     {
         // Check if the object has an animation and execute it
         if(objects[i].animation)
@@ -248,13 +247,13 @@ void Render()
 
         // Render based on what type of shader it uses
         if (objects[i].texture == 0) {
-            renderingHandler->render(projection, &objects[i], SingleColor);
+            rendering_handler->render(projection, &objects[i], SingleColor);
         }
         else {
-            renderingHandler->render(projection, &objects[i], Phong);
+            rendering_handler->render(projection, &objects[i], Phong);
         }
         
-        renderingHandler->draw_arrays(vao[i], objects[i].vertices.size());
+        rendering_handler->draw_arrays(vao[i], objects[i].vertices.size());
     }
 
     // Calculate the arm positions for the FPS view
@@ -290,20 +289,20 @@ void Render()
 // Render method that is called by the timer function
 //------------------------------------------------------------
 
-void Render(int n)
+void render(int n)
 {
     // Define background
     glClearColor(0.0, 0.0, 0.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
-    Render();
-    glutTimerFunc(DELTA_TIME, Render, 0);
+    render();
+    glutTimerFunc(DELTA_TIME, render, 0);
 }
 
 // Slower render function for the beer tap animation
-void UpdateBeerAnimation(int value) {
-    RenderParticles();
-    glutTimerFunc(PARTICLE_DELTA_TIME, UpdateBeerAnimation, 0);
+void update_beer_animation(int value) {
+    render_particles();
+    glutTimerFunc(PARTICLE_DELTA_TIME, update_beer_animation, 0);
 }
 
 
@@ -312,19 +311,19 @@ void UpdateBeerAnimation(int value) {
 // Initializes Glut and Glew
 //------------------------------------------------------------
 
-void InitGlutGlew(int argc, char** argv)
+void init_glut_glew(int argc, char** argv)
 {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
     glutInitWindowSize(WIDTH, HEIGHT);
     glutCreateWindow("OpenGL Sietse van der Zee");
     //glutFullScreen();
-    glutDisplayFunc(Render);
-    glutKeyboardFunc(keyboardHandler);
-    glutMouseFunc(mouseClickHandler);
-    glutPassiveMotionFunc(mouseMotionHandler);
-    glutTimerFunc(DELTA_TIME, Render, 0);
-    glutTimerFunc(PARTICLE_DELTA_TIME, UpdateBeerAnimation, 0);
+    glutDisplayFunc(render);
+    glutKeyboardFunc(keyboard_handler);
+    glutMouseFunc(mouse_click_handler);
+    glutPassiveMotionFunc(mouse_motion_handler);
+    glutTimerFunc(DELTA_TIME, render, 0);
+    glutTimerFunc(PARTICLE_DELTA_TIME, update_beer_animation, 0);
 
     glEnable(GL_DEPTH_TEST);
     glClear(GL_DEPTH_BUFFER_BIT);
@@ -338,7 +337,7 @@ void InitGlutGlew(int argc, char** argv)
 // Initializes the fragmentshader and vertexshader
 //------------------------------------------------------------
 
-void InitShaders()
+void init_shaders()
 {
     const char* fragshader_name = "fragmentshader.frag";
     const char* vertexshader_name = "vertexshader.vert";
@@ -357,7 +356,7 @@ void InitShaders()
     singlecolor_program_id = glsl::makeShaderProgram(vsh_id, singlecolor_fsh_id);
     program_id = glsl::makeShaderProgram(vsh_id, fsh_id);
 
-    renderingHandler = RenderingHandler::get_instance(program_id, singlecolor_program_id);
+    rendering_handler = RenderingHandler::get_instance(program_id, singlecolor_program_id);
 }
 
 //------------------------------------------------------------
@@ -365,9 +364,9 @@ void InitShaders()
 // Allocates and fills buffers
 //------------------------------------------------------------
 
-void InitBuffers()
+void init_buffers()
 {
-    for (int i = 0; i < objectAmount; i++)
+    for (int i = 0; i < object_amount; i++)
     {
         vao.push_back(0);
         
@@ -395,10 +394,10 @@ void InitBuffers()
 
 int main(int argc, char** argv)
 {
-    InitGlutGlew(argc, argv);
-    InitShaders();
-    tie(objects, objectAmount) = Object::get_objects();
-    InitBuffers();
+    init_glut_glew(argc, argv);
+    init_shaders();
+    tie(objects, object_amount) = Object::get_objects();
+    init_buffers();
 
     // Hide console window
     HWND hWnd = GetConsoleWindow();

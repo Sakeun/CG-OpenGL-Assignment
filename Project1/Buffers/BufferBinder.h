@@ -2,7 +2,7 @@
 #include <vector>
 #include <GL/glew.h>
 
-#include "../Importers/ObjectProperties.h"
+#include "../Structs.h"
 
 class BufferBinder
 {

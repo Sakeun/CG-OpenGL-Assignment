@@ -1,5 +1,5 @@
 #pragma once
-#include "../Importers/ObjectProperties.h"
+#include "../Structs.h"
 #include "../objloader.h"
 #include "../texture.h"
 #include "../JsonReader/JsonReader.h"

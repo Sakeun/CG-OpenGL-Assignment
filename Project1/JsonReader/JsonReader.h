@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../json.hpp"
-#include "../Importers/ObjectProperties.h"
+#include "../Structs.h"
 
 class JsonReader
 {

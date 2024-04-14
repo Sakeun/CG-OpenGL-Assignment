@@ -154,13 +154,13 @@
     <ClInclude Include="Camera\CameraControls.h" />
     <ClInclude Include="glsl.h" />
     <ClInclude Include="Importers\Object.h" />
-    <ClInclude Include="Importers\ObjectProperties.h" />
     <ClInclude Include="json.hpp" />
     <ClInclude Include="JsonReader\JsonReader.h" />
     <ClInclude Include="Meshes\Cube.h" />
     <ClInclude Include="Meshes\Cylinder.h" />
     <ClInclude Include="Meshes\Meshes.h" />
     <ClInclude Include="objloader.h" />
+    <ClInclude Include="Structs.h" />
     <ClInclude Include="texture.h" />
   </ItemGroup>
   <ItemGroup>
