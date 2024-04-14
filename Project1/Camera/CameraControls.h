@@ -28,6 +28,7 @@ private:
     CameraPositions drone_mode_cam;
     CameraPositions upstairs_cam;
 
+    // Pointer to the active camera to easily update the correct camera
     CameraPositions* active_cam;
     CameraMode active_mode;
     

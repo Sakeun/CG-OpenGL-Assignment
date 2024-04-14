@@ -44,5 +44,6 @@ void AmbientAnimation::update_object(ObjectProperties& object)
         if(color_index > 4)
             color_index = 0;
     }
+    
     object.materials.ambient_color = get_color();
 }

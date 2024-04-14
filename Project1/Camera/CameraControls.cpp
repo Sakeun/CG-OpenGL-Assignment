@@ -69,6 +69,7 @@ void CameraControls::set_vp(glm::mat4& view, glm::mat4& projection, const float 
         100.0f);
 }
 
+// Switch between camera modes and set the active camera to the correct one
 void CameraControls::toggle_camera_mode(unsigned char key)
 {
     if(key == '1' && get_active_mode() == CameraMode::Upstairs)
