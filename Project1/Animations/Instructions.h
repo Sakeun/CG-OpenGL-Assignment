@@ -13,16 +13,16 @@ private:
     static Instructions* instance;
     RenderingHandler* rendering_handler = RenderingHandler::GetInstance();
 
-    void InitInstructionsBuffers(GLuint program_id);
+    void init_instructions_buffers(GLuint program_id);
     
     Instructions()
     {
-        isGrabbed = true;
+        is_grabbed = true;
     }
     
 public:
-    bool isGrabbed;
-    static Instructions* GetInstance();
-    void GrabInstructions();
-    void UpdateInstructionsPosition(glm::vec3 position, GLuint program_id, glm::mat4 view, glm::mat4 projection);
+    bool is_grabbed;
+    static Instructions* get_instance();
+    void grab_instructions();
+    void update_instructions_position(glm::vec3 position, GLuint program_id, glm::mat4 view, glm::mat4 projection);
 };

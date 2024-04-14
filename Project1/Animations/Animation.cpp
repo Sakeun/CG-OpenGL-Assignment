@@ -1,6 +1,6 @@
 #include "Animation.h"
 
-Animation::Animation(const float x, const float y, const float z, const bool isLoop): x_degrees(x), y_degrees(y), z_degrees(z), isLoop(isLoop)
+Animation::Animation(const float x, const float y, const float z, const bool isLoop): x_degrees(x), y_degrees(y), z_degrees(z), is_loop(isLoop)
 {
     current_x_degrees = 0.0f;
     current_y_degrees = 0.0f;
@@ -12,7 +12,7 @@ Animation::Animation(const float x, const float y, const float z, const bool isL
 }
 
 // Execute animation
-void Animation::Execute(glm::mat4& model)
+void Animation::execute(glm::mat4& model)
 {
     // Extract scale and translation from model so it can be reapplied after rotation
     glm::vec3 scale;
@@ -26,24 +26,27 @@ void Animation::Execute(glm::mat4& model)
     glm::mat4 z_matrix = glm::mat4(1.0f);
     
     if(x_degrees != 0.0f)
-        RotateX(x_matrix);
+        rotate_x(x_matrix);
     if(y_degrees != 0.0f)
-        RotateY(y_matrix);
+        rotate_y(y_matrix);
     if(z_degrees != 0.0f)
-        RotateZ(z_matrix);
+        rotate_z(z_matrix);
+
+    // Dont apply rotation if animation is completed to avoid jitter
     if(completed) return;
+    
     model = z_matrix * y_matrix * x_matrix;
     model = glm::scale(model, scale);
     model[3] = glm::vec4(translation, 1.0f);
 }
 
 // Rotation functions for X Y and Z, which repeat the animation if it is a loop
-void Animation::RotateX(glm::mat4& model)
+void Animation::rotate_x(glm::mat4& model)
 {
     current_x_degrees += x_direction;
     if(abs(current_x_degrees) >= abs(x_degrees) && x_degrees != 360.0f)
     {
-        if(isLoop) {
+        if(is_loop) {
             x_direction *= -1;
         }
         else {
@@ -53,12 +56,12 @@ void Animation::RotateX(glm::mat4& model)
     model = glm::rotate(model, glm::radians(current_x_degrees), x_rotation);
 }
 
-void Animation::RotateY(glm::mat4& model)
+void Animation::rotate_y(glm::mat4& model)
 {
     current_y_degrees += y_direction;
     if(abs(current_y_degrees) >= abs(y_degrees) && y_degrees != 360.0f)
     {
-        if(isLoop) {
+        if(is_loop) {
             y_direction *= -1;
         }
         else {
@@ -68,12 +71,12 @@ void Animation::RotateY(glm::mat4& model)
     model = glm::rotate(model, glm::radians(current_y_degrees), y_rotation);
 }
 
-void Animation::RotateZ(glm::mat4& model)
+void Animation::rotate_z(glm::mat4& model)
 {
     current_z_degrees += z_direction;
     if(abs(current_z_degrees) >= abs(z_degrees) && z_degrees != 360.0f)
     {
-        if(isLoop) {
+        if(is_loop) {
             z_direction *= -1;
         }
         else {

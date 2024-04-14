@@ -80,9 +80,9 @@ int objectAmount;
 
 // Singletons
 CameraControls* camera = CameraControls::GetInstance();
-Beer* beer = Beer::GetInstance();
-Instructions* instructions = Instructions::GetInstance();
-Crowd* crowd = Crowd::GetInstance();
+Beer* beer = Beer::get_instance();
+Instructions* instructions = Instructions::get_instance();
+Crowd* crowd = Crowd::get_instance();
 RenderingHandler* renderingHandler;
 
 //--------------------------------------------------------------------------------
@@ -183,11 +183,11 @@ void keyboardHandler(unsigned char key, int a, int b)
         target_position.y += speed;
         camera->setTargetPosition(target_position);
     }
-    if(key == 'b' && camera->getActiveMode() )
+    if(key == 'b' && current_camera_mode != Drone)
     {
-        if(beer->isGrabbed)
+        if(beer->is_grabbed)
         {
-            beer->DrinkBeer();
+            beer->drink_beer();
         }
         else
         {
@@ -196,13 +196,13 @@ void keyboardHandler(unsigned char key, int a, int b)
             camera->setCameraLookat(glm::vec3(-0.4f, -0.17f, 0.9f));
             camera->setTargetPosition(glm::vec3(-1.35f, 0.5f, 6.92f));
             camera->SetYawPitch(*camera->getYaw(), *camera->getPitch(), glm::normalize(camera->getCameraLookat()));
-            beer->GrabBeer(program_id);
+            beer->grab_beer(program_id);
             
         }
     }
     if(key == 'm')
     {
-        instructions->GrabInstructions();
+        instructions->grab_instructions();
     }
 }
 
@@ -211,7 +211,7 @@ void keyboardHandler(unsigned char key, int a, int b)
 //--------------------------------------------------------------------------------
 void RenderParticles() {
 
-    beer->UpdatePositions();
+    beer->update_particle_positions();
     glutSwapBuffers();
 
 }
@@ -235,10 +235,10 @@ void Render()
         // Check if the object has an animation and execute it
         if(objects[i].animation)
         {
-            objects[i].animation->Execute(objects[i].model);
+            objects[i].animation->execute(objects[i].model);
 
             // Delete the animation in case it is completed to prevent memory leak
-            if (objects[i].animation->IsCompleted())
+            if (objects[i].animation->is_completed())
             {
                 delete objects[i].animation;
                 objects[i].animation = nullptr;
@@ -273,12 +273,12 @@ void Render()
 
     // Update and render the cup and instructions
     if(camera->getActiveMode() != Drone)
-        beer->UpdateCupPosition(cameraPos + cameraLookat + offsetRight, program_id, view, projection);
-    instructions->UpdateInstructionsPosition(cameraPos + cameraLookat + offsetLeft, program_id, view, projection);
+        beer->update_cup_position(cameraPos + cameraLookat + offsetRight, program_id, view, projection);
+    instructions->update_instructions_position(cameraPos + cameraLookat + offsetLeft, program_id, view, projection);
 
     // Render the crowd and beer
-    beer->DrawBeer(singlecolor_program_id, view, projection);
-    crowd->DrawCrowd(program_id, view, projection);
+    beer->draw_beer_particles(singlecolor_program_id, view, projection);
+    crowd->draw_crowd(program_id, view, projection);
     
     // Swap buffers
     glutSwapBuffers();
@@ -389,7 +389,7 @@ void InitBuffers()
         glBindVertexArray(0);
     }
 
-    beer->InitBeerBuffers(program_id);
+    beer->init_beer_buffers(program_id);
 }
 
 

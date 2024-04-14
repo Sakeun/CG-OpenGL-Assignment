@@ -6,7 +6,7 @@
 
 Instructions* Instructions::instance = nullptr;
 
-Instructions* Instructions::GetInstance()
+Instructions* Instructions::get_instance()
 {
     if (!instance)
     {
@@ -16,14 +16,14 @@ Instructions* Instructions::GetInstance()
 }
 
 // Update the position of the instructions to the position of the hand and render it
-void Instructions::UpdateInstructionsPosition(glm::vec3 position, GLuint program_id, glm::mat4 view, glm::mat4 projection)
+void Instructions::update_instructions_position(glm::vec3 position, GLuint program_id, glm::mat4 view, glm::mat4 projection)
 {
-    if(!isGrabbed) return;
+    if(!is_grabbed) return;
 
     // if the instructions are not initialized, initialize them
     if(!instructions)
     {
-        InitInstructionsBuffers(program_id);
+        init_instructions_buffers(program_id);
     }
 
     glm::mat4 cameraRotation = glm::mat4(glm::mat3(view));
@@ -40,12 +40,12 @@ void Instructions::UpdateInstructionsPosition(glm::vec3 position, GLuint program
     rendering_handler->DrawArrays(vao, instructions->vertices.size());
 }
 
-void Instructions::GrabInstructions()
+void Instructions::grab_instructions()
 {
-    isGrabbed = !isGrabbed;
+    is_grabbed = !is_grabbed;
 }
 
-void Instructions::InitInstructionsBuffers(GLuint program_id)
+void Instructions::init_instructions_buffers(GLuint program_id)
 {
     instructions = new ObjectProperties();
     bool res = loadOBJ("Objects/Instructions.obj", instructions->vertices, instructions->uvs, instructions->normals);
