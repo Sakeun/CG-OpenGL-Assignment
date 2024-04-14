@@ -305,7 +305,8 @@
         "z": 0.0,
         "radius": 90
       },
-      "Animation": false,
+      "Animation": true,
+      "AnimationType": "diffuse",
       "Repeated": false
     },
     {
