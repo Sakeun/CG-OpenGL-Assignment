@@ -1,6 +1,7 @@
 #pragma once
 #include <GL/glew.h>
 
+#include "../Buffers/RenderingHandler.h"
 #include "../Importers/ObjectProperties.h"
 #include "../Meshes/Cube.h"
 
@@ -15,7 +16,8 @@ private:
     GLuint cup_vao;
 
     Animation* cup_animation;
-
+    RenderingHandler* rendering_handler = RenderingHandler::GetInstance();
+    
     float minY = -0.1f;
     float maxY = 0.18f;
     Beer()

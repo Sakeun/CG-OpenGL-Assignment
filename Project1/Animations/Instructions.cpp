@@ -34,42 +34,8 @@ void Instructions::UpdateInstructionsPosition(glm::vec3 position, GLuint program
 
     instructions->mv = view * instructions->model;
 
-    // Send mv
-    glUseProgram(program_id);
-
-    GLint uniform_mv = 0;
-    glUniformMatrix4fv(uniform_mv, 1, GL_FALSE, glm::value_ptr(instructions->mv));
-    
-    // Make uniform vars
-    uniform_mv = glGetUniformLocation(program_id, "mv");
-    const GLuint uniform_proj = glGetUniformLocation(program_id, "projection");
-    const GLuint uniform_light_pos = glGetUniformLocation(program_id, "light_pos");
-    const GLuint uniform_material_ambient = glGetUniformLocation(program_id, "mat_ambient");
-    const GLuint uniform_material_diffuse = glGetUniformLocation(program_id, "mat_diffuse");
-    const GLuint uniform_specular = glGetUniformLocation(program_id, "mat_specular");
-    const GLuint uniform_material_power = glGetUniformLocation(program_id, "mat_power");
-    const GLuint uniform_reflection_ambient = glGetUniformLocation(program_id, "reflection_ambient");
-    const GLuint uniform_reflection_diffuse = glGetUniformLocation(program_id, "reflection_diffuse");
-    const GLuint uniform_reflection_specular = glGetUniformLocation(program_id, "reflection_specular");
-
-    //Bind Texture
-    glBindTexture(GL_TEXTURE_2D, instructions->texture);
-
-    glUniform1i(glGetUniformLocation(program_id, "texsampler"), 0);
-    // Fill uniform vars
-    glUniformMatrix4fv(uniform_proj, 1, GL_FALSE, glm::value_ptr(projection));
-    glUniform3fv(uniform_material_ambient, 1, glm::value_ptr(instructions->materials.ambient_color));
-    glUniform3fv(uniform_material_diffuse, 1, glm::value_ptr(instructions->materials.diffuse_color));
-    glUniform3fv(uniform_specular, 1, glm::value_ptr(instructions->materials.specular_color));
-    glUniform1f(uniform_material_power, instructions->materials.power);
-    glUniform1f(uniform_reflection_ambient, instructions->materials.ambient_strength);
-    glUniform1f(uniform_reflection_diffuse, instructions->materials.diffuse_strength);
-    glUniform1f(uniform_reflection_specular, instructions->materials.specular_strength);
-
-    // Send vao
-    glBindVertexArray(vao);
-    glDrawArrays(GL_TRIANGLES, 0, instructions->vertices.size());
-    glBindVertexArray(0);
+    rendering_handler->Render(projection, instructions, Phong);
+    rendering_handler->DrawArrays(vao, instructions->vertices.size());
 }
 
 void Instructions::GrabInstructions()

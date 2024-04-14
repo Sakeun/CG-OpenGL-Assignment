@@ -133,6 +133,7 @@
     <ClCompile Include="Animations\Crowd.cpp" />
     <ClCompile Include="Animations\Instructions.cpp" />
     <ClCompile Include="Buffers\BufferBinder.cpp" />
+    <ClCompile Include="Buffers\RenderingHandler.cpp" />
     <ClCompile Include="Camera\CameraControls.cpp" />
     <ClCompile Include="glsl.cpp" />
     <ClCompile Include="Importers\Object.cpp" />
@@ -149,6 +150,7 @@
     <ClInclude Include="Animations\Crowd.h" />
     <ClInclude Include="Animations\Instructions.h" />
     <ClInclude Include="Buffers\BufferBinder.h" />
+    <ClInclude Include="Buffers\RenderingHandler.h" />
     <ClInclude Include="Camera\CameraControls.h" />
     <ClInclude Include="glsl.h" />
     <ClInclude Include="Importers\Object.h" />

@@ -14,6 +14,7 @@
 #include "Animations/Crowd.h"
 #include "Animations/Instructions.h"
 #include "Buffers/BufferBinder.h"
+#include "Buffers/RenderingHandler.h"
 #include "Camera/CameraControls.h"
 #include "Importers/Object.h"
 #include "Importers/ObjectProperties.h"
@@ -28,14 +29,8 @@ using namespace std;
 
 const int WIDTH = 1900, HEIGHT = 1060;
 
-const char* fragshader_name = "fragmentshader.frag";
-const char* vertexshader_name = "vertexshader.vert";
-const char* singlecolor_fragshader_name = "singlecolor.frag";
-
 unsigned const int DELTA_TIME = 10;
 unsigned const int PARTICLE_DELTA_TIME = 50;
-
-bool cubeRendered = false;
 
 //--------------------------------------------------------------------------------
 // Typedefs
@@ -84,14 +79,12 @@ int last_x = WIDTH / 2, last_y = HEIGHT / 2;
 // Object properties
 ObjectProperties* objects;
 int objectAmount;
-std::vector<ObjectMeshes*> objectMeshes;
 
 CameraControls* camera = CameraControls::GetInstance();
 Beer* beer = Beer::GetInstance();
 Instructions* instructions = Instructions::GetInstance();
 Crowd* crowd = Crowd::GetInstance();
-
-Meshes* cube = nullptr;
+RenderingHandler* renderingHandler;
 
 //--------------------------------------------------------------------------------
 // Mouse handling
@@ -140,10 +133,8 @@ void keyboardHandler(unsigned char key, int a, int b)
 {
     const float speed = 10.0f * delta_time;
     glm::vec3 target_position = camera->getTargetPosition();
-    glm::vec3 camera_lookat = camera->getCameraLookat();
-    glm::vec3 camera_up = camera->getCameraUp();
-
-    glm::vec3 camera_direction_xz = glm::normalize(glm::vec3(camera_lookat.x, 0.0f, camera_lookat.z));
+    const glm::vec3 camera_lookat = camera->getCameraLookat();
+    const glm::vec3 camera_up = camera->getCameraUp();
 
     if (key == 27)
         glutExit();
@@ -220,8 +211,6 @@ void keyboardHandler(unsigned char key, int a, int b)
     {
         instructions->GrabInstructions();
     }
-
-    glutPostRedisplay();
 }
 
 //--------------------------------------------------------------------------------
@@ -236,23 +225,19 @@ void RenderParticles() {
 
 void Render()
 {
-    // Define background
-    glClearColor(0.0, 0.0, 0.0, 1.0);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
     float current_frame = glutGet(GLUT_ELAPSED_TIME);
     delta_time = (current_frame - last_frame) / 1000.0f;
     last_frame = current_frame;
     camera->Lerp(delta_time);
 
     GLuint uniform_light_pos = glGetUniformLocation(program_id, "light_pos");
+    
     glUniform3fv(uniform_light_pos, 1, glm::value_ptr(light.position));
 
-    tie(view, projection) = camera->SetVP(angle_x, angle_y, WIDTH, HEIGHT);
+    camera->SetVP(view, projection, angle_x, angle_y, WIDTH, HEIGHT);
     
     for (glm::uint i = 0; i < objectAmount; i++)
     {
-        // Do transformation
         if(objects[i].animation)
         {
             objects[i].animation->Execute(objects[i].model);
@@ -262,79 +247,17 @@ void Render()
                 objects[i].animation = nullptr;
             }
         }
-
         objects[i].mv = view * objects[i].model;
 
         if (objects[i].texture == 0) {
-            glUseProgram(singlecolor_program_id);
-
-            // Send mv
-            GLint uniform_mv = glGetUniformLocation(singlecolor_program_id, "mv");
-            glUniformMatrix4fv(uniform_mv, 1, GL_FALSE, glm::value_ptr(objects[i].mv));
-
-            // Make uniform vars
-            uniform_mv = glGetUniformLocation(singlecolor_program_id, "mv");
-            const GLuint uniform_proj = glGetUniformLocation(singlecolor_program_id, "projection");
-            const GLuint uniform_light_pos = glGetUniformLocation(singlecolor_program_id, "light_pos");
-            GLint fragColLocation = glGetUniformLocation(singlecolor_program_id, "FragCol");
-            const GLuint uniform_material_ambient = glGetUniformLocation(program_id, "mat_ambient");
-            const GLuint uniform_specular = glGetUniformLocation(program_id, "mat_specular");
-            const GLuint uniform_material_power = glGetUniformLocation(program_id, "mat_power");
-            const GLuint uniform_reflection_ambient = glGetUniformLocation(program_id, "reflection_ambient");
-            const GLuint uniform_reflection_diffuse = glGetUniformLocation(program_id, "reflection_diffuse");
-            const GLuint uniform_reflection_specular = glGetUniformLocation(program_id, "reflection_specular");
-
-            // Fill uniform vars
-            glUniformMatrix4fv(uniform_proj, 1, GL_FALSE, glm::value_ptr(projection));
-            glm::vec3 color = objects[i].materials.diffuse_color;
-            glUniform3f(fragColLocation, color.r, color.g, color.b);
-            glUniform3fv(uniform_material_ambient, 1, glm::value_ptr(objects[i].materials.ambient_color));
-            glUniform3fv(uniform_specular, 1, glm::value_ptr(objects[i].materials.specular_color));
-            glUniform1f(uniform_material_power, objects[i].materials.power);
-            glUniform1f(uniform_reflection_ambient, objects[i].materials.ambient_strength);
-            glUniform1f(uniform_reflection_diffuse, 1.0f);
-            glUniform1f(uniform_reflection_specular, objects[i].materials.specular_strength);
+            renderingHandler->Render(projection, &objects[i], SingleColor);
         }
         else {
-            glUseProgram(program_id);
-            // Send mv
-            GLint uniform_mv = 0;
-            glUniformMatrix4fv(uniform_mv, 1, GL_FALSE, glm::value_ptr(objects[i].mv));
-            glUseProgram(program_id);
-
-            // Make uniform vars
-            uniform_mv = glGetUniformLocation(program_id, "mv");
-            const GLuint uniform_proj = glGetUniformLocation(program_id, "projection");
-            const GLuint uniform_light_pos = glGetUniformLocation(program_id, "light_pos");
-            const GLuint uniform_material_ambient = glGetUniformLocation(program_id, "mat_ambient");
-            const GLuint uniform_material_diffuse = glGetUniformLocation(program_id, "mat_diffuse");
-            const GLuint uniform_specular = glGetUniformLocation(program_id, "mat_specular");
-            const GLuint uniform_material_power = glGetUniformLocation(program_id, "mat_power");
-            const GLuint uniform_reflection_ambient = glGetUniformLocation(program_id, "reflection_ambient");
-            const GLuint uniform_reflection_diffuse = glGetUniformLocation(program_id, "reflection_diffuse");
-            const GLuint uniform_reflection_specular = glGetUniformLocation(program_id, "reflection_specular");
-
-            //Bind Texture
-            glBindTexture(GL_TEXTURE_2D, objects[i].texture);
-
-            glUniform1i(glGetUniformLocation(program_id, "texsampler"), 0);
-            // Fill uniform vars
-            glUniformMatrix4fv(uniform_proj, 1, GL_FALSE, glm::value_ptr(projection));
-            glUniform3fv(uniform_material_ambient, 1, glm::value_ptr(objects[i].materials.ambient_color));
-            glUniform3fv(uniform_material_diffuse, 1, glm::value_ptr(objects[i].materials.diffuse_color));
-            glUniform3fv(uniform_specular, 1, glm::value_ptr(objects[i].materials.specular_color));
-            glUniform1f(uniform_material_power, objects[i].materials.power);
-            glUniform1f(uniform_reflection_ambient, objects[i].materials.ambient_strength);
-            glUniform1f(uniform_reflection_diffuse, objects[i].materials.diffuse_strength);
-            glUniform1f(uniform_reflection_specular, objects[i].materials.specular_strength);
+            renderingHandler->Render(projection, &objects[i], Phong);
         }
-
-        // Send vao
-        glBindVertexArray(vao[i]);
-        glDrawArrays(GL_TRIANGLES, 0, objects[i].vertices.size());
-        glBindVertexArray(0);
+        
+        renderingHandler->DrawArrays(vao[i], objects[i].vertices.size());
     }
-    beer->DrawBeer(singlecolor_program_id, view, projection);
 
     glm::vec3 cameraPos = camera->getTargetPosition();
     glm::vec3 cameraLookat = camera->getCameraLookat();
@@ -345,9 +268,9 @@ void Render()
     glm::vec3 cameraDown = glm::normalize(glm::cross(cameraRight, cameraLookat));
 
     // Define the offset from the camera position
-    float rightOffset = 0.6f; // Adjust this value as needed
+    float rightOffset = 0.6f;
     float leftOffset = -0.5f;
-    float downOffset = -0.2f; // Adjust this value as needed
+    float downOffset = -0.2f;
     glm::vec3 offsetRight = rightOffset * cameraRight + downOffset * cameraDown;
     glm::vec3 offsetLeft = leftOffset * cameraRight + downOffset * cameraDown;
 
@@ -355,6 +278,8 @@ void Render()
         beer->UpdateCupPosition(cameraPos + cameraLookat + offsetRight, program_id, view, projection);
 
     instructions->UpdateInstructionsPosition(cameraPos + cameraLookat + offsetLeft, program_id, view, projection);
+    
+    beer->DrawBeer(singlecolor_program_id, view, projection);
 
     crowd->DrawCrowd(program_id, view, projection);
     
@@ -370,6 +295,10 @@ void Render()
 
 void Render(int n)
 {
+    // Define background
+    glClearColor(0.0, 0.0, 0.0, 1.0);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    
     Render();
     glutTimerFunc(DELTA_TIME, Render, 0);
 }
@@ -413,6 +342,10 @@ void InitGlutGlew(int argc, char** argv)
 
 void InitShaders()
 {
+    const char* fragshader_name = "fragmentshader.frag";
+    const char* vertexshader_name = "vertexshader.vert";
+    const char* singlecolor_fragshader_name = "singlecolor.frag";
+    
     GLuint vsh_id;
     GLuint fsh_id;
     char* vertexshader = glsl::readFile(vertexshader_name);
@@ -425,6 +358,8 @@ void InitShaders()
     singlecolor_fsh_id = glsl::makeFragmentShader(singlecolor_fragshader);
     singlecolor_program_id = glsl::makeShaderProgram(vsh_id, singlecolor_fsh_id);
     program_id = glsl::makeShaderProgram(vsh_id, fsh_id);
+
+    renderingHandler = RenderingHandler::GetInstance(program_id, singlecolor_program_id);
 }
 
 //------------------------------------------------------------
@@ -464,7 +399,6 @@ int main(int argc, char** argv)
     InitGlutGlew(argc, argv);
     InitShaders();
     tie(objects, objectAmount) = Object::get_objects();
-    tie(view, projection) = camera->SetVP(angle_x, angle_y, WIDTH, HEIGHT);
     InitBuffers();
 
     // Hide console window

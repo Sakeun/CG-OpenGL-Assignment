@@ -55,14 +55,15 @@ public:
     static CameraControls* GetInstance();
     void updateCameraRotation(float x, float y);
     void updateTargetPosition(glm::vec3 targetPos);
-    std::tuple<glm::mat4, glm::mat4> SetVP(const float x, const float y, const int width, const int height);
+    void SetVP(glm::mat4&view, glm::mat4& projection, const float x, const float y, const int width, const int height);
     void Lerp(float time);
 
     glm::vec3 getTargetPosition();
     glm::vec3 getCameraUp();
     glm::vec3 getCameraLookat();
     glm::vec3 getCameraPosition();
-
+    void getHandPositions(glm::vec3& leftHand, glm::vec3& rightHand);
+    
     void setCameraUp(glm::vec3 newValue);
     void setCameraLookat(glm::vec3 newValue);
     void setCameraPosition(glm::vec3 newValue);

@@ -52,7 +52,7 @@ void CameraControls::Lerp(float time) {
     setCameraPosition(newPosition);
 }
 
-std::tuple<glm::mat4, glm::mat4> CameraControls::SetVP(const float x, const float y, const int width, const int height)
+void CameraControls::SetVP(glm::mat4& view, glm::mat4& projection, const float x, const float y, const int width, const int height)
 {
     glm::vec3 camera_lookat = getCameraLookat();
     glm::vec3 target_position = getTargetPosition();
@@ -65,13 +65,11 @@ std::tuple<glm::mat4, glm::mat4> CameraControls::SetVP(const float x, const floa
     glm::vec4 rotated_lookat = rotation * glm::vec4(camera_lookat, 0.0f);
     glm::vec3 new_lookat(rotated_lookat);
 
-    glm::mat4 view = glm::lookAt(target_position, target_position + new_lookat, camera_up);
-    glm::mat4 projection = glm::perspective(
+    view = glm::lookAt(target_position, target_position + new_lookat, camera_up);
+    projection = glm::perspective(
         glm::radians(45.0f),
         1.0f * width / height, 0.1f,
         100.0f);
-
-    return {view, projection};
 }
 
 void CameraControls::updateTargetPosition(glm::vec3 targetPos) {
@@ -203,4 +201,24 @@ float* CameraControls::getPitch()
     if (isWalk)
         return &walk_mode_cam.pitch;
     return &drone_mode_cam.pitch;
+}
+
+void CameraControls::getHandPositions(glm::vec3& leftHand, glm::vec3& rightHand)
+{
+    glm::vec3 cameraPosition = getCameraPosition();
+    glm::vec3 cameraLookat = getCameraLookat();
+    glm::vec3 cameraUp = getCameraUp();
+
+    glm::vec3 cameraOffset = glm::normalize(glm::cross(cameraLookat, cameraUp));
+    glm::vec3 cameraDown = glm::normalize(glm::cross(cameraOffset, cameraLookat));
+
+    float downOffset = -0.2f;
+    float leftOffset = -0.5f;
+    float rightOffset = 0.6f;
+
+    glm::vec3 offsetLeft = leftOffset * cameraOffset + downOffset * cameraDown;
+    leftHand = cameraPosition + cameraLookat + offsetLeft;
+
+    glm::vec3 offsetRight = rightOffset * cameraOffset + downOffset * cameraDown;
+    rightHand = cameraPosition + cameraLookat + offsetRight;
 }

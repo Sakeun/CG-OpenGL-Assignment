@@ -3,6 +3,7 @@
 #include "../objloader.h"
 #include "../texture.h"
 #include "../JsonReader/JsonReader.h"
+#include "../Buffers/RenderingHandler.h"
 
 class Instructions
 {
@@ -10,6 +11,8 @@ private:
     GLuint vao;
     ObjectProperties* instructions;
     static Instructions* instance;
+    RenderingHandler* rendering_handler = RenderingHandler::GetInstance();
+
     void InitInstructionsBuffers(GLuint program_id);
     
     Instructions()
