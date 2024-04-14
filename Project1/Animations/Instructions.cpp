@@ -50,7 +50,7 @@ void Instructions::init_instructions_buffers(GLuint program_id)
     instructions = new ObjectProperties();
     bool res = loadOBJ("Objects/Instructions.obj", instructions->vertices, instructions->uvs, instructions->normals);
     instructions->texture = loadDDS("Textures/Controls.dds");
-    instructions->materials = JsonReader::ReadMaterial("Metallic");
+    instructions->materials = JsonReader::read_materials("Metallic");
     instructions->model = glm::mat4();
     
     // Get vertex attributes

@@ -6,10 +6,9 @@
 class JsonReader
 {
 private:
-    //static MeshProperties ReadMesh(nlohmann::json object, std::string meshType);
-    static ShaderType GetShaderType(std::string shader);
+    static ShaderType get_shader_type(std::string shader);
 public:
-    static std::vector<ImportProperties*> ReadObjects();
-    static std::vector<ObjectProperties*> ReadMeshes();
-    static Material ReadMaterial(std::string shader);
+    static std::vector<ImportProperties*> read_objects();
+    static std::vector<ObjectProperties*> read_meshes();
+    static Material read_materials(std::string shader);
 };

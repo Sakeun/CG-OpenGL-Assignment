@@ -18,7 +18,7 @@ private:
         glm::vec3(-1.0f, 1.0f, -1.0f) // 7: Back top left
     };
 
-    std::vector<glm::vec3> normalPoints = {
+    std::vector<glm::vec3> normal_points = {
         glm::vec3(0.0f, 0.0f, 1.0f), // 0: Front
         glm::vec3(0.0f, 0.0f, -1.0f), // 1: Back
         glm::vec3(1.0f, 0.0f, 0.0f), // 2: Right
@@ -27,7 +27,7 @@ private:
         glm::vec3(0.0f, -1.0f, 0.0f) // 5: Bottom
     };
 
-    std::vector<glm::vec2> uvPositions = {
+    std::vector<glm::vec2> uv_positions = {
         glm::vec2(0.0f, 0.0f), // 0: bottom left
         glm::vec2(1.0f, 0.0f), // 1: bottom right
         glm::vec2(1.0f, 1.0f), // 2: top right

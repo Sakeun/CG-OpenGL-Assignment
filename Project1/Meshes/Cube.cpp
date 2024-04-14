@@ -5,21 +5,21 @@
 Cube::Cube(glm::vec3 position, glm::vec3 scale, glm::vec3 rotation, float radians, MeshType type) : Meshes()
 {
     // Set the rotation, translation, and scale matrices to apply transformations at the absolute origin
-    glm::mat4 rotationMatrix = glm::mat4(1.0f);
-    glm::mat4 translationMatrix = glm::mat4(1.0f);
-    glm::mat4 scaleMatrix = glm::mat4(1.0f);
+    glm::mat4 rotation_matrix = glm::mat4(1.0f);
+    glm::mat4 translation_matrix = glm::mat4(1.0f);
+    glm::mat4 scale_matrix = glm::mat4(1.0f);
 
     if (rotation.x != 0.0f || rotation.y != 0.0f || rotation.z != 0.0f)
-        rotationMatrix = glm::rotate(rotationMatrix, glm::radians(radians), rotation);
+        rotation_matrix = glm::rotate(rotation_matrix, glm::radians(radians), rotation);
 
     if (position != glm::vec3())
-        translationMatrix = glm::translate(translationMatrix, position);
+        translation_matrix = glm::translate(translation_matrix, position);
 
     if (scale != glm::vec3())
-        scaleMatrix = glm::scale(scaleMatrix, scale);
+        scale_matrix = glm::scale(scale_matrix, scale);
 
     // Apply the transformations to the model matrix
-    glm::mat4 model = translationMatrix * rotationMatrix * scaleMatrix;
+    glm::mat4 model = translation_matrix * rotation_matrix * scale_matrix;
 
     // Initialize the Cube
     Cube::set_triangles(type);
@@ -95,7 +95,7 @@ void Cube::set_normals()
     {
         for(int j = 0; j < 6; j++)
         {
-            normals.push_back(normalPoints[i]);
+            normals.push_back(normal_points[i]);
         }
     }
 }
@@ -106,7 +106,7 @@ void Cube::set_uvs()
     {
         for(int j = 0; j < 6; j++)
         {
-            uvs.push_back(uvPositions[j]);
+            uvs.push_back(uv_positions[j]);
         }
     }
 }

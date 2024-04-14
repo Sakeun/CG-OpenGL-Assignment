@@ -103,7 +103,7 @@ void Beer::grab_beer(GLuint program_id)
         cup = new ObjectProperties();
         bool res = loadOBJ("Objects/Cup.obj", cup->vertices, cup->uvs, cup->normals);
         cup->texture = loadDDS("Textures/Hand.dds");
-        cup->materials = JsonReader::ReadMaterial("Metallic");
+        cup->materials = JsonReader::read_materials("Metallic");
 
         cup->model = glm::mat4();
         cup_vao = 0;

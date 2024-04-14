@@ -34,7 +34,7 @@ void Crowd::init_crowd_buffers(GLuint program_id)
     // Load the crowd character once to re-use for all the crowd characters
     ObjectProperties* actor = new ObjectProperties();
     bool res = loadOBJ("Objects/CrowdCharacter.obj", actor->vertices, actor->uvs, actor->normals);
-    actor->materials = JsonReader::ReadMaterial("Metallic");
+    actor->materials = JsonReader::read_materials("Metallic");
     actor->model = glm::mat4();
     actor->materials.diffuse_color = glm::vec3(0.01, 0.01, 0.01);
     actor->model = glm::scale(actor->model, glm::vec3(1.0f, 1.0f, 1.0f));

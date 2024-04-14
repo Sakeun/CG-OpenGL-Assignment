@@ -9,7 +9,7 @@
 #include "../Importers/Object.h"
 #include "../objloader.h"
 
-std::vector<ImportProperties*> JsonReader::ReadObjects() {
+std::vector<ImportProperties*> JsonReader::read_objects() {
     std::ifstream file("Objects.json");
     nlohmann::json jsonObject;
     file >> jsonObject;
@@ -51,7 +51,7 @@ glm::vec3 getVec3(nlohmann::basic_json<> json)
     return glm::vec3(json[0], json[1], json[2]);
 }
 
-std::vector<ObjectProperties*> JsonReader::ReadMeshes()
+std::vector<ObjectProperties*> JsonReader::read_meshes()
 {
     std::ifstream file("Meshes.json");
     nlohmann::json jsonObject;
@@ -83,7 +83,7 @@ std::vector<ObjectProperties*> JsonReader::ReadMeshes()
                 delete mesh;
                 std::string path = object["Props"]["texture"];
                 obj->texture = 0;
-                obj->materials = ReadMaterial(object["Props"]["Shader"]);
+                obj->materials = read_materials(object["Props"]["Shader"]);
                 if (path.find("color") != std::string::npos) {
                     std::string subS = path.substr(6);
                     obj->materials.diffuse_color = Object::get_color(subS);
@@ -101,7 +101,7 @@ std::vector<ObjectProperties*> JsonReader::ReadMeshes()
     return objects;
 }
 
-ShaderType JsonReader::GetShaderType(std::string shader)
+ShaderType JsonReader::get_shader_type(std::string shader)
 {
     if (shader == "Glossy")
         return ShaderType::Glossy;
@@ -115,7 +115,7 @@ ShaderType JsonReader::GetShaderType(std::string shader)
     return ShaderType::Glossy;
 }
 
-Material JsonReader::ReadMaterial(std::string shader)
+Material JsonReader::read_materials(std::string shader)
 {
     std::ifstream file("Shaders.json");
     nlohmann::json object;

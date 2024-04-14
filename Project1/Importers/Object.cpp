@@ -13,8 +13,8 @@ struct Colors {
 
 std::tuple<ObjectProperties*, int> Object::get_objects()
 {
-    std::vector<ImportProperties*> objects = JsonReader::ReadObjects();
-    std::vector<ObjectProperties*> meshes = JsonReader::ReadMeshes();
+    std::vector<ImportProperties*> objects = JsonReader::read_objects();
+    std::vector<ObjectProperties*> meshes = JsonReader::read_meshes();
 
     // Map used to store objects once they've already been loaded, to prevent having to load an object again if it's used multiple times.
     std::map<std::string, ObjectElements> loadedObjs;
@@ -36,7 +36,7 @@ std::tuple<ObjectProperties*, int> Object::get_objects()
         objectProperties[i].normals = loadedObjs[properties->path].normals;
 
         objectProperties[i].texture = loadDDS(("Textures/" + properties->texture + ".dds").c_str());
-        objectProperties[i].materials = JsonReader::ReadMaterial(properties->shader);
+        objectProperties[i].materials = JsonReader::read_materials(properties->shader);
 
         // Translate the object to the predefined position
         objectProperties[i].model = glm::mat4();
