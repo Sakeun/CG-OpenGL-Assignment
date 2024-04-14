@@ -79,7 +79,7 @@ ObjectProperties* objects;
 int objectAmount;
 
 // Singletons
-CameraControls* camera = CameraControls::GetInstance();
+CameraControls* camera = CameraControls::get_instance();
 Beer* beer = Beer::get_instance();
 Instructions* instructions = Instructions::get_instance();
 Crowd* crowd = Crowd::get_instance();
@@ -108,7 +108,7 @@ void mouseMotionHandler(int x, int y)
     last_x = WIDTH / 2;
     last_y = HEIGHT / 2;
 
-    camera->updateCameraRotation(xOffset, yOffset);
+    camera->update_camera_rotation(xOffset, yOffset);
     glutWarpPointer(WIDTH / 2, HEIGHT / 2);
     
 }
@@ -132,56 +132,56 @@ void mouseClickHandler(int button, int state, int x, int y)
 void keyboardHandler(unsigned char key, int a, int b)
 {
     const float speed = 10.0f * delta_time;
-    glm::vec3 target_position = camera->getTargetPosition();
-    const glm::vec3 camera_lookat = camera->getCameraLookat();
-    const glm::vec3 camera_up = camera->getCameraUp();
+    glm::vec3 target_position = camera->get_target_position();
+    const glm::vec3 camera_lookat = camera->get_camera_lookat();
+    const glm::vec3 camera_up = camera->get_camera_up();
 
-    CameraMode current_camera_mode = camera->getActiveMode();
+    CameraMode current_camera_mode = camera->get_active_mode();
 
     if (key == 27)
         glutExit();
     if(key == 'w')
     {
-        camera->setTargetPosition(target_position + speed * camera_lookat);
+        camera->set_target_position(target_position + speed * camera_lookat);
     }
     if(key == 's')
     {
-        camera->setTargetPosition(target_position - speed * camera_lookat);
+        camera->set_target_position(target_position - speed * camera_lookat);
     }
     if(key == 'a')
     {
-        camera->setTargetPosition(target_position - glm::normalize(glm::cross(camera_lookat, camera_up)) * speed);
+        camera->set_target_position(target_position - glm::normalize(glm::cross(camera_lookat, camera_up)) * speed);
     }
     if(key == 'd')
     {
-        camera->setTargetPosition(target_position + glm::normalize(glm::cross(camera_lookat, camera_up)) * speed);
+        camera->set_target_position(target_position + glm::normalize(glm::cross(camera_lookat, camera_up)) * speed);
     }
     if(key == 'i')
     {
-        camera->updateCameraRotation(0.0f, 10.0f);
+        camera->update_camera_rotation(0.0f, 10.0f);
     }
     if(key == 'k')
     {
-        camera->updateCameraRotation(0.0f, -10.0f);
+        camera->update_camera_rotation(0.0f, -10.0f);
     }
     if(key == 'j')
     {
-        camera->updateCameraRotation(-10.0f, 0.0f);
+        camera->update_camera_rotation(-10.0f, 0.0f);
     }
     if(key == 'l')
     {
-        camera->updateCameraRotation(10.0f, 0.0f);
+        camera->update_camera_rotation(10.0f, 0.0f);
     }
     if (key == 'v' || key == '1' || key == '2') {
-        camera->ToggleCameraMode(key);
+        camera->toggle_camera_mode(key);
     }
     if (key == 'q' && current_camera_mode == Drone) {
         target_position.y -= speed;
-        camera->setTargetPosition(target_position);
+        camera->set_target_position(target_position);
     }
     if (key == 'e' && current_camera_mode == Drone) {
         target_position.y += speed;
-        camera->setTargetPosition(target_position);
+        camera->set_target_position(target_position);
     }
     if(key == 'b' && current_camera_mode != Drone)
     {
@@ -192,10 +192,10 @@ void keyboardHandler(unsigned char key, int a, int b)
         else
         {
             // if the character is upstairs, force it to go downstairs to the bar to "grab" a beer at the bar.
-            camera->ToggleCameraMode('1');
-            camera->setCameraLookat(glm::vec3(-0.4f, -0.17f, 0.9f));
-            camera->setTargetPosition(glm::vec3(-1.35f, 0.5f, 6.92f));
-            camera->SetYawPitch(*camera->getYaw(), *camera->getPitch(), glm::normalize(camera->getCameraLookat()));
+            camera->toggle_camera_mode('1');
+            camera->set_camera_lookat(glm::vec3(-0.4f, -0.17f, 0.9f));
+            camera->set_target_position(glm::vec3(-1.35f, 0.5f, 6.92f));
+            camera->set_yaw_pitch(*camera->get_yaw(), *camera->get_pitch(), glm::normalize(camera->get_camera_lookat()));
             beer->grab_beer(program_id);
             
         }
@@ -222,13 +222,13 @@ void Render()
     float current_frame = glutGet(GLUT_ELAPSED_TIME);
     delta_time = (current_frame - last_frame) / 1000.0f;
     last_frame = current_frame;
-    camera->Lerp(delta_time);
+    camera->lerp(delta_time);
 
     // Get the lighting position
     GLuint uniform_light_pos = glGetUniformLocation(program_id, "light_pos");
     glUniform3fv(uniform_light_pos, 1, glm::value_ptr(light.position));
 
-    camera->SetVP(view, projection, angle_x, angle_y, WIDTH, HEIGHT);
+    camera->set_vp(view, projection, angle_x, angle_y, WIDTH, HEIGHT);
     
     for (glm::uint i = 0; i < objectAmount; i++)
     {
@@ -258,9 +258,9 @@ void Render()
     }
 
     // Calculate the arm positions for the FPS view
-    glm::vec3 cameraPos = camera->getTargetPosition();
-    glm::vec3 cameraLookat = camera->getCameraLookat();
-    glm::vec3 cameraUp = camera->getCameraUp();
+    glm::vec3 cameraPos = camera->get_target_position();
+    glm::vec3 cameraLookat = camera->get_camera_lookat();
+    glm::vec3 cameraUp = camera->get_camera_up();
 
     glm::vec3 cameraRight = glm::normalize(glm::cross(cameraLookat, cameraUp));
     glm::vec3 cameraDown = glm::normalize(glm::cross(cameraRight, cameraLookat));
@@ -272,7 +272,7 @@ void Render()
     glm::vec3 offsetLeft = leftOffset * cameraRight + downOffset * cameraDown;
 
     // Update and render the cup and instructions
-    if(camera->getActiveMode() != Drone)
+    if(camera->get_active_mode() != Drone)
         beer->update_cup_position(cameraPos + cameraLookat + offsetRight, program_id, view, projection);
     instructions->update_instructions_position(cameraPos + cameraLookat + offsetLeft, program_id, view, projection);
 
