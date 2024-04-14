@@ -4,6 +4,12 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+enum CameraMode {
+    Downstairs,
+    Upstairs,
+    Drone
+};
+
 struct CameraPositions {
     glm::vec3 camera_position;
     glm::vec3 camera_lookat;
@@ -18,18 +24,21 @@ class CameraControls
 private:
     static CameraControls* instance;
     const float lerp_speed = 0.1f;
-    CameraPositions walk_mode_cam;
+    CameraPositions downstairs_cam;
     CameraPositions drone_mode_cam;
     CameraPositions upstairs_cam;
+
+    CameraPositions* active_cam;
+    CameraMode active_mode;
     
     CameraControls()
     {
         // Set the default positions per camera mode and initialize the yaw and pitch to match the view direction
-        walk_mode_cam.camera_position = glm::vec3(0.0, 0.5, 3.0);
-        walk_mode_cam.camera_lookat = glm::normalize(glm::vec3(3.0, 0.0, -1.0));
-        walk_mode_cam.camera_up = glm::vec3(0.0, 1.0, 0.0);
-        walk_mode_cam.target_position = walk_mode_cam.camera_position;
-        SetYawPitch(walk_mode_cam.yaw, walk_mode_cam.pitch, glm::normalize(walk_mode_cam.camera_lookat));
+        downstairs_cam.camera_position = glm::vec3(0.0, 0.5, 3.0);
+        downstairs_cam.camera_lookat = glm::normalize(glm::vec3(3.0, 0.0, -1.0));
+        downstairs_cam.camera_up = glm::vec3(0.0, 1.0, 0.0);
+        downstairs_cam.target_position = downstairs_cam.camera_position;
+        SetYawPitch(downstairs_cam.yaw, downstairs_cam.pitch, glm::normalize(downstairs_cam.camera_lookat));
 
         drone_mode_cam.camera_position = glm::vec3(15.0, 2.5, 10.0);
         drone_mode_cam.camera_lookat = glm::normalize(glm::vec3(-5.0, -1.0, -3.0));
@@ -42,15 +51,12 @@ private:
         upstairs_cam.camera_up = glm::vec3(0.0, 1.0, 0.0);
         upstairs_cam.target_position = upstairs_cam.camera_position;
         SetYawPitch(upstairs_cam.yaw, upstairs_cam.pitch, glm::normalize(upstairs_cam.camera_lookat));
-        
-        isWalk = true;
-        isUpstairs = false;
+
+        active_cam = &downstairs_cam;
+        active_mode = CameraMode::Downstairs;
     }
     
 public:
-    bool isWalk;
-    bool isUpstairs;
-    
     CameraControls(CameraControls const&) = delete;
     void operator=(CameraControls const&) = delete;
     
@@ -64,6 +70,7 @@ public:
     glm::vec3 getCameraUp();
     glm::vec3 getCameraLookat();
     glm::vec3 getCameraPosition();
+    CameraMode getActiveMode();
     
     void setCameraUp(glm::vec3 newValue);
     void setCameraLookat(glm::vec3 newValue);

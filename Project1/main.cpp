@@ -136,6 +136,8 @@ void keyboardHandler(unsigned char key, int a, int b)
     const glm::vec3 camera_lookat = camera->getCameraLookat();
     const glm::vec3 camera_up = camera->getCameraUp();
 
+    CameraMode current_camera_mode = camera->getActiveMode();
+
     if (key == 27)
         glutExit();
     if(key == 'w')
@@ -170,28 +172,18 @@ void keyboardHandler(unsigned char key, int a, int b)
     {
         camera->updateCameraRotation(10.0f, 0.0f);
     }
-    if (key == 'v') {
-        firstMouse = true;
-        mouseActive = !mouseActive;
-        camera->isWalk = !camera->isWalk;
+    if (key == 'v' || key == '1' || key == '2') {
+        camera->ToggleCameraMode(key);
     }
-    if (key == 'q' && !camera->isWalk) {
+    if (key == 'q' && current_camera_mode == Drone) {
         target_position.y -= speed;
         camera->setTargetPosition(target_position);
     }
-    if (key == 'e' && !camera->isWalk) {
+    if (key == 'e' && current_camera_mode == Drone) {
         target_position.y += speed;
         camera->setTargetPosition(target_position);
     }
-    if(key == '1' && camera->isWalk)
-    {
-        camera->isUpstairs = false;
-    }
-    if(key == '2' && camera->isWalk)
-    {
-        camera->isUpstairs = true;
-    }
-    if(key == 'b' && camera->isWalk)
+    if(key == 'b' && camera->getActiveMode() )
     {
         if(beer->isGrabbed)
         {
@@ -200,7 +192,7 @@ void keyboardHandler(unsigned char key, int a, int b)
         else
         {
             // if the character is upstairs, force it to go downstairs to the bar to "grab" a beer at the bar.
-            camera->isUpstairs = false;
+            camera->ToggleCameraMode('1');
             camera->setCameraLookat(glm::vec3(-0.4f, -0.17f, 0.9f));
             camera->setTargetPosition(glm::vec3(-1.35f, 0.5f, 6.92f));
             camera->SetYawPitch(*camera->getYaw(), *camera->getPitch(), glm::normalize(camera->getCameraLookat()));
@@ -280,7 +272,7 @@ void Render()
     glm::vec3 offsetLeft = leftOffset * cameraRight + downOffset * cameraDown;
 
     // Update and render the cup and instructions
-    if(camera->isWalk)
+    if(camera->getActiveMode() != Drone)
         beer->UpdateCupPosition(cameraPos + cameraLookat + offsetRight, program_id, view, projection);
     instructions->UpdateInstructionsPosition(cameraPos + cameraLookat + offsetLeft, program_id, view, projection);
 

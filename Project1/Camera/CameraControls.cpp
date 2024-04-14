@@ -71,17 +71,20 @@ void CameraControls::SetVP(glm::mat4& view, glm::mat4& projection, const float x
 
 void CameraControls::ToggleCameraMode(unsigned char key)
 {
-    if(key == '1' && isWalk)
+    if(key == '1' && getActiveMode() == CameraMode::Upstairs)
     {
-        isUpstairs = false;
+        active_mode = CameraMode::Downstairs;
+        active_cam = &downstairs_cam;
     }
-    else if(key == '2' && isWalk)
+    else if(key == '2' && getActiveMode() == CameraMode::Downstairs)
     {
-        isUpstairs = true;
+        active_mode = CameraMode::Upstairs;
+        active_cam = &upstairs_cam;
     }
     else if(key == 'v')
     {
-        isWalk = !isWalk;
+        active_mode = CameraMode::Drone;
+        active_cam = &drone_mode_cam;
     }
 }
 
@@ -91,112 +94,52 @@ void CameraControls::SetYawPitch(float& yaw, float& pitch, glm::vec3 newValue)
     pitch = glm::degrees(asin(newValue.y));
 }
 
+CameraMode CameraControls::getActiveMode() {
+    return active_mode;
+}
+
 // Getters and Setters based on active camera mode
 void CameraControls::updateTargetPosition(glm::vec3 targetPos) {
-    if (isWalk) {
-        if(isUpstairs)
-            upstairs_cam.target_position = targetPos;
-        else
-            walk_mode_cam.target_position = targetPos;
-    }
-    else {
-        drone_mode_cam.target_position = targetPos;
-    }
+    active_cam->target_position = targetPos;
 }
 
 glm::vec3 CameraControls::getTargetPosition() {
-    if(isUpstairs && isWalk)
-        return upstairs_cam.target_position;
-    if (isWalk)
-        return walk_mode_cam.target_position;
-    return drone_mode_cam.target_position;
+    return active_cam->target_position;
 }
 
 glm::vec3 CameraControls::getCameraUp() {
-    if(isUpstairs && isWalk)
-        return upstairs_cam.camera_up;
-    if (isWalk)
-        return walk_mode_cam.camera_up;
-    return drone_mode_cam.camera_up;
+    return active_cam->camera_up;
 }
 
 glm::vec3 CameraControls::getCameraLookat() {
-    if(isUpstairs && isWalk)
-        return upstairs_cam.camera_lookat;
-    if (isWalk)
-        return walk_mode_cam.camera_lookat;
-    return drone_mode_cam.camera_lookat;
+    return active_cam->camera_lookat;
 }
 
 glm::vec3 CameraControls::getCameraPosition() {
-    if(isUpstairs && isWalk)
-        return upstairs_cam.camera_position;
-    if (isWalk)
-        return walk_mode_cam.camera_position;
-    return drone_mode_cam.camera_position;
+    return active_cam->camera_position;
 }
 
 void CameraControls::setCameraUp(glm::vec3 newValue) {
-    if (isWalk) {
-        if(isUpstairs)
-            upstairs_cam.camera_up = newValue;
-        else
-            walk_mode_cam.camera_up = newValue;
-    }
-    else {
-        drone_mode_cam.camera_up = newValue;
-    }
+    active_cam->camera_up = newValue;
 }
 void CameraControls::setCameraLookat(glm::vec3 newValue) {
-    if (isWalk) {
-        if(isUpstairs)
-            upstairs_cam.camera_lookat = newValue;
-        else
-            walk_mode_cam.camera_lookat = newValue;
-    }
-    else {
-        drone_mode_cam.camera_lookat = newValue;
-    }
+    active_cam->camera_lookat = newValue;
+
 }
 void CameraControls::setCameraPosition(glm::vec3 newValue) {
-    if (isWalk) {
-        if(isUpstairs)
-            upstairs_cam.camera_position = newValue;
-        else
-            walk_mode_cam.camera_position = newValue;
-    }
-    else {
-        drone_mode_cam.camera_position = newValue;
-    }
+    active_cam->camera_position = newValue;
 }
 
 void CameraControls::setTargetPosition(glm::vec3 newValue) {
-    if (isWalk) {
-        newValue.y = getTargetPosition().y;
-        if(isUpstairs)
-            upstairs_cam.target_position = newValue;
-        else
-            walk_mode_cam.target_position = newValue;
-    }
-    else {
-        drone_mode_cam.target_position = newValue;
-    }
+    active_cam->target_position = newValue;
 }
 
 float* CameraControls::getYaw()
 {
-    if(isUpstairs && isWalk)
-        return &upstairs_cam.yaw;
-    if (isWalk)
-        return &walk_mode_cam.yaw;
-    return &drone_mode_cam.yaw;
+    return &active_cam->yaw;
 }
 
 float* CameraControls::getPitch()
 {
-    if(isUpstairs && isWalk)
-        return &upstairs_cam.pitch;
-    if (isWalk)
-        return &walk_mode_cam.pitch;
-    return &drone_mode_cam.pitch;
+    return &active_cam->pitch;
 }

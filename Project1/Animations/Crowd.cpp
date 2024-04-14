@@ -34,9 +34,9 @@ void Crowd::InitCrowdBuffers(GLuint program_id)
     // Load the crowd character once to re-use for all the crowd characters
     ObjectProperties* actor = new ObjectProperties();
     bool res = loadOBJ("Objects/CrowdCharacter.obj", actor->vertices, actor->uvs, actor->normals);
-    actor->texture = loadDDS("Textures/Controls.dds");
     actor->materials = JsonReader::ReadMaterial("Metallic");
     actor->model = glm::mat4();
+    actor->materials.diffuse_color = glm::vec3(0.01, 0.01, 0.01);
     actor->model = glm::scale(actor->model, glm::vec3(1.0f, 1.0f, 1.0f));
 
     // initialize x amount of crowd members
@@ -78,7 +78,7 @@ void Crowd::DrawCrowd(GLuint program_id, glm::mat4 view, glm::mat4 projection)
     for(auto actor: crowd)
     {
         actor->mv = view * actor->model;
-        rendering_handler->Render(projection, actor, Phong);
+        rendering_handler->Render(projection, actor, SingleColor);
         rendering_handler->DrawArrays(vao[vaoindex], actor->vertices.size());
         
         vaoindex++;
