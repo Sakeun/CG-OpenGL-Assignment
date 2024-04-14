@@ -46,6 +46,7 @@ struct ImportProperties
     glm::vec3 scale;
     glm::vec3 rotation;
     std::string shader;
+    std::string animation_type;
     float radius;
     bool isAnimated;
     float xDegrees;

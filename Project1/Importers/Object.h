@@ -13,5 +13,6 @@ public:
     static std::tuple<ObjectProperties*, int> get_objects();
     static void init_material_lights(Material &materials);
     static glm::vec3 get_color(std::string color);
+    static Animation* get_animation_type(std::string type);
     
 };

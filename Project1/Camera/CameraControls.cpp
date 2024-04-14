@@ -81,7 +81,12 @@ void CameraControls::toggle_camera_mode(unsigned char key)
         active_mode = CameraMode::Upstairs;
         active_cam = &upstairs_cam;
     }
-    else if(key == 'v')
+    else if(key == 'v' && get_active_mode() == CameraMode::Drone)
+    {
+        active_mode = CameraMode::Downstairs;
+        active_cam = &downstairs_cam;
+    }
+    else if(key == 'v' && get_active_mode() != CameraMode::Drone)
     {
         active_mode = CameraMode::Drone;
         active_cam = &drone_mode_cam;

@@ -2,6 +2,8 @@
 #include "../Buffers/BufferBinder.h"
 #include <random>
 #include <glm/gtc/matrix_transform.hpp>
+
+#include "DiffuseAnimation.h"
 #include "../objloader.h"
 #include "../texture.h"
 #include "../JsonReader/JsonReader.h"
@@ -38,7 +40,7 @@ void Crowd::init_crowd_buffers(GLuint program_id)
     actor->model = glm::mat4();
     actor->materials.diffuse_color = glm::vec3(0.01, 0.01, 0.01);
     actor->model = glm::scale(actor->model, glm::vec3(1.0f, 1.0f, 1.0f));
-
+    
     // initialize x amount of crowd members
     for(int i = 0; i < CROWD_SIZE; i++)
     {
@@ -48,6 +50,7 @@ void Crowd::init_crowd_buffers(GLuint program_id)
         ObjectProperties* newActor = new ObjectProperties(*actor);
         newActor->model = glm::translate(newActor->model, glm::vec3(get_random_num(-10.0, 13.0), get_random_num(1.13, 0.8) * -1, get_random_num(-7.0, 7.0)));
         newActor->model = glm::rotate(newActor->model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        newActor->animation = new DiffuseAnimation();
         crowd.push_back(newActor);
         
         // Get vertex attributes
@@ -77,6 +80,7 @@ void Crowd::draw_crowd(GLuint program_id, glm::mat4 view, glm::mat4 projection)
     int vao_index = 0;
     for(auto actor: crowd)
     {
+        actor->animation->update_object(*actor);
         actor->mv = view * actor->model;
         rendering_handler->render(projection, actor, SingleColor);
         rendering_handler->draw_arrays(vao[vao_index], actor->vertices.size());

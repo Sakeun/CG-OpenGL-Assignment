@@ -5,7 +5,8 @@
         "name": "SpeakerLeft",
         "texture": "color Black",
         "position": [ 20.7, 2.0, -7.0 ],
-        "Shader": "Props"
+        "Shader": "Props",
+        "Animation": false
       },
       "Obj": [
         {
@@ -85,7 +86,8 @@
         "name": "SpeakerRight",
         "texture": "color Black",
         "position": [ 20.7, 2.0, 7.0 ],
-        "Shader": "Props"
+        "Shader": "Props",
+        "Animation": false
       },
       "Obj": [
         {
@@ -165,7 +167,9 @@
         "name": "Stairs",
         "texture": "stairs",
         "position": [ -5.5, 0.0, 0.0 ],
-        "Shader": "Wall"
+        "Shader": "Wall",
+        "Animation": true,
+        "AnimationType": "diffuse"
       },
       "Obj": [
         {
@@ -280,7 +284,8 @@
         "name": "Stage",
         "texture": "color Black",
         "position": [ 20.1, 0.0, 0.0 ],
-        "Shader": "Stage"
+        "Shader": "Stage",
+        "Animation": false
       },
       "Obj": [
         {
@@ -297,6 +302,7 @@
         "name": "Curtains",
         "texture": "color Red",
         "Shader": "Curtain",
+        "Animation": false,
         "position": [ 20.1, 0.7, 0.0 ]
       },
       "Obj": [
@@ -321,6 +327,8 @@
         "name": "Upstairs",
         "texture": "color Black",
         "Shader": "Wall",
+        "Animation": true,
+        "AnimationType": "diffuse",
         "position": [ -5.0, 0.0, 0.0 ]
       },
       "Obj": [
@@ -380,6 +388,8 @@
         "name": "UpstairsBarricades",
         "texture": "color Grey",
         "Shader": "Barricade",
+        "Animation": true,
+        "AnimationType": "diffuse",
         "position": [ -4.35, 0.0, 0.0 ]
       },
       "Obj": [

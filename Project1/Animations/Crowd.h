@@ -8,7 +8,7 @@
 class Crowd
 {
 private:
-    const int CROWD_SIZE = 20;
+    const int CROWD_SIZE = 100;
     std::vector<ObjectProperties*> crowd;
     // Vector used to track the current y position of each crowd member so it can easily be reset mid animation
     std::vector<float> crowd_y_positions;

@@ -5,6 +5,8 @@
 #include "../objloader.h"
 #include "../texture.h"
 #include "../Animations/Animation.h"
+#include "../Animations/RotateAnimation.h"
+#include "../Animations/DiffuseAnimation.h"
 
 struct Colors {
     glm::vec3 Black = glm::vec3(0, 0, 0);
@@ -56,7 +58,7 @@ std::tuple<ObjectProperties*, int> Object::get_objects()
         // Add animation to the object
         if(properties->isAnimated)
         {
-            objectProperties[i].animation = new Animation(properties->xDegrees, properties->yDegrees, properties->zDegrees);
+            objectProperties[i].animation = get_animation_type(properties->animation_type);
         } else
         {
             objectProperties[i].animation = nullptr;
@@ -91,4 +93,17 @@ void Object::init_material_lights(Material &materials)
     materials.diffuse_color = glm::vec3(0.5, 0.0, 0.0);
     materials.specular_color = glm::vec3(1.0, 1.0, 1.0);
     materials.power = 128.0;
+}
+
+Animation* Object::get_animation_type(std::string type)
+{
+    if(type == "rotate")
+    {
+        return new RotateAnimation();
+    }
+    if(type == "diffuse")
+    {
+        return new DiffuseAnimation();
+    }
+    return nullptr;
 }

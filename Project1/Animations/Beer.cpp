@@ -3,6 +3,8 @@
 #include <random>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.inl>
+
+#include "RotateAnimation.h"
 #include "../Importers//Object.h"
 #include "../objloader.h"
 #include "../texture.h"
@@ -103,7 +105,7 @@ void Beer::grab_beer(GLuint program_id)
         cup = new ObjectProperties();
         bool res = loadOBJ("Objects/Cup.obj", cup->vertices, cup->uvs, cup->normals);
         cup->texture = loadDDS("Textures/Hand.dds");
-        cup->materials = JsonReader::read_materials("Metallic");
+        cup->materials = JsonReader::read_materials("Props");
 
         cup->model = glm::mat4();
         cup_vao = 0;
@@ -144,7 +146,7 @@ void Beer::update_cup_position(glm::vec3 position, GLuint program_id, glm::mat4 
     if(!is_grabbed && cup_animation)
     {
         glm::mat4 animation_matrix = glm::mat4(1.0f);
-        cup_animation->execute(animation_matrix);
+        cup_animation->update_model(animation_matrix);
         if (cup_animation->is_completed())
         {
             delete cup_animation;
@@ -164,7 +166,7 @@ void Beer::drink_beer()
 {
     if (is_grabbed)
     {
-        cup_animation = new Animation( 0.0f, 0.0f, -90.0f, false);
+        cup_animation = new RotateAnimation( 0.0f, 0.0f, -90.0f, false);
         is_grabbed = false;
     }
 }

@@ -27,9 +27,13 @@ std::vector<ImportProperties*> JsonReader::read_objects() {
         if(object["Animation"])
         {
             obj->isAnimated = true;
-            obj->xDegrees = object["AnimationProps"]["xDeg"];
-            obj->yDegrees = object["AnimationProps"]["yDeg"];
-            obj->zDegrees = object["AnimationProps"]["zDeg"];
+            obj->animation_type = object["AnimationType"];
+            if(object["AnimationType"] != "diffuse")
+            {
+                obj->xDegrees = object["AnimationProps"]["xDeg"];
+                obj->yDegrees = object["AnimationProps"]["yDeg"];
+                obj->zDegrees = object["AnimationProps"]["zDeg"];
+            }
         }
         if (object["Repeated"]) {
             for (int i = 1; i < object["RepeatOffset"]["amount"]; i++) {
@@ -90,6 +94,10 @@ std::vector<ObjectProperties*> JsonReader::read_meshes()
                 
                 } else {
                     obj->texture = loadDDS(("Textures/" + path + ".dds").c_str());
+                }
+                if(object["Props"]["Animation"])
+                {
+                    obj->animation = Object::get_animation_type(object["Props"]["AnimationType"]);
                 }
                 objects.push_back(obj);
             }

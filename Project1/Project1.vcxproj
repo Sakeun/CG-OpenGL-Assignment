@@ -128,10 +128,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Animations\Animation.cpp" />
     <ClCompile Include="Animations\Beer.cpp" />
     <ClCompile Include="Animations\Crowd.cpp" />
+    <ClCompile Include="Animations\DiffuseAnimation.cpp" />
     <ClCompile Include="Animations\Instructions.cpp" />
+    <ClCompile Include="Animations\RotateAnimation.cpp" />
     <ClCompile Include="Buffers\BufferBinder.cpp" />
     <ClCompile Include="Buffers\RenderingHandler.cpp" />
     <ClCompile Include="Camera\CameraControls.cpp" />
@@ -148,7 +149,9 @@
     <ClInclude Include="Animations\Animation.h" />
     <ClInclude Include="Animations\Beer.h" />
     <ClInclude Include="Animations\Crowd.h" />
+    <ClInclude Include="Animations\DiffuseAnimation.h" />
     <ClInclude Include="Animations\Instructions.h" />
+    <ClInclude Include="Animations\RotateAnimation.h" />
     <ClInclude Include="Buffers\BufferBinder.h" />
     <ClInclude Include="Buffers\RenderingHandler.h" />
     <ClInclude Include="Camera\CameraControls.h" />

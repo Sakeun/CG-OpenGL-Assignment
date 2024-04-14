@@ -50,7 +50,7 @@
   "Character": {
     "ambient": [ 0.95, 0.62, 0.88 ],
     "specular": [ 1.0, 1.0, 1.0 ],
-    "shininess": 128.0,
+    "shininess": 30.0,
     "ambientStrength": 0.25,
     "diffuseStrength": 1.0,
     "specularStrength": 0.5

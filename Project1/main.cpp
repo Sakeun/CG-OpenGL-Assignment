@@ -242,7 +242,7 @@ void render()
         // Check if the object has an animation and execute it
         if(objects[i].animation)
         {
-            objects[i].animation->execute(objects[i].model);
+            objects[i].animation->update_object(objects[i]);
 
             // Delete the animation in case it is completed to prevent memory leak
             if (objects[i].animation->is_completed())
