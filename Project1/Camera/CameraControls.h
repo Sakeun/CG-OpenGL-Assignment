@@ -17,8 +17,14 @@ class CameraControls
 {
 private:
     static CameraControls* instance;
+    const float lerp_speed = 0.1f;
+    CameraPositions walk_mode_cam;
+    CameraPositions drone_mode_cam;
+    CameraPositions upstairs_cam;
+    
     CameraControls()
     {
+        // Set the default positions per camera mode and initialize the yaw and pitch to match the view direction
         walk_mode_cam.camera_position = glm::vec3(0.0, 0.5, 3.0);
         walk_mode_cam.camera_lookat = glm::normalize(glm::vec3(3.0, 0.0, -1.0));
         walk_mode_cam.camera_up = glm::vec3(0.0, 1.0, 0.0);
@@ -40,10 +46,6 @@ private:
         isWalk = true;
         isUpstairs = false;
     }
-    const float lerp_speed = 0.1f;
-    CameraPositions walk_mode_cam;
-    CameraPositions drone_mode_cam;
-    CameraPositions upstairs_cam;
     
 public:
     bool isWalk;
@@ -62,7 +64,6 @@ public:
     glm::vec3 getCameraUp();
     glm::vec3 getCameraLookat();
     glm::vec3 getCameraPosition();
-    void getHandPositions(glm::vec3& leftHand, glm::vec3& rightHand);
     
     void setCameraUp(glm::vec3 newValue);
     void setCameraLookat(glm::vec3 newValue);

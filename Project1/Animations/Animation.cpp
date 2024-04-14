@@ -14,7 +14,7 @@ Animation::Animation(const float x, const float y, const float z, const bool isL
 // Execute animation
 void Animation::Execute(glm::mat4& model)
 {
-    // Extract scale and translation from model matrix
+    // Extract scale and translation from model so it can be reapplied after rotation
     glm::vec3 scale;
     scale.x = glm::length(glm::vec3(model[0]));
     scale.y = glm::length(glm::vec3(model[1]));
@@ -37,6 +37,7 @@ void Animation::Execute(glm::mat4& model)
     model[3] = glm::vec4(translation, 1.0f);
 }
 
+// Rotation functions for X Y and Z, which repeat the animation if it is a loop
 void Animation::RotateX(glm::mat4& model)
 {
     current_x_degrees += x_direction;

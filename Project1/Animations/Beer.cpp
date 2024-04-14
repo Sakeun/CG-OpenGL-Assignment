@@ -69,6 +69,7 @@ void Beer::DrawBeer(GLuint program_id, glm::mat4 view, glm::mat4 projection)
     }
 }
 
+// Update the position of the beer particles at a random Z and X to simulate falling
 void Beer::UpdatePositions() {
     std::random_device rd;
     std::mt19937 gen(rd());

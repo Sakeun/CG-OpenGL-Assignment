@@ -15,10 +15,12 @@ Instructions* Instructions::GetInstance()
     return instance;
 }
 
+// Update the position of the instructions to the position of the hand and render it
 void Instructions::UpdateInstructionsPosition(glm::vec3 position, GLuint program_id, glm::mat4 view, glm::mat4 projection)
 {
     if(!isGrabbed) return;
 
+    // if the instructions are not initialized, initialize them
     if(!instructions)
     {
         InitInstructionsBuffers(program_id);

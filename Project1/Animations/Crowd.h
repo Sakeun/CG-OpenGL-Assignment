@@ -8,6 +8,7 @@
 class Crowd
 {
 private:
+    const int CROWD_SIZE = 20;
     std::vector<ObjectProperties*> crowd;
     std::vector<float> yPos;
     static Crowd* instance;

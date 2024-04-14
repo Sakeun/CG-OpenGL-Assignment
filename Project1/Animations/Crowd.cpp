@@ -31,6 +31,7 @@ double Crowd::GetRandomNum(double min, double max)
 
 void Crowd::InitCrowdBuffers(GLuint program_id)
 {
+    // Load the crowd character once to re-use for all the crowd characters
     ObjectProperties* actor = new ObjectProperties();
     bool res = loadOBJ("Objects/CrowdCharacter.obj", actor->vertices, actor->uvs, actor->normals);
     actor->texture = loadDDS("Textures/Controls.dds");
@@ -38,8 +39,10 @@ void Crowd::InitCrowdBuffers(GLuint program_id)
     actor->model = glm::mat4();
     actor->model = glm::scale(actor->model, glm::vec3(1.0f, 1.0f, 1.0f));
 
-    for(int i = 0; i < 20; i++)
+    // initialize x amount of crowd members
+    for(int i = 0; i < CROWD_SIZE; i++)
     {
+        // Add an actor at a random position within the crowd area and at a random height, to simulate a more realistic jumping crowd
         vao.push_back(0);
         yPos.push_back(-1);
         ObjectProperties* newActor = new ObjectProperties(*actor);
@@ -66,9 +69,10 @@ void Crowd::InitCrowdBuffers(GLuint program_id)
 
 void Crowd::DrawCrowd(GLuint program_id, glm::mat4 view, glm::mat4 projection)
 {
-    
+    // Initialize the crowd if it is not initialized
     if(crowd.empty()) InitCrowdBuffers(program_id);
 
+    // Update the position of the crowd and render them
     UpdatePositions();
     int vaoindex = 0;
     for(auto actor: crowd)
@@ -81,19 +85,18 @@ void Crowd::DrawCrowd(GLuint program_id, glm::mat4 view, glm::mat4 projection)
     }
 }
 
+// Update the position of the crowd to simulate jumping up and down
 void Crowd::UpdatePositions()
 {
     int index = 0;
     for(auto actor : crowd)
     {
-        // Get the current y position
         float currentY = actor->model[3][1];
 
-        // Check if the actor has reached the upper or lower limit
         if (currentY >= -0.8f) {
-            yPos[index] = -1; // Change direction to down
+            yPos[index] = -1;
         } else if (currentY <= -1.13f) {
-            yPos[index] = 1; // Change direction to up
+            yPos[index] = 1;
         }
 
         glm::vec3 translation(0.0f, yPos[index] * 0.01f, 0.0f);

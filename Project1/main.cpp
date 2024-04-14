@@ -55,14 +55,8 @@ std::vector<GLuint> vao;
 // Matrices
 glm::mat4 view, projection;
 
-bool scaled = false;
-
 // Material and light
 LightSource light;
-
-// Mouse positions
-bool firstMouse = true;
-int mouse_x, mouse_y;
 
 // Camera angles
 float angle_x = 0.0f;
@@ -76,10 +70,15 @@ float last_frame = 0.0f;
 bool mouseActive = false;
 int last_x = WIDTH / 2, last_y = HEIGHT / 2;
 
+// Mouse positions
+bool firstMouse = true;
+int mouse_x, mouse_y;
+
 // Object properties
 ObjectProperties* objects;
 int objectAmount;
 
+// Singletons
 CameraControls* camera = CameraControls::GetInstance();
 Beer* beer = Beer::GetInstance();
 Instructions* instructions = Instructions::GetInstance();
@@ -125,6 +124,7 @@ void mouseClickHandler(int button, int state, int x, int y)
         }
     }
 }
+
 //--------------------------------------------------------------------------------
 // Keyboard handling
 //--------------------------------------------------------------------------------
@@ -199,6 +199,7 @@ void keyboardHandler(unsigned char key, int a, int b)
         }
         else
         {
+            // if the character is upstairs, force it to go downstairs to the bar to "grab" a beer at the bar.
             camera->isUpstairs = false;
             camera->setCameraLookat(glm::vec3(-0.4f, -0.17f, 0.9f));
             camera->setTargetPosition(glm::vec3(-1.35f, 0.5f, 6.92f));
@@ -225,22 +226,26 @@ void RenderParticles() {
 
 void Render()
 {
+    // Lerp camera for smooth movement
     float current_frame = glutGet(GLUT_ELAPSED_TIME);
     delta_time = (current_frame - last_frame) / 1000.0f;
     last_frame = current_frame;
     camera->Lerp(delta_time);
 
+    // Get the lighting position
     GLuint uniform_light_pos = glGetUniformLocation(program_id, "light_pos");
-    
     glUniform3fv(uniform_light_pos, 1, glm::value_ptr(light.position));
 
     camera->SetVP(view, projection, angle_x, angle_y, WIDTH, HEIGHT);
     
     for (glm::uint i = 0; i < objectAmount; i++)
     {
+        // Check if the object has an animation and execute it
         if(objects[i].animation)
         {
             objects[i].animation->Execute(objects[i].model);
+
+            // Delete the animation in case it is completed to prevent memory leak
             if (objects[i].animation->IsCompleted())
             {
                 delete objects[i].animation;
@@ -249,6 +254,7 @@ void Render()
         }
         objects[i].mv = view * objects[i].model;
 
+        // Render based on what type of shader it uses
         if (objects[i].texture == 0) {
             renderingHandler->Render(projection, &objects[i], SingleColor);
         }
@@ -259,28 +265,27 @@ void Render()
         renderingHandler->DrawArrays(vao[i], objects[i].vertices.size());
     }
 
+    // Calculate the arm positions for the FPS view
     glm::vec3 cameraPos = camera->getTargetPosition();
     glm::vec3 cameraLookat = camera->getCameraLookat();
     glm::vec3 cameraUp = camera->getCameraUp();
 
-    // Calculate the camera's right and down vectors
     glm::vec3 cameraRight = glm::normalize(glm::cross(cameraLookat, cameraUp));
     glm::vec3 cameraDown = glm::normalize(glm::cross(cameraRight, cameraLookat));
 
-    // Define the offset from the camera position
     float rightOffset = 0.6f;
     float leftOffset = -0.5f;
     float downOffset = -0.2f;
     glm::vec3 offsetRight = rightOffset * cameraRight + downOffset * cameraDown;
     glm::vec3 offsetLeft = leftOffset * cameraRight + downOffset * cameraDown;
 
+    // Update and render the cup and instructions
     if(camera->isWalk)
         beer->UpdateCupPosition(cameraPos + cameraLookat + offsetRight, program_id, view, projection);
-
     instructions->UpdateInstructionsPosition(cameraPos + cameraLookat + offsetLeft, program_id, view, projection);
-    
-    beer->DrawBeer(singlecolor_program_id, view, projection);
 
+    // Render the crowd and beer
+    beer->DrawBeer(singlecolor_program_id, view, projection);
     crowd->DrawCrowd(program_id, view, projection);
     
     // Swap buffers
@@ -303,6 +308,7 @@ void Render(int n)
     glutTimerFunc(DELTA_TIME, Render, 0);
 }
 
+// Slower render function for the beer tap animation
 void UpdateBeerAnimation(int value) {
     RenderParticles();
     glutTimerFunc(PARTICLE_DELTA_TIME, UpdateBeerAnimation, 0);
@@ -383,6 +389,7 @@ void InitBuffers()
         
         glBindVertexArray(vao[i]);
 
+        // Bind vao and vbo buffers
         BufferBinder::bind_vao3d(position_id, objects[i].vertices);
         BufferBinder::bind_vao3d(normal_id, objects[i].normals);
         BufferBinder::bind_vao2d(uv_id, objects[i].uvs);

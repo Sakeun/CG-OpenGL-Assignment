@@ -23,6 +23,7 @@ private:
     Beer()
     {
         float currY = maxY;
+        // Initialize 3 particles per Y position until there's 3 particles at the bottom
         while(currY >= minY)
         {
             beer_particles.push_back(new Cube(glm::vec3(-0.5f, currY, 0.0f), glm::vec3(0.005f, 0.005f, 0.005f)));

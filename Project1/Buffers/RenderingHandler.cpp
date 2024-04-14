@@ -18,6 +18,7 @@ RenderingHandler* RenderingHandler::GetInstance(GLuint phong_program_id, GLuint 
     return instance;
 }
 
+// Render with the specified fragment shader
 void RenderingHandler::Render(glm::mat4 projection, ObjectProperties* object, FragmentShader shader)
 {
     switch (shader)

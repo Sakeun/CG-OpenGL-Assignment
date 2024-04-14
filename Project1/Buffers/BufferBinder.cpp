@@ -18,7 +18,6 @@ void BufferBinder::bind_vbo2d(GLuint &vbo, std::vector<glm::vec2> prop)
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-
 void BufferBinder::bind_vao3d(GLuint id, std::vector<glm::vec3> prop)
 {
     GLuint vbo;

@@ -19,6 +19,7 @@ public:
            const std::vector<glm::vec2>& uvs, const glm::mat4& model) : triangles(triangles), normals(normals), uvs(uvs), model(model)
     {
     }
+    
     virtual void set_triangles(MeshType type) = 0;
     virtual void set_normals() = 0;
     virtual void set_uvs() = 0;
