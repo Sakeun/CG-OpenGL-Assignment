@@ -4,7 +4,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.inl>
 
-#include "RotateAnimation.h"
+#include "Animation/RotateAnimation.h"
 #include "../Importers//Object.h"
 #include "../objloader.h"
 #include "../texture.h"

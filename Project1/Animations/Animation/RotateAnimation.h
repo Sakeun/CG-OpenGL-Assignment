@@ -2,19 +2,22 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "Animation.h"
-#include "../Structs.h"
+#include "../../Structs.h"
 
 class RotateAnimation : public Animation
 {
 private:
+    // Variable to check the max degrees the animmation can reach
     const float x_degrees;
     const float y_degrees;
     const float z_degrees;
 
+    // Variables to keep track of the current degrees of the animatoin
     float current_x_degrees;
     float current_y_degrees;
     float current_z_degrees;
 
+    // Variables used to determine which axis to rotate on
     glm::vec3 x_rotation;
     glm::vec3 y_rotation;
     glm::vec3 z_rotation;

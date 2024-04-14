@@ -3,7 +3,7 @@
 #include <random>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "AmbientAnimation.h"
+#include "Animation/AmbientAnimation.h"
 #include "../objloader.h"
 #include "../texture.h"
 #include "../JsonReader/JsonReader.h"

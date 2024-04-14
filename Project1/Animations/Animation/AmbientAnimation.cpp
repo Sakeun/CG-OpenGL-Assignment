@@ -1,12 +1,12 @@
 #include "AmbientAnimation.h"
 
-#include "../Structs.h"
+#include "../../Structs.h"
 
 int AmbientAnimation::color_index = 0;
 std::mutex AmbientAnimation::color_index_mutex;
 std::chrono::steady_clock::time_point AmbientAnimation::last_color_change;
 
-glm::vec3 AmbientAnimation::get_next_color()
+glm::vec3 AmbientAnimation::get_color()
 {
     switch(color_index)
     {
@@ -27,11 +27,14 @@ glm::vec3 AmbientAnimation::get_next_color()
 
 void AmbientAnimation::update_object(ObjectProperties& object)
 {
+    // Lock the mutex so only one thread can change the color at a time
     std::lock_guard<std::mutex> lock(color_index_mutex);
+
+    // Timer to change the color every x seconds
     auto now = std::chrono::steady_clock::now();
     auto elapsed = std::chrono::duration_cast<std::chrono::seconds>(now - last_color_change);
 
-    if(elapsed.count() > 3)
+    if(elapsed.count() > ANIMATION_DURATION)
     {
         if(completed) return;
 
@@ -41,5 +44,5 @@ void AmbientAnimation::update_object(ObjectProperties& object)
         if(color_index > 4)
             color_index = 0;
     }
-    object.materials.ambient_color = get_next_color();
+    object.materials.ambient_color = get_color();
 }

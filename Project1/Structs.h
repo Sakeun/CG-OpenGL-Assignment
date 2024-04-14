@@ -3,7 +3,7 @@
 #include <vector>
 #include <glm/glm.hpp>
 #include <GL/glew.h>
-#include "Animations/Animation.h"
+#include "Animations/Animation/Animation.h"
 #include "Meshes/Meshes.h"
 
 enum ShaderType

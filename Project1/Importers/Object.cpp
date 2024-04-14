@@ -4,9 +4,9 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "../objloader.h"
 #include "../texture.h"
-#include "../Animations/Animation.h"
-#include "../Animations/RotateAnimation.h"
-#include "../Animations/AmbientAnimation.h"
+#include "../Animations/Animation/Animation.h"
+#include "../Animations/Animation/RotateAnimation.h"
+#include "../Animations/Animation/AmbientAnimation.h"
 
 struct Colors {
     glm::vec3 Black = glm::vec3(0, 0, 0);

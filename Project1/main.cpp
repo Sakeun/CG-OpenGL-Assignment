@@ -9,7 +9,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "glsl.h"
-#include "Animations/Animation.h"
+#include "Animations/Animation/Animation.h"
 #include "Animations/Beer.h"
 #include "Animations/Crowd.h"
 #include "Animations/Instructions.h"
