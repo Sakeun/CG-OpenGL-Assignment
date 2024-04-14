@@ -1,12 +1,12 @@
-#include "DiffuseAnimation.h"
+#include "AmbientAnimation.h"
 
 #include "../Structs.h"
 
-int DiffuseAnimation::color_index = 0;
-std::mutex DiffuseAnimation::color_index_mutex;
-std::chrono::steady_clock::time_point DiffuseAnimation::last_color_change;
+int AmbientAnimation::color_index = 0;
+std::mutex AmbientAnimation::color_index_mutex;
+std::chrono::steady_clock::time_point AmbientAnimation::last_color_change;
 
-glm::vec3 DiffuseAnimation::get_next_color()
+glm::vec3 AmbientAnimation::get_next_color()
 {
     switch(color_index)
     {
@@ -25,7 +25,7 @@ glm::vec3 DiffuseAnimation::get_next_color()
     }
 }
 
-void DiffuseAnimation::update_object(ObjectProperties& object)
+void AmbientAnimation::update_object(ObjectProperties& object)
 {
     std::lock_guard<std::mutex> lock(color_index_mutex);
     auto now = std::chrono::steady_clock::now();

@@ -3,7 +3,7 @@
 #include <random>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "DiffuseAnimation.h"
+#include "AmbientAnimation.h"
 #include "../objloader.h"
 #include "../texture.h"
 #include "../JsonReader/JsonReader.h"
@@ -50,7 +50,7 @@ void Crowd::init_crowd_buffers(GLuint program_id)
         ObjectProperties* newActor = new ObjectProperties(*actor);
         newActor->model = glm::translate(newActor->model, glm::vec3(get_random_num(-10.0, 13.0), get_random_num(1.13, 0.8) * -1, get_random_num(-7.0, 7.0)));
         newActor->model = glm::rotate(newActor->model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        newActor->animation = new DiffuseAnimation();
+        newActor->animation = new AmbientAnimation();
         crowd.push_back(newActor);
         
         // Get vertex attributes

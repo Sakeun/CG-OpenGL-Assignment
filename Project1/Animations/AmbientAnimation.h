@@ -4,7 +4,7 @@
 
 #include "Animation.h"
 
-class DiffuseAnimation : public Animation
+class AmbientAnimation : public Animation
 {
 private:
     static int color_index;
@@ -14,7 +14,7 @@ private:
     glm::vec3 get_next_color();
     
 public:
-    DiffuseAnimation(bool isLoop = true) : Animation(isLoop)
+    AmbientAnimation(bool isLoop = true) : Animation(isLoop)
     {
         last_color_change = std::chrono::steady_clock::now();
     }

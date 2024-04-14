@@ -130,7 +130,7 @@
   <ItemGroup>
     <ClCompile Include="Animations\Beer.cpp" />
     <ClCompile Include="Animations\Crowd.cpp" />
-    <ClCompile Include="Animations\DiffuseAnimation.cpp" />
+    <ClCompile Include="Animations\AmbientAnimation.cpp" />
     <ClCompile Include="Animations\Instructions.cpp" />
     <ClCompile Include="Animations\RotateAnimation.cpp" />
     <ClCompile Include="Buffers\BufferBinder.cpp" />
@@ -149,7 +149,7 @@
     <ClInclude Include="Animations\Animation.h" />
     <ClInclude Include="Animations\Beer.h" />
     <ClInclude Include="Animations\Crowd.h" />
-    <ClInclude Include="Animations\DiffuseAnimation.h" />
+    <ClInclude Include="Animations\AmbientAnimation.h" />
     <ClInclude Include="Animations\Instructions.h" />
     <ClInclude Include="Animations\RotateAnimation.h" />
     <ClInclude Include="Buffers\BufferBinder.h" />

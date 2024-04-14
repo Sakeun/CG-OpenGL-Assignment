@@ -6,7 +6,7 @@
 #include "../texture.h"
 #include "../Animations/Animation.h"
 #include "../Animations/RotateAnimation.h"
-#include "../Animations/DiffuseAnimation.h"
+#include "../Animations/AmbientAnimation.h"
 
 struct Colors {
     glm::vec3 Black = glm::vec3(0, 0, 0);
@@ -103,7 +103,7 @@ Animation* Object::get_animation_type(std::string type)
     }
     if(type == "diffuse")
     {
-        return new DiffuseAnimation();
+        return new AmbientAnimation();
     }
     return nullptr;
 }
