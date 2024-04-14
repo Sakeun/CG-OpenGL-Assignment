@@ -320,7 +320,7 @@
       "Props": {
         "name": "Upstairs",
         "texture": "color Black",
-        "Shader": "Blinn",
+        "Shader": "Wall",
         "position": [ -5.0, 0.0, 0.0 ]
       },
       "Obj": [
@@ -379,7 +379,7 @@
       "Props": {
         "name": "UpstairsBarricades",
         "texture": "color Grey",
-        "Shader": "Blinn",
+        "Shader": "Barricade",
         "position": [ -4.35, 0.0, 0.0 ]
       },
       "Obj": [
