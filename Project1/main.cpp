@@ -248,13 +248,13 @@ void Render()
 
         // Render based on what type of shader it uses
         if (objects[i].texture == 0) {
-            renderingHandler->Render(projection, &objects[i], SingleColor);
+            renderingHandler->render(projection, &objects[i], SingleColor);
         }
         else {
-            renderingHandler->Render(projection, &objects[i], Phong);
+            renderingHandler->render(projection, &objects[i], Phong);
         }
         
-        renderingHandler->DrawArrays(vao[i], objects[i].vertices.size());
+        renderingHandler->draw_arrays(vao[i], objects[i].vertices.size());
     }
 
     // Calculate the arm positions for the FPS view
@@ -357,7 +357,7 @@ void InitShaders()
     singlecolor_program_id = glsl::makeShaderProgram(vsh_id, singlecolor_fsh_id);
     program_id = glsl::makeShaderProgram(vsh_id, fsh_id);
 
-    renderingHandler = RenderingHandler::GetInstance(program_id, singlecolor_program_id);
+    renderingHandler = RenderingHandler::get_instance(program_id, singlecolor_program_id);
 }
 
 //------------------------------------------------------------

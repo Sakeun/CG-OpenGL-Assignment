@@ -23,7 +23,7 @@ private:
     GLuint cup_vao;
     Animation* cup_animation;
 
-    RenderingHandler* rendering_handler = RenderingHandler::GetInstance();
+    RenderingHandler* rendering_handler = RenderingHandler::get_instance();
     
     Beer()
     {

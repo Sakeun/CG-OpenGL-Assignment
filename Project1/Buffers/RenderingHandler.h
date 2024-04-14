@@ -24,11 +24,13 @@ private:
         this->singlecolor_program_id = singlecolor_program_id;
     }
 
-    void RenderPhong(glm::mat4 projection, ObjectProperties* object);
-    void RenderSingleColor(glm::mat4 projection, ObjectProperties* object);
+    // Render based on the defined fragment shader
+    void render_phong(glm::mat4 projection, ObjectProperties* object);
+    void render_single_color(glm::mat4 projection, ObjectProperties* object);
+    
 public:
-    static RenderingHandler* GetInstance(GLuint phong_program_id, GLuint singlecolor_program_id);
-    static RenderingHandler* GetInstance()
+    static RenderingHandler* get_instance(GLuint phong_program_id, GLuint singlecolor_program_id);
+    static RenderingHandler* get_instance()
     {
         if(!instance)
             instance = new RenderingHandler(0, 0);
@@ -36,6 +38,6 @@ public:
         return instance;
     }
 
-    void Render(glm::mat4 projection, ObjectProperties* object, FragmentShader shader);
-    void DrawArrays(GLuint vao, int size);
+    void render(glm::mat4 projection, ObjectProperties* object, FragmentShader shader);
+    void draw_arrays(GLuint vao, int size);
 };

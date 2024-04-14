@@ -36,8 +36,8 @@ void Instructions::update_instructions_position(glm::vec3 position, GLuint progr
 
     instructions->mv = view * instructions->model;
 
-    rendering_handler->Render(projection, instructions, Phong);
-    rendering_handler->DrawArrays(vao, instructions->vertices.size());
+    rendering_handler->render(projection, instructions, Phong);
+    rendering_handler->draw_arrays(vao, instructions->vertices.size());
 }
 
 void Instructions::grab_instructions()

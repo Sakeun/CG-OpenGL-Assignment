@@ -11,7 +11,7 @@ private:
     GLuint vao;
     ObjectProperties* instructions;
     static Instructions* instance;
-    RenderingHandler* rendering_handler = RenderingHandler::GetInstance();
+    RenderingHandler* rendering_handler = RenderingHandler::get_instance();
 
     void init_instructions_buffers(GLuint program_id);
     

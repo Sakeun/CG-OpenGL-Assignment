@@ -66,7 +66,7 @@ void Beer::draw_beer_particles(GLuint program_id, glm::mat4 view, glm::mat4 proj
         glUniformMatrix4fv(uniform_proj, 1, GL_FALSE, glm::value_ptr(projection));
         glUniform3f(fragColLocation, 0.89f, 0.91f, 0.15f);
 
-        rendering_handler->DrawArrays(vao[i], beer_particles[i]->triangles.size());
+        rendering_handler->draw_arrays(vao[i], beer_particles[i]->triangles.size());
     }
 }
 
@@ -156,8 +156,8 @@ void Beer::update_cup_position(glm::vec3 position, GLuint program_id, glm::mat4 
     }
 
     cup->mv = view * cup->model;
-    rendering_handler->Render(projection, cup, Phong);
-    rendering_handler->DrawArrays(cup_vao, cup->vertices.size());
+    rendering_handler->render(projection, cup, Phong);
+    rendering_handler->draw_arrays(cup_vao, cup->vertices.size());
 }
 
 void Beer::drink_beer()

@@ -14,7 +14,7 @@ private:
     std::vector<float> crowd_y_positions;
     static Crowd* instance;
     std::vector<GLuint> vao;
-    RenderingHandler* rendering_handler = RenderingHandler::GetInstance();
+    RenderingHandler* rendering_handler = RenderingHandler::get_instance();
 
     double get_random_num(double min, double max);
     Crowd()

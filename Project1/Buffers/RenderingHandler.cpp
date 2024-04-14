@@ -4,7 +4,7 @@
 
 RenderingHandler* RenderingHandler::instance = nullptr;
 
-RenderingHandler* RenderingHandler::GetInstance(GLuint phong_program_id, GLuint singlecolor_program_id)
+RenderingHandler* RenderingHandler::get_instance(GLuint phong_program_id, GLuint singlecolor_program_id)
 {
     if (instance == nullptr)
     {
@@ -19,29 +19,29 @@ RenderingHandler* RenderingHandler::GetInstance(GLuint phong_program_id, GLuint 
 }
 
 // Render with the specified fragment shader
-void RenderingHandler::Render(glm::mat4 projection, ObjectProperties* object, FragmentShader shader)
+void RenderingHandler::render(glm::mat4 projection, ObjectProperties* object, FragmentShader shader)
 {
     switch (shader)
     {
     case Phong:
-        RenderPhong(projection, object);
+        render_phong(projection, object);
         break;
     case SingleColor:
-        RenderSingleColor(projection, object);
+        render_single_color(projection, object);
         break;
     default:
         break;
     }
 }
 
-void RenderingHandler::DrawArrays(GLuint vao, int size)
+void RenderingHandler::draw_arrays(GLuint vao, int size)
 {
     glBindVertexArray(vao);
     glDrawArrays(GL_TRIANGLES, 0, size);
     glBindVertexArray(0);
 }
 
-void RenderingHandler::RenderPhong(glm::mat4 projection, ObjectProperties* object)
+void RenderingHandler::render_phong(glm::mat4 projection, ObjectProperties* object)
 {
     glUseProgram(phong_program_id);
     // Send mv
@@ -77,7 +77,7 @@ void RenderingHandler::RenderPhong(glm::mat4 projection, ObjectProperties* objec
     glUniform1f(uniform_reflection_specular, object->materials.specular_strength);
 }
 
-void RenderingHandler::RenderSingleColor(glm::mat4 projection, ObjectProperties* object)
+void RenderingHandler::render_single_color(glm::mat4 projection, ObjectProperties* object)
 {
     glUseProgram(singlecolor_program_id);
 

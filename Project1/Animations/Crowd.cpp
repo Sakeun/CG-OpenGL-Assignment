@@ -78,8 +78,8 @@ void Crowd::draw_crowd(GLuint program_id, glm::mat4 view, glm::mat4 projection)
     for(auto actor: crowd)
     {
         actor->mv = view * actor->model;
-        rendering_handler->Render(projection, actor, SingleColor);
-        rendering_handler->DrawArrays(vao[vao_index], actor->vertices.size());
+        rendering_handler->render(projection, actor, SingleColor);
+        rendering_handler->draw_arrays(vao[vao_index], actor->vertices.size());
         
         vao_index++;
     }
