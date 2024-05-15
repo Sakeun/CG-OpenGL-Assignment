@@ -14,7 +14,7 @@ private:
     static std::chrono::steady_clock::time_point last_color_change;
 
     glm::vec3 get_color();
-    
+
 public:
     AmbientAnimation(bool isLoop = true) : Animation(isLoop)
     {
@@ -22,4 +22,5 @@ public:
     }
     virtual void update_object(ObjectProperties& object) override;
     virtual void update_model(glm::mat4& model) override {}
+    virtual void set_degrees(float x, float y, float z) override {};
 };

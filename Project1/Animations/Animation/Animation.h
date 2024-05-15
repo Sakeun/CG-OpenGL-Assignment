@@ -12,6 +12,7 @@ public:
     virtual void update_object(ObjectProperties& object) = 0;
     virtual void update_model(glm::mat4& model) = 0;
     virtual bool is_completed() const { return completed; }
+    virtual void set_degrees(float x, float y, float z) = 0;
 
 protected:
     bool is_loop;

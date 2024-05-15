@@ -23,7 +23,7 @@ std::tuple<ObjectProperties*, int> Object::get_objects()
 
     ObjectProperties* objectProperties = new ObjectProperties[objects.size() + meshes.size()];
     int i = 0;
-    for(auto properties : objects)
+    for (auto properties : objects)
     {
         // Check if object has already been loaded
         if (loadedObjs.find(properties->path) == loadedObjs.end()) {
@@ -38,13 +38,14 @@ std::tuple<ObjectProperties*, int> Object::get_objects()
         objectProperties[i].normals = loadedObjs[properties->path].normals;
 
         objectProperties[i].materials = JsonReader::read_materials(properties->shader);
-        
+
         std::string path = properties->texture;
         if (path.find("color") != std::string::npos) {
             std::string subS = path.substr(6);
             objectProperties[i].materials.diffuse_color = Object::get_color(subS);
-                
-        } else {
+
+        }
+        else {
             objectProperties[i].texture = loadDDS(("Textures/" + path + ".dds").c_str());
         }
         // Translate the object to the predefined position
@@ -56,10 +57,14 @@ std::tuple<ObjectProperties*, int> Object::get_objects()
         objectProperties[i].model = glm::translate(objectProperties[i].model, properties->position);
 
         // Add animation to the object
-        if(properties->isAnimated)
+        if (properties->isAnimated)
         {
             objectProperties[i].animation = get_animation_type(properties->animation_type);
-        } else
+            if (properties->animation_type != "diffuse")
+                objectProperties[i].animation->set_degrees(properties->xDegrees, properties->yDegrees, properties->zDegrees);
+
+        }
+        else
         {
             objectProperties[i].animation = nullptr;
         }
@@ -69,13 +74,13 @@ std::tuple<ObjectProperties*, int> Object::get_objects()
     }
 
     // Add all the custom made meshes to the object array for rendering
-    for(auto properties : meshes)
+    for (auto properties : meshes)
     {
         objectProperties[i] = *properties;
         i++;
     }
 
-    return {objectProperties, i};
+    return { objectProperties, i };
 }
 
 glm::vec3 Object::get_color(std::string color) {
@@ -87,7 +92,7 @@ glm::vec3 Object::get_color(std::string color) {
     return glm::vec3(0.00, 0.00, 0.00);
 }
 
-void Object::init_material_lights(Material &materials)
+void Object::init_material_lights(Material& materials)
 {
     materials.ambient_color = glm::vec3(0.2, 0.07, 0.07);
     materials.diffuse_color = glm::vec3(0.5, 0.0, 0.0);
@@ -97,11 +102,11 @@ void Object::init_material_lights(Material &materials)
 
 Animation* Object::get_animation_type(std::string type)
 {
-    if(type == "rotate")
+    if (type == "rotate")
     {
         return new RotateAnimation();
     }
-    if(type == "diffuse")
+    if (type == "diffuse")
     {
         return new AmbientAnimation();
     }
